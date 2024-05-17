@@ -1,6 +1,17 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { verifyOTP } from "../../redux/actions/user/userActions";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { URL } from "../../common/api";
+import { config } from "../../common/configurations";
+axios.defaults.withCredentials = true;
 
 const OtpVerification = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate=useNavigate()
     // const [minutes,setMinutes]=useState(1);
     // const [seconds, setSeconds]=useState(59);
     const [resendButton,setResendButton]=useState<boolean>(false)
@@ -27,6 +38,23 @@ const OtpVerification = () => {
       inputRefs.current[index - 1].focus();
     }
   };
+  const handleSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault();
+    if(otp.length<6){
+      toast.error("enter otp")
+      return
+    }
+    const newOtp=otp.join('')
+    const newData={
+      data:{
+        otp:newOtp,
+        type:"register"
+      },
+      navigate:navigate
+    }
+    dispatch(verifyOTP(newData))
+    
+  }
   useEffect(() => {
     console.log("timer");
     const storedTimerValue = localStorage.getItem("timerValue");
@@ -51,7 +79,27 @@ const OtpVerification = () => {
       }
     };
   }, []);
+  const resendOTP = async () => {
+    // Restart the timer
+    
 
+    // Call your Axios function to resend OTP
+    try {
+      await axios.get(`${URL}/notification/email-verification`,{
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      // Show success message or handle the resend success in any way you want
+      setTimer(null);
+      startTimer(119000);
+      toast.success("OTP resent successfully");
+    } catch (error:any) {
+      console.log(error.message);
+      toast.error("Failed to resend OTP");
+    }
+  };
   const startTimer = (time: number) => {
     const endTime = Date.now() + time;
     const interval = setInterval(() => {
@@ -83,6 +131,7 @@ const OtpVerification = () => {
         <div className="otp-tilte mt-14 ">
           <strong className="text-xl">Enter the OTP</strong>
         </div>
+        <form onSubmit={handleSubmit}>
         <div className="otp-input flex items-center justify-center mt-8">
           {otp.map((value, index) => (
             <input
@@ -108,7 +157,7 @@ const OtpVerification = () => {
             </div>
             <div className="resend m-4">
                 {
-                     !resendButton ?<p className="opacity-40">Resend OTP</p>:<a className="" href="/">Resend OTP</a>
+                     !resendButton ?<p className="opacity-40">Resend OTP</p>:<a className="" onClick={resendOTP}>Resend OTP</a>
                 }
                 
             </div>
@@ -121,7 +170,7 @@ const OtpVerification = () => {
             Submit
           </button>
         </div>
-
+        </form>
         {/* <div className="new-user mt-3">
           New user?<a href="/">Resend</a>
         </div> */}

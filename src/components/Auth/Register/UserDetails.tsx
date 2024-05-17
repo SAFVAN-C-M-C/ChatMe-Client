@@ -18,7 +18,7 @@ const UserDetails = () => {
           height={24}
           className="mr-2 text-gray-400"
         />
-        <input
+        <input 
           type="text"
           className="w-full h-full bg-transparent"
           placeholder="Enter Full Name "

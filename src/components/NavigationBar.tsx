@@ -1,6 +1,9 @@
 import { Icon } from "@iconify/react";
 import NavigationOptions from "./NavigationOptions";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/store";
+import { logout } from "../redux/actions/user/userActions";
 
 const NavigationBar = () => {
   const options = {
@@ -19,6 +22,11 @@ const NavigationBar = () => {
     // darkTheamActive?setTheamToggle("light"):setTheamToggle("dark");
     setDarkTheamActive(!darkTheamActive);
   };
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleLogout=(e:any)=>{
+    dispatch(logout())
+  }
   return (
     <div className="Nav-Bar h-[100vh] md:w-[270px] w-[75px] border-r-[.5px] border-black">
       <div className="logo-container hidden md:block p-3 h-[90px]">
@@ -79,8 +87,8 @@ const NavigationBar = () => {
                 <div className="option-icon w-[40%] flex justify-center">
                   <Icon icon="tabler:logout" width={26} height={26} />
                 </div>
-                <div className="option-title w-[60%] text-lg flex justify-start">
-                  <b>Logout</b>
+                <div className="option-title w-[60%] text-lg flex justify-start cursor-pointer" onClick={handleLogout}>
+                  <b  >Logout</b>
                 </div>
               </div>
             </div>
