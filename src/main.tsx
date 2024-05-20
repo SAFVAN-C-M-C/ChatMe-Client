@@ -7,8 +7,8 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.tsx";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
-// import { GoogleOAuthProvider } from "@react-oauth/google";
-// import {GOOGLE_ID} from "@/Common/configurations.tsx"
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import {GOOGLE_ID} from "@/Common/configurations.tsx"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

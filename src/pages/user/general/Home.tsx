@@ -1,10 +1,10 @@
 
 import { useEffect } from 'react';
-import NavigationBar from '../../components/NavigationBar'
+import NavigationBar from '../../../components/NavigationBar'
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { RootState } from '../../../redux/store';
 import { useNavigate } from 'react-router-dom';
-import Login from './Login';
+import Login from '../auth/Login';
 
 const Home = () => {
   const { user } = useSelector((state: RootState) => state.user);

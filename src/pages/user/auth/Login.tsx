@@ -1,8 +1,8 @@
 
-import ForgotPassword from "../../components/Auth/ForgotPassword";
-import LoginForm from "../../components/Auth/LoginForm";
-import OtpVerification from "../../components/Auth/OtpVerification";
-import ResetPassword from "../../components/Auth/ResetPassword";
+import ForgotPassword from "../../../components/Auth/ForgotPassword";
+import LoginForm from "../../../components/Auth/LoginForm";
+import OtpVerification from "../../../components/Auth/OtpVerification";
+import ResetPassword from "../../../components/Auth/ResetPassword";
 
 const Login = () => {
   return (
@@ -10,7 +10,7 @@ const Login = () => {
       <div className="main-container w-full h-[100vh] flex">
         <div className="hero-image w-[60%] flex justify-center items-center hidden md:flex">
           <img
-            src="/login-hero-bg.jpg"
+            src="/general/login-hero-bg.jpg"
             alt="login"
             className="bg-blend-color-burn"
           />

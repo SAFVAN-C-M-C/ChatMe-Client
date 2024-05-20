@@ -10,7 +10,7 @@ const NavigationOptions = (props:NavigationOptionsProps) => {
         <div className="option-icon w-[40%] flex justify-center">
           <Icon icon={props.icon} width={26} height={26} />
         </div>
-        <div className="option-title w-[60%] text-lg flex justify-start hidden md:flex">
+        <div className="option-title w-[60%] text-lg flex justify-start hidden lg:flex">
           <b>{props.title}</b>
         </div>
       </div>

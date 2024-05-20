@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface IUserLogin {
   email: string | null;
   google?: boolean;
@@ -7,11 +8,6 @@ export enum AccountType{
   company="company",
   recruiter="recruiter"
 }
-//  export interface UserValues {
-//     email: string;
-//     password?:string;
-//     google?:boolean;
-//   }
 
 export interface UserState {
   loading: boolean;
@@ -32,8 +28,6 @@ export interface ErrorType {
   status?: boolean;
   details?: any;
 }
-
-
 
 export interface IUserSelector {
   user:UserState,
