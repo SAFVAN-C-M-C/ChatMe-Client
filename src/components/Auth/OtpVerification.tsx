@@ -1,21 +1,23 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { verifyOTP } from "../../redux/actions/user/userActions";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { URL } from "../../common/api";
-import { config } from "../../common/configurations";
+
 axios.defaults.withCredentials = true;
 
 const OtpVerification = () => {
+  const { user, loading, error } = useSelector(
+    (state: RootState) => state.user
+  );
+
   const dispatch = useDispatch<AppDispatch>();
   const navigate=useNavigate()
-    // const [minutes,setMinutes]=useState(1);
-    // const [seconds, setSeconds]=useState(59);
-    const [resendButton,setResendButton]=useState<boolean>(false)
-    const [timer, setTimer] = useState<number | null>(null);
+  const [resendButton,setResendButton]=useState<boolean>(false)
+  const [timer, setTimer] = useState<number | null>(null);
   const [timerValue, setTimerValue] = useState<string>("01:59");
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
   const inputRefs = useRef<HTMLInputElement[]>([]);
@@ -44,23 +46,22 @@ const OtpVerification = () => {
       toast.error("enter otp")
       return
     }
+    
     const newOtp=otp.join('')
     const newData={
       data:{
         otp:newOtp,
-        type:"register"
+        type:user?.data?.otpType
       },
-      navigate:navigate
     }
-    dispatch(verifyOTP(newData))
+    console.log(newData,"============");
     
+    dispatch(verifyOTP(newData))
   }
   useEffect(() => {
     console.log("timer");
     const storedTimerValue = localStorage.getItem("timerValue");
     const storedTimerEnd = localStorage.getItem("timerEnd");
-    
-    
     if (storedTimerValue && storedTimerEnd) {
       const storedTimerEndMs = parseInt(storedTimerEnd);
       const timeRemaining = storedTimerEndMs - Date.now();
@@ -125,6 +126,20 @@ const OtpVerification = () => {
     }, 1000);
     setTimer(interval);
   };
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (user?.success && user?.data?.otp && user?.data.reset ) {
+      navigate('/update-password' ,{replace:true })
+    }
+    if (user?.success && user?.data?.otp && user?.data.details ) {
+      navigate('/register' ,{replace:true })
+    }
+  }, [user]);
   return (
     <>
       <div className="otp-container bg-white rounded-lg w-[90%] m-2 h-[300px] lg:w-[80%] md:w-[90%] sm:w-[60%] flex flex-col items-center">

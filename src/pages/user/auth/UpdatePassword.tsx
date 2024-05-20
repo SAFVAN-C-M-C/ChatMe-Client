@@ -10,12 +10,7 @@ const UpdatePassword = () => {
     const { user, loading, error } = useSelector(
         (state: RootState) => state.user
     );
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (user && user?.loggined) {
-          navigate("/",{replace:true});
-        }
-      }, [user, navigate]);
+
   return (
     <>
       <div className="main-container w-full h-[100vh] flex">

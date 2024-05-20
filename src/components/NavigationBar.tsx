@@ -1,11 +1,16 @@
 import { Icon } from "@iconify/react";
 import NavigationOptions from "./NavigationOptions";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
 import { logout } from "../redux/actions/user/userActions";
 
 const NavigationBar = () => {
+  const { user, loading, error } = useSelector(
+    (state: RootState) => state.user
+  );
+  console.log("==================================hey",user);
+  
   const options = {
     Home: "teenyicons:home-solid",
     Notification: "mingcute:notification-fill",
@@ -53,13 +58,11 @@ const NavigationBar = () => {
             <img
               src="/general/ChatMe-profile.png"
               alt="profile"
-              width={26}
-              height={26}
-              className="rounded-full"
+              className="rounded-full w-[26px] h-[26px]"
             />
           </div>
           <div className="option-title w-[60%] text-lg flex justify-start hidden lg:flex">
-            <b>Profile</b>
+            <b className="text-base">{user?.data?.name}</b>
           </div>
         </div>
         {moreActive ? (

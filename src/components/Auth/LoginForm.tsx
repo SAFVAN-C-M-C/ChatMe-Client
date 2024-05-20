@@ -7,8 +7,9 @@ import { Field } from "formik";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { loginUser } from "../../redux/actions/user/userActions";
+import { googleLoginOrSignUp, loginUser } from "../../redux/actions/user/userActions";
 import { validateEmail, validatePassword } from "../../helper/validate";
+import { GoogleLogin } from "@react-oauth/google";
 const LoginForm = () => {
   const { user, loading, error } = useSelector(
     (state: RootState) => state.user
@@ -22,22 +23,14 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
 
-  useEffect(() => {
-    if (user?.loggined) {
-      navigate("/",{replace:true});
-    }
-    if(user && !user?.isDetailsComplete){
-      navigate('/register',{replace:true})
-    }
 
-  }, [user, navigate]);
   const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
     const {name , value} = e.target
     setFormData(prevData => ({ ...prevData, [name]: value}))
   }
   useEffect(() => {
     if (error) {
-      toast.error("Please check your email or password");
+      toast.error(error);
     }
   }, [error]);
 
@@ -56,10 +49,9 @@ const LoginForm = () => {
       navigate:navigate
     }
     dispatch(loginUser(newData));
-    // setTimeout(() => {
-      
-    // }, 2000);
-    
+  };
+  const loginWithGoogle = async (data:any) => {
+    dispatch(googleLoginOrSignUp(data));
   };
   return (
     <>
@@ -124,10 +116,20 @@ const LoginForm = () => {
           <p className="text-blue-600 text-xs mt-3"><Link to="/forgot-password">Forgot password?</Link></p>
         </div>
         <div className="line w-[90%] h-[.5px] mt-4 bg-gray-700"></div>
-        <div className="sign-up-with-google w-3/4 h-[40px] border-[.5px] border-gray-600 rounded-lg mt-4 flex justify-center items-center">
-          <p className="font-medium text-gray-500 mr-3">Sign in with </p>
-          <Icon icon="devicon:google" width="1.2rem" height="1.2rem" />
-        </div>
+        {/* <div className="sign-up-with-google w-3/4 h-[40px] border-[.5px] border-gray-600 rounded-lg mt-4 flex justify-center items-center"> */}
+          {/* <p className="font-medium text-gray-500 mr-3">Sign in with </p>
+          <Icon icon="devicon:google" width="1.2rem" height="1.2rem" /> */}
+          <div className="mt-4">
+          <GoogleLogin text="signin_with"
+              onSuccess={(credentialResponse) => {
+                loginWithGoogle(credentialResponse);
+              }}
+              onError={() => {
+                console.log("Login Failed");
+              }}
+            />
+          </div>
+        {/* </div> */}
         <div className="new-user mt-3">
           New user?<Link to="/register">SignUp</Link>
         </div>

@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { URL } from "../../../common/api";
-import { config, handleError, appJson } from "../../../common/configurations";
+import { config, handleError } from "../../../common/configurations";
+import { IUserLogin } from "../../../types/Iuser";
 axios.defaults.withCredentials = true;
 
+// get user details
 export const getUserDataFirst = createAsyncThunk(
   "user/getUserDataFirst",
   async (_, { rejectWithValue }) => {
@@ -16,6 +19,25 @@ export const getUserDataFirst = createAsyncThunk(
     }
   }
 );
+
+//google auth
+export const googleLoginOrSignUp = createAsyncThunk(
+  "user/googleLoginOrSignUp",
+  async (userCredentials: IUserLogin, { rejectWithValue }) => {
+    try {
+      console.log("reached in userLogin reducer");
+      const { data } = await axios.post(
+        `${URL}/auth/google`,
+        userCredentials,
+        config
+      );
+      return data;
+    } catch (error: any) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+
 //logout
 export const logout = createAsyncThunk(
   "user/logout",
@@ -35,7 +57,6 @@ export const RegisterUser = createAsyncThunk(
   "user/registerUser",
   async (
     userCredentials: {
-      navigate: any;
       data: {
         email: string;
         password: string;
@@ -44,18 +65,14 @@ export const RegisterUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const { navigate } = userCredentials;
       console.log("calling signup");
       console.log(`${URL}/auth/register`);
-
       const { data } = await axios.post(
         `${URL}/auth/register`,
         userCredentials.data,
         config
       );
       console.log(data, "here in data");
-
-      navigate("/otp-verification", { replace: true });
       return data;
     } catch (error: any) {
       return handleError(error, rejectWithValue);
@@ -75,12 +92,11 @@ export const addRegisterDetails = createAsyncThunk(
         phone: string;
         accountType: string;
       };
-      navigate: any;
+
     },
     { rejectWithValue }
   ) => {
     try {
-      const { navigate } = userCredentials;
 
       console.log("calling signup");
 
@@ -90,7 +106,6 @@ export const addRegisterDetails = createAsyncThunk(
         config
       );
       console.log(data, "here in data");
-      navigate("/", { replace: true });
       return { ...data, loggined: true };
     } catch (error: any) {
       return handleError(error, rejectWithValue);
@@ -106,19 +121,17 @@ export const loginUser = createAsyncThunk(
         email: string;
         password: string;
       };
-      navigate: any;
     },
     { rejectWithValue }
   ) => {
     try {
-      const { navigate } = userCredentials;
+  
       const res = await axios.post(
         `${URL}/auth/login`,
         userCredentials.data,
         config
       );
       localStorage.setItem("user", res.data);
-      navigate("/", { replace: true });
       return { ...res.data, loggined: true };
     } catch (error: any) {
       return handleError(error, rejectWithValue);
@@ -127,22 +140,34 @@ export const loginUser = createAsyncThunk(
 );
 
 //forgot password
-// export const forgotPassword = createAsyncThunk(
-//   "forgot/password",
-//   async ({ email: string, navigate: any }, { rejectWithValue }) => {
-//     try {
-//       const { data } = await axios.post(
-//         `${URL}/auth/forgotpassword`,
-//         { email },
-//         config
-//       );
-//       console.log("🚀 ~ file: userActions.tsx:99 ~ async ~ data:", data);
-//       return data;
-//     } catch (error: any) {
-//       return handleError(error, rejectWithValue);
-//     }
-//   }
-// );
+export const forgotPassword = createAsyncThunk(
+  "forgot/password",
+  async (email: string, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(
+        `${URL}/auth/forgotpassword`,
+        {email},
+        config
+      );
+      console.log("🚀 ~ file: userActions.tsx:99 ~ async ~ data:", data);
+      return data;
+    } catch (error: any) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+//update password
+export const updatePassword = createAsyncThunk(
+  "reset/password",
+  async (password:string, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(`${URL}/auth/reset-password`,{password}, config);
+      return data;
+    } catch (error: any) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
 //verify otp
 export const verifyOTP = createAsyncThunk(
   "otp/verify",
@@ -152,12 +177,10 @@ export const verifyOTP = createAsyncThunk(
         otp: string;
         type: string;
       };
-      navigate: any;
     },
     { rejectWithValue }
   ) => {
     try {
-      const { navigate } = dataFromClient;
       const { data } = await axios.post(
         `${URL}/auth/verify-otp`,
         dataFromClient.data,
@@ -169,7 +192,7 @@ export const verifyOTP = createAsyncThunk(
         }
       );
       console.log("🚀 ~ file: userActions.tsx:127 ~ async ~ data:", data);
-      navigate("/register", { replace: true });
+      
       return data;
     } catch (error: any) {
       return handleError(error, rejectWithValue);

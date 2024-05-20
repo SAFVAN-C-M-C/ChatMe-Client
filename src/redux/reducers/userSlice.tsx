@@ -1,13 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
-import { RegisterUser,addRegisterDetails,getUserDataFirst,loginUser,logout, verifyOTP } from "../actions/user/userActions";
-export interface User{
+import {
+  RegisterUser,
+  addRegisterDetails,
+  forgotPassword,
+  getUserDataFirst,
+  googleLoginOrSignUp,
+  loginUser,
+  logout,
+  verifyOTP,
+} from "../actions/user/userActions";
+export interface User {
   _id: string;
   email: string;
   role: string;
   type: string;
   loggined: boolean;
-  isEmailVerified?:boolean;
-  isDetailsComplete?:boolean
+  isEmailVerified?: boolean;
+  isDetailsComplete?: boolean;
 }
 export interface UserState {
   error: any | null;
@@ -17,7 +27,7 @@ export interface UserState {
 
 const initialState: UserState = {
   loading: false as boolean,
-  user: null as any|null ,
+  user: null as any | null,
   error: null as any | null,
 };
 
@@ -31,20 +41,35 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-    .addCase(getUserDataFirst.pending, (state) => {
-      state.loading = true;
-    })
-    .addCase(getUserDataFirst.fulfilled, (state, { payload }) => {
-      state.loading = false;
-      state.error = null;
-      state.user = payload;
-    })
-    .addCase(getUserDataFirst.rejected, (state) => {
-      state.loading = false;
-      state.user = null;
-      state.error = null;
-    })
-    
+      //get user details
+      .addCase(getUserDataFirst.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUserDataFirst.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.user = payload;
+      })
+      .addCase(getUserDataFirst.rejected, (state) => {
+        state.loading = false;
+        state.user = null;
+        state.error = null;
+      })
+      //google auth
+      .addCase(googleLoginOrSignUp.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(googleLoginOrSignUp.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.user = payload;
+      })
+      .addCase(googleLoginOrSignUp.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.user = null;
+        state.error = payload;
+      })
+
       // Login States
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
@@ -82,16 +107,27 @@ const userSlice = createSlice({
       .addCase(RegisterUser.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.error = null;
-        console.log(payload.data,"==================================");
-        
-        state.user = payload.data;
+        state.user = payload;
       })
       .addCase(RegisterUser.rejected, (state, { payload }) => {
         state.loading = false;
         state.user = null;
         state.error = payload;
       })
-
+      // Forgot password
+      .addCase(forgotPassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(forgotPassword.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.user = payload;
+      })
+      .addCase(forgotPassword.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.user = null;
+        state.error = payload;
+      })
       // add register details States
       .addCase(addRegisterDetails.pending, (state) => {
         state.loading = true;
@@ -99,7 +135,7 @@ const userSlice = createSlice({
       .addCase(addRegisterDetails.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.error = null;
-        state.user = payload.data;
+        state.user = payload;
       })
       .addCase(addRegisterDetails.rejected, (state, { payload }) => {
         state.loading = false;
@@ -107,14 +143,14 @@ const userSlice = createSlice({
         state.error = payload;
       })
 
-      // add register details States
+      // verify otp
       .addCase(verifyOTP.pending, (state) => {
         state.loading = true;
       })
       .addCase(verifyOTP.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.error = null;
-        state.user = payload.data;
+        state.user = payload;
       })
       .addCase(verifyOTP.rejected, (state, { payload }) => {
         state.loading = false;

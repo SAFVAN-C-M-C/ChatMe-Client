@@ -11,11 +11,6 @@ const Home = () => {
   console.log(user,"in home");
   
   const navigate=useNavigate()
-useEffect(()=>{
-    if(!user?.loggined){
-        navigate('/login',{replace:true})
-    }
-},[user,navigate])
   return (
     <>
     <NavigationBar/>

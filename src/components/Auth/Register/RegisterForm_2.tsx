@@ -20,7 +20,7 @@ const RegisterForm_2 = () => {
     name: "",
     location: "",
     phone: "",
-    accountType: "",
+    accountType: "personal",
   });
   const [userAccount, setUserAccount] = useState<boolean>(true);
   const [companyAccount, setCompanyAccount] = useState<boolean>(false);

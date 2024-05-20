@@ -11,11 +11,7 @@ const Register = () => {
   );
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  useEffect(() => {
-    if (user && user?.loggined) {
-      navigate("/",{replace:true});
-    }
-  }, [user, navigate]);
+
   return (
     <>
         <div className="main-container w-full h-[100vh] flex">

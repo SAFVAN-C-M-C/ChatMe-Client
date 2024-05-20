@@ -1,13 +1,12 @@
 import { Icon } from '@iconify/react'
 import { useEffect, useState } from 'react';
-import * as Yup from "yup";
-import { Formik, Form, Field } from "formik";
-import { RegisterUser } from '../../../redux/actions/user/userActions';
+import { RegisterUser, googleLoginOrSignUp } from '../../../redux/actions/user/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../redux/store';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { validateEmail, validatePassword } from '../../../helper/validate';
+import { GoogleLogin } from '@react-oauth/google';
 
 
 const RegisterForm_1 = () => {
@@ -29,7 +28,7 @@ const RegisterForm_1 = () => {
 const navigate=useNavigate()
   useEffect(() => {
     if (error) {
-      toast.error("Please check your email or password");
+      toast.error(error);
     }
   }, [error]);
   // useEffect(()=>{
@@ -67,15 +66,18 @@ const navigate=useNavigate()
       toast.error("Password must contain 8 characters")
       return
     }
+    if(confirmPass.length<8){
+      toast.error("Password don't match up")
+      return
+    }
     const newData={
       data:formData,
       navigate:navigate
     }
-    dispatch(RegisterUser(newData));
-    setTimeout(() => {
-      
-    }, 2000);
-    
+    dispatch(RegisterUser(newData));   
+  };
+  const loginWithGoogle = async (data:any) => {
+    dispatch(googleLoginOrSignUp(data));
   };
   return (
     <>
@@ -156,10 +158,16 @@ const navigate=useNavigate()
         </form>
       
         <div className="line w-[90%] h-[.5px] mt-4 bg-gray-700"></div>
-        <div className="sign-up-with-google w-3/4 h-[40px] border-[.5px] border-gray-600 rounded-lg mt-4 flex justify-center items-center">
-          <p className="font-medium text-gray-500 mr-3">Sign up with </p>
-          <Icon icon="devicon:google" width="1.2rem" height="1.2rem" />
-        </div>
+        <div className="mt-4">
+          <GoogleLogin text="signup_with"
+              onSuccess={(credentialResponse) => {
+                loginWithGoogle(credentialResponse);
+              }}
+              onError={() => {
+                console.log("Login Failed");
+              }}
+            />
+          </div>
         <div className="new-user mt-3">
           Already registered?<Link to="/">Login</Link>
         </div>
