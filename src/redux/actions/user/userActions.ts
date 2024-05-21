@@ -13,7 +13,7 @@ export const getUserDataFirst = createAsyncThunk(
     try {
       const { data } = await axios.get(`${URL}/auth/`, config);
       console.log(data, "here in data of getUserDataFirst");
-      return { ...data, loggined: true };
+      return data;
     } catch (error: any) {
       return handleError(error, rejectWithValue);
     }
@@ -175,7 +175,7 @@ export const verifyOTP = createAsyncThunk(
     dataFromClient: {
       data: {
         otp: string;
-        type: string;
+        type?: string;
       };
     },
     { rejectWithValue }
@@ -191,7 +191,8 @@ export const verifyOTP = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log("🚀 ~ file: userActions.tsx:127 ~ async ~ data:", data);
+      console.log("in user action data",data);
+      
       
       return data;
     } catch (error: any) {

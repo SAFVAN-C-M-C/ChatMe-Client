@@ -9,8 +9,7 @@ const Register = () => {
   const { user } = useSelector(
     (state: RootState) => state.user
   );
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
+console.log("hellop");
 
   return (
     <>
@@ -24,7 +23,7 @@ const Register = () => {
         </div>
         <div className="register-part w-full md:w-[40%] bg-gray-00 flex items-center justify-center ">
           {
-            user && !user.isDetailsComplete?  <RegisterForm_2/>:<RegisterForm_1/>
+            user && user?.data?.details?  <RegisterForm_2/>:<RegisterForm_1/>
           }
         </div>
       </div>

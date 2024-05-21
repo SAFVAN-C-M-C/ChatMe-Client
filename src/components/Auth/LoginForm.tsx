@@ -53,6 +53,12 @@ const LoginForm = () => {
   const loginWithGoogle = async (data:any) => {
     dispatch(googleLoginOrSignUp(data));
   };
+  useEffect(()=>{
+    console.log("hello");
+    if(user && user?.data?.details){
+      navigate('/register',{replace:true})
+    }
+  },[user])
   return (
     <>
       <div className="login-container bg-white border-[.5px] border-gray-700 rounded-lg w-[90%] m-2 h-[550px] lg:w-[80%] md:w-[90%] sm:w-[60%] flex flex-col items-center">

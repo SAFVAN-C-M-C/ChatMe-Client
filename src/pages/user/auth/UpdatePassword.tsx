@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+
 import ResetPassword from "../../../components/Auth/ResetPassword";
 
 const UpdatePassword = () => {

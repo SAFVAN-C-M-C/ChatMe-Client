@@ -10,7 +10,7 @@ const Home = () => {
   const { user } = useSelector((state: RootState) => state.user);
   console.log(user,"in home");
   
-  const navigate=useNavigate()
+  
   return (
     <>
     <NavigationBar/>

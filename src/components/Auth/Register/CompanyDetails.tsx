@@ -1,6 +1,5 @@
 import { Icon } from "@iconify/react";
 
-
 const CompanyDetails = () => {
   return (
     <>
@@ -32,7 +31,7 @@ const CompanyDetails = () => {
           placeholder="Enter Phone Number "
         />
       </div>
-      
+
       <div className=" pl-3 register-field mt-5 mb-5 bg-slate-200 w-[80%] h-[50px] rounded-md flex items-center">
         <Icon
           icon="mdi:location"

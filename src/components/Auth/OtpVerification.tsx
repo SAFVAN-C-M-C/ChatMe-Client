@@ -13,15 +13,19 @@ const OtpVerification = () => {
   const { user, loading, error } = useSelector(
     (state: RootState) => state.user
   );
-
   const dispatch = useDispatch<AppDispatch>();
-  const navigate=useNavigate()
+  const navigate=useNavigate();
+
+  //local states
   const [resendButton,setResendButton]=useState<boolean>(false)
   const [timer, setTimer] = useState<number | null>(null);
   const [timerValue, setTimerValue] = useState<string>("01:59");
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
   const inputRefs = useRef<HTMLInputElement[]>([]);
 
+
+
+  //event handlers
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const value = e.target.value;
     if (isNaN(Number(value))) {
@@ -55,36 +59,10 @@ const OtpVerification = () => {
       },
     }
     console.log(newData,"============");
-    
     dispatch(verifyOTP(newData))
   }
-  useEffect(() => {
-    console.log("timer");
-    const storedTimerValue = localStorage.getItem("timerValue");
-    const storedTimerEnd = localStorage.getItem("timerEnd");
-    if (storedTimerValue && storedTimerEnd) {
-      const storedTimerEndMs = parseInt(storedTimerEnd);
-      const timeRemaining = storedTimerEndMs - Date.now();
-
-    //   if (timeRemaining > 0) {
-        startTimer(timeRemaining);
-    //   }
-    } else {
-
-      startTimer(119000);
-    }
-
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    };
-  }, []);
+  
   const resendOTP = async () => {
-    // Restart the timer
-    
-
-    // Call your Axios function to resend OTP
     try {
       await axios.get(`${URL}/notification/email-verification`,{
         headers: {
@@ -92,7 +70,6 @@ const OtpVerification = () => {
         },
         withCredentials: true,
       });
-      // Show success message or handle the resend success in any way you want
       setTimer(null);
       startTimer(119000);
       toast.success("OTP resent successfully");
@@ -126,6 +103,32 @@ const OtpVerification = () => {
     }, 1000);
     setTimer(interval);
   };
+
+
+
+  //useefects
+  useEffect(() => {
+    console.log("timer");
+    const storedTimerValue = localStorage.getItem("timerValue");
+    const storedTimerEnd = localStorage.getItem("timerEnd");
+    if (storedTimerValue && storedTimerEnd) {
+      const storedTimerEndMs = parseInt(storedTimerEnd);
+      const timeRemaining = storedTimerEndMs - Date.now();
+
+    //   if (timeRemaining > 0) {
+        startTimer(timeRemaining);
+    //   }
+    } else {
+
+      startTimer(119000);
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, []);
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -133,10 +136,13 @@ const OtpVerification = () => {
   }, [error]);
 
   useEffect(() => {
-    if (user?.success && user?.data?.otp && user?.data.reset ) {
+    if (user?.success && user?.data?.reset ) {
+      console.log("hi");
+      
       navigate('/update-password' ,{replace:true })
     }
-    if (user?.success && user?.data?.otp && user?.data.details ) {
+    if (user?.success && user?.data?.details) {
+
       navigate('/register' ,{replace:true })
     }
   }, [user]);

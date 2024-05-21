@@ -8,6 +8,7 @@ import {
   googleLoginOrSignUp,
   loginUser,
   logout,
+  updatePassword,
   verifyOTP,
 } from "../actions/user/userActions";
 export interface User {
@@ -18,10 +19,21 @@ export interface User {
   loggined: boolean;
   isEmailVerified?: boolean;
   isDetailsComplete?: boolean;
+  otp?:boolean;
+  details?:boolean;
+  reset?:boolean;
+  otpType?:string
+}
+export interface UserPayload{
+  success:boolean;
+  data:User;
+  message:string;
+  loggined?:boolean;
+  detailsFilled?:boolean;
 }
 export interface UserState {
   error: any | null;
-  user: User | null;
+  user: UserPayload | null;
   loading: boolean;
 }
 
@@ -127,6 +139,20 @@ const userSlice = createSlice({
         state.loading = false;
         state.user = null;
         state.error = payload;
+      })
+      //update password
+      .addCase(updatePassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updatePassword.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.user = payload;
+      })
+      .addCase(updatePassword.rejected, (state) => {
+        state.loading = false;
+        state.user = null;
+        state.error = null;
       })
       // add register details States
       .addCase(addRegisterDetails.pending, (state) => {

@@ -20,17 +20,9 @@ const ForgotPassword = () => {
   );
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
-  }, [error]);
-  useEffect(() => {
-    if (user?.success && user?.data?.otp ) {
-      navigate('/otp-verification' ,{replace:true })
-    }
-  }, [user]);
+
   const [email, setEmail] = useState<string>("");
+  //event handler
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
@@ -43,6 +35,18 @@ const ForgotPassword = () => {
     }
     dispatch(forgotPassword(email));
   };
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+  useEffect(() => {
+    if (user?.success && user?.data?.otp ) {
+      navigate('/otp-verification' ,{replace:true })
+    }
+  }, [user]);
+  
+
   return (
     <>
       <div className="forgot-container bg-white rounded-lg w-[90%] m-2 h-[300px] lg:w-[80%] md:w-[90%] sm:w-[60%] flex flex-col items-center">

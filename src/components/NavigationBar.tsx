@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import { logout } from "../redux/actions/user/userActions";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const NavigationBar = () => {
   const { user, loading, error } = useSelector(
@@ -12,13 +13,13 @@ const NavigationBar = () => {
   console.log("==================================hey",user);
   
   const options = {
-    Home: "teenyicons:home-solid",
-    Notification: "mingcute:notification-fill",
-    Explore: "mdi:compass",
-    Chat: "icon-park-solid:message",
-    Saved: "iconamoon:bookmark-fill",
-    "Create Post": "icons8:plus",
-    Jobs: "solar:suitcase-bold",
+    Home: ["teenyicons:home-solid",'/'],
+    Notification: ["mingcute:notification-fill",'/'],
+    Explore: ["mdi:compass",'/'],
+    Chat: ["icon-park-solid:message",'/'],
+    Saved: ["iconamoon:bookmark-fill",'/'],
+    "Create Post": ["icons8:plus",'/'],
+    Jobs: ["solar:suitcase-bold",'/'],
   };
   const [moreActive, setMoreActive] = useState(false);
   // const [theamToggle,setTheamToggle]=useState("light");
@@ -28,10 +29,17 @@ const NavigationBar = () => {
     setDarkTheamActive(!darkTheamActive);
   };
   const dispatch = useDispatch<AppDispatch>();
-
+  const navigate=useNavigate()
   const handleLogout=(e:any)=>{
     dispatch(logout())
   }
+  type HandleOptionClick = (event: React.MouseEvent<HTMLDivElement>, option: string) => void;
+
+// Implement the event handler function
+const handleOptionClick: HandleOptionClick = (event, option) => {
+  event.preventDefault();
+  navigate(`/${option}`)
+};
   return (
     <div className="Nav-Bar h-[100%] lg:w-[270px] w-[75px] ">
     <div className="Nav-Bar fixed h-[100vh] lg:w-[270px] w-[75px] border-r-[.5px] border-black">
@@ -51,9 +59,9 @@ const NavigationBar = () => {
       </div>
       <div className="options-container flex flex-col items-center mt-10">
         {Object.entries(options).map(([title, icon], index) => (
-          <NavigationOptions key={index} title={title} icon={icon} />
+          <NavigationOptions key={index} title={title} value={icon}/>
         ))}
-        <div className="options flex justify-center w-[80%] mt-4 mb-4">
+        <div className="options flex justify-center w-[80%] mt-4 mb-4" onClick={(e)=>handleOptionClick(e,"profile")}>
           <div className="option-icon w-[40%] flex justify-center">
             <img
               src="/general/ChatMe-profile.png"

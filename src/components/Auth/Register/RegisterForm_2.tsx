@@ -1,8 +1,5 @@
 import { Icon } from "@iconify/react";
-import { useState } from "react";
-import UserDetails from "./UserDetails";
-import CompanyDetails from "./CompanyDetails";
-import { date } from "yup";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +13,9 @@ const RegisterForm_2 = () => {
   );
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
+
+  //local states
   const [formData, setFormData] = useState({
     name: "",
     location: "",
@@ -24,7 +24,10 @@ const RegisterForm_2 = () => {
   });
   const [userAccount, setUserAccount] = useState<boolean>(true);
   const [companyAccount, setCompanyAccount] = useState<boolean>(false);
-  const handleAccountRadio = (e) => {
+
+
+  //event handler
+  const handleAccountRadio = (e:React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === "company") {
       setCompanyAccount(true);
       setUserAccount(false);
@@ -55,13 +58,23 @@ const RegisterForm_2 = () => {
     }
     const newData = {
       data: formData,
-      navigate: navigate,
     };
     dispatch(addRegisterDetails(newData));
-    // setTimeout(() => {
-
-    // }, 2000);
   };
+
+  //use effects
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+  useEffect(() => {
+    if (user && user?.success && user?.loggined) {
+      console.log("this is the error");
+      
+      navigate("/", { replace: true });
+    }
+  },[user]);
   return (
     <>
       <div className="register-container bg-white rounded-lg w-[90%] m-2 h-[550px] lg:w-[80%] md:w-[90%] sm:w-[60%] flex flex-col items-center border-[.5px] border-gray-500">
@@ -159,7 +172,7 @@ const RegisterForm_2 = () => {
               className="w-full h-full text-white flex justify-center items-center"
               type="submit"
             >
-              Register
+              {loading?"loading...":"Register"}
             </button>
           </div>
         </form>

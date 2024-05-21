@@ -13,18 +13,10 @@ const ResetPassword = () => {
     (state: RootState) => state.user
   );
   const navigate=useNavigate()
-  useEffect(()=>{
-    if(error){
-      toast.error(error)
-    }
-  },[error]);
-  
-    useEffect(() => {
-      if (user?.success ) {
-        navigate('/' ,{replace:true })
-      }
-    }, [user]);
   const dispatch = useDispatch<AppDispatch>();
+
+
+
     const [showPassword,setShowPassword]=useState<boolean>(false)
     const [password,setPassword]=useState<string>("");
     const [confirmPassword,setConfirmPassword]=useState<string>("")
@@ -48,6 +40,16 @@ const ResetPassword = () => {
       }
       dispatch(updatePassword(password))
     }
+    useEffect(()=>{
+      if(error){
+        toast.error(error)
+      }
+    },[error]);
+    useEffect(() => {
+      if (user?.success && user?.message==="Password updated successfully" ) {
+        navigate('/login' ,{replace:true })
+      }
+    }, [user]);
   return (
     <>
       <div className="forgot-container bg-white rounded-lg w-[90%] m-2 h-[350px] lg:w-[80%] md:w-[90%] sm:w-[60%] flex flex-col items-center">
