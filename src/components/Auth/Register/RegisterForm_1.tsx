@@ -82,9 +82,11 @@ const RegisterForm_1 = () => {
   }, [error]);
   useEffect(() => {
     if (user && user?.success && user?.data?.otp) {
+      localStorage.removeItem("timerValue");
+      localStorage.removeItem("timerEnd");
       navigate("/otp-verification", { replace: true });
     }
-  },[user]);
+  }, [user]);
   return (
     <>
       <div className="register-container bg-white border-[.5px] border-gray-700 rounded-lg w-[90%] m-2 h-[550px] lg:w-[80%] md:w-[90%] sm:w-[60%] flex flex-col items-center">

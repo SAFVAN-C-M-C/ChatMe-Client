@@ -41,11 +41,12 @@ const ForgotPassword = () => {
     }
   }, [error]);
   useEffect(() => {
-    if (user?.success && user?.data?.otp ) {
-      navigate('/otp-verification' ,{replace:true })
+    if (user?.success && user?.data?.otp) {
+      localStorage.removeItem("timerValue");
+      localStorage.removeItem("timerEnd");
+      navigate("/otp-verification", { replace: true });
     }
   }, [user]);
-  
 
   return (
     <>

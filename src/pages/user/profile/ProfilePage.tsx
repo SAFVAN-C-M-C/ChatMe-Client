@@ -6,6 +6,8 @@ import UserExprerience from "../../../components/Profile/UserExprerience";
 import UserSkills from "../../../components/Profile/UserSkills";
 import UserPreferedJob from "../../../components/Profile/UserPreferedJob";
 import UserPostPart from "../../../components/Profile/UserPostPart";
+import CompanyPostPart from "../../../components/Profile/CompanyPostPart";
+import RecruiterPostpart from "../../../components/Profile/RecruiterPostpart";
 
 const ProfilePage = () => {
   return (
@@ -19,7 +21,9 @@ const ProfilePage = () => {
           <UserExprerience />
           <UserSkills />
           <UserPreferedJob />
-          <UserPostPart/>
+          {/* <UserPostPart/> */}
+          {/* <CompanyPostPart/> */}
+          <RecruiterPostpart/>
         </div>
       </div>
     </>

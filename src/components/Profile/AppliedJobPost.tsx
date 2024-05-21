@@ -5,7 +5,7 @@ const AppliedJobPost = () => {
   return (
     <>
         <div className="post-container mt-4 w-[90%] rounded-lg border-[.5px] border-gray-500 h-auto flex">
-            <div className="logo w-[30%] md:w-[20%] bg-blue-500 h-full flex justify-center items-center">
+            <div className="logo w-[30%] md:w-[20%]  h-full flex justify-center items-center">
                 <img src="/tests/some_company_logo.jpg" alt="company logo" className='w-[56px] h-[56px] rounded-full' />
             </div>
             <div className="logo w-[70%] md:w-[80%]  h-full ">

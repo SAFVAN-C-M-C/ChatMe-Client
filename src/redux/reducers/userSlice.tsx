@@ -12,11 +12,12 @@ import {
   verifyOTP,
 } from "../actions/user/userActions";
 export interface User {
-  _id: string;
-  email: string;
-  role: string;
-  type: string;
-  loggined: boolean;
+  _id?: string;
+  name?:string
+  email?: string;
+  role?: string;
+  type?: string;
+  loggined?: boolean;
   isEmailVerified?: boolean;
   isDetailsComplete?: boolean;
   otp?:boolean;
