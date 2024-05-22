@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import Posts from "./Posts";
+import Posts from "../General/Posts";
 import { useState } from "react";
 import Jobs from "./Jobs";
 import Recruiters from "./Recruiters";
@@ -27,7 +27,7 @@ const CompanyPostPart = () => {
                 : ""
             }
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onClick={(e) => handleNavPostClick("post")}
+            onClick={() => handleNavPostClick("post")}
           >
             <div className=" p-3 flex items-center">
               <Icon
@@ -46,7 +46,7 @@ const CompanyPostPart = () => {
                 : ""
             }
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onClick={(e) => handleNavPostClick("jobs")}
+            onClick={() => handleNavPostClick("jobs")}
           >
             <div className=" p-3 flex items-center">
               <Icon
@@ -65,7 +65,7 @@ const CompanyPostPart = () => {
                 : ""
             }
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onClick={(e) => handleNavPostClick("recruiter")}
+            onClick={() => handleNavPostClick("recruiter")}
           >
             <div className=" p-3 flex items-center">
               <Icon
@@ -84,7 +84,7 @@ const CompanyPostPart = () => {
                 : ""
             }
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onClick={(e) => handleNavPostClick("recruiter_request")}
+            onClick={() => handleNavPostClick("recruiter_request")}
           >
             <div className="p-3 flex items-center">
               <Icon

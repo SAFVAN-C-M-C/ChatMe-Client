@@ -11,12 +11,13 @@ import {
   updatePassword,
   verifyOTP,
 } from "../actions/user/userActions";
+import { AccountType } from "../../types/Iuser";
 export interface User {
   _id?: string;
   name?:string
   email?: string;
   role?: string;
-  type?: string;
+  accountType?: AccountType;
   loggined?: boolean;
   isEmailVerified?: boolean;
   isDetailsComplete?: boolean;

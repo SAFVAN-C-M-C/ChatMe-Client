@@ -1,4 +1,4 @@
-import React from "react";
+
 import PostinGrid from "./PostinGrid";
 
 const Posts = () => {

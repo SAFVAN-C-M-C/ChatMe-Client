@@ -1,10 +1,12 @@
-import { Icon } from "@iconify/react";
-import { useState } from "react";
-import Posts from "./Posts";
-import AppliedJobs from "./AppliedJobs";
+import { Icon } from '@iconify/react'
+import { useState } from 'react';
+import Posts from '../General/Posts';
+import Jobs from '../Company/Jobs';
+import RecruiterJobs from './RecruiterJobs';
 
-const UserPostPart = () => {
-    const [postNav, setPostNav] = useState("post");
+
+const RecruiterPostpart = () => {
+    const [postNav, setPostNav] = useState<string | "post" | "jobs" >("post");
     const handleNavPostClick = (value: string) => {
       setPostNav(value);
     };
@@ -38,28 +40,28 @@ const UserPostPart = () => {
           </li>
           <li
             className={
-              postNav === "applied_job"
+              postNav === "jobs"
                 ? "md:border-t md:border-gray-700 md:-mt-px md:text-gray-700"
                 : ""
             }
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onClick={(e) => handleNavPostClick("applied_job")}
+            onClick={(e) => handleNavPostClick("jobs")}
           >
             <div className="p-3 flex items-center">
               <Icon
-                icon="hugeicons:job-search"
+                icon="solar:suitcase-bold"
                 className="mr-1"
                 width={26}
                 height={26}
               />
-              <span className="hidden md:inline">Applied Jobs</span>
+              <span className="hidden md:inline">Jobs</span>
             </div>
           </li>
         </ul>
       </div>
-      {postNav === "post" ? <Posts /> : <AppliedJobs />}
+      {postNav === "post" ? <Posts /> : <RecruiterJobs />}
     </>
-  );
-};
+  )
+}
 
-export default UserPostPart;
+export default RecruiterPostpart
