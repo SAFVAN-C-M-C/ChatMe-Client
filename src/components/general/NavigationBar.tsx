@@ -2,8 +2,8 @@ import { Icon } from "@iconify/react";
 import NavigationOptions from "./NavigationOptions";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../redux/store";
-import { logout } from "../redux/actions/user/userActions";
+import { AppDispatch, RootState } from "../../redux/store";
+import { logout } from "../../redux/actions/user/userActions";
 import { Navigate, useNavigate } from "react-router-dom";
 
 const NavigationBar = () => {

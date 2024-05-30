@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../redux/actions/user/userActions";
-import NavigationOptions from "../NavigationOptions";
+import NavigationOptions from "../general/NavigationOptions";
 import { Icon } from "@iconify/react";
 
 const NavBar = () => {

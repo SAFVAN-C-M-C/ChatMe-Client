@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
-import { handleError } from "./configurations";
+// import { handleError } from "./configurations";
 
 // Constants for API endpoints
 export const URL = "http://localhost:5555/api";
@@ -17,6 +17,80 @@ apiInstance.interceptors.response.use((response) => {
   console.log(error.message);
   throw error; 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Function to handle common requests
 export const commonRequest = async (

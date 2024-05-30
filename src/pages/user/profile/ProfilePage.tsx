@@ -1,4 +1,4 @@
-import NavigationBar from "../../../components/NavigationBar";
+import NavigationBar from "../../../components/general/NavigationBar";
 import UserBio from "../../../components/Profile/Personal/UserBio";
 import About from "../../../components/Profile/General/About";
 import UserEducation from "../../../components/Profile/Personal/UserEducation";

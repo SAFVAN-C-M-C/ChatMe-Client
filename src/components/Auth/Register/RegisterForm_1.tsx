@@ -162,9 +162,9 @@ const RegisterForm_1 = () => {
               <p className="text-red-700 text-sm">{inputError}</p>
             </div>
           )}
-          <div className="login-button w-[30%] h-[40px] bg-blue-600 rounded-full">
+          <div className="login-button w-[30%] h-[40px] rounded-full">
             <button
-              className="w-full h-full text-white flex justify-center items-center"
+              className="w-full outline-none rounded-full hover:outline-none bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-500 focus:outline-none h-full text-white flex justify-center items-center transition-colors duration-500 delay-200"
               type="submit"
             >
               {loading ? "loading..." : "Verify"}
