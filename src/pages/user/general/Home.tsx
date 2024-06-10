@@ -11,7 +11,7 @@ import SugestedUser from '../../../components/Home/SugestedUser';
 
 const Home = () => {
   const { user } = useSelector((state: RootState) => state.user);
-  console.log(user,"in home");
+  
   
   
   return (

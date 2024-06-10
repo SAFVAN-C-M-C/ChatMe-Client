@@ -22,8 +22,9 @@ const ProfilePage = () => {
         <NavigationBar />
         <div className="profile-part w-full   flex flex-col items-center">
           {
-            user?.data?.accountType === "personal" ?<UserBio/>:user?.data?.accountType === "company" ? <CompanyBio/>:null
+            user?.data?.accountType === "personal" ?<UserBio/>:user?.data?.accountType === "company" ? <CompanyBio/>:user?.data?.accountType === "recruiter" ? <RecruiterBio/>:null
           }
+          
           <About />
           {user?.data?.accountType === "personal" ? (
             <>

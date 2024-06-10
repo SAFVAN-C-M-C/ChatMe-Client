@@ -10,7 +10,7 @@ const NavigationBar = () => {
   const { user, loading, error } = useSelector(
     (state: RootState) => state.user
   );
-  console.log("==================================hey",user);
+  
   
   const options = {
     Home: ["teenyicons:home-solid",'/'],
@@ -31,7 +31,7 @@ const NavigationBar = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate=useNavigate()
   const handleLogout=(e:any)=>{
-    dispatch(logout())
+    dispatch(logout(navigate))
   }
   type HandleOptionClick = (event: React.MouseEvent<HTMLDivElement>, option: string) => void;
 

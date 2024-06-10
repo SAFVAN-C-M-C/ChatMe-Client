@@ -25,4 +25,6 @@ export interface IProfile{
       jobs?: string[] | null;
       recruiters?: string[] | null;
     };
+    isVerified:boolean;
+    
 }

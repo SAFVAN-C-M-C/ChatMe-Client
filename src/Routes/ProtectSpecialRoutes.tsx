@@ -12,17 +12,15 @@ const ProtectSpecialRoutes = ({
   type,
   children,
 }: ProtectSpecialRoutesProps) => {
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user,error } = useSelector((state: RootState) => state.user);
 
   if (type === "otp") {
-    if (user?.data?.otp) {
+    if (user?.data?.otp || error) {
       return <>{children}</>;
     } else {
       return <Navigate to="/login" />;
     }
   } else if (type === "reset") {
-    console.log("here some where ",user?.data?.reset);
-    
     if (user?.data?.reset) {
       return <>{children}</>;
     } else {

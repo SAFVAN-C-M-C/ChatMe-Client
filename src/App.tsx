@@ -1,32 +1,40 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import Login from "./pages/user/auth/Login";
-import Register from "./pages/user/auth/Register";
-import Home from "./pages/user/general/Home";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "./redux/store";
-import OTPpage from "./pages/user/auth/OTPpage";
 import { useEffect, useState } from "react";
 import { getUserDataFirst } from "./redux/actions/user/userActions";
+import { getProfileDataFirst } from "./redux/actions/user/profileActions";
+import { getAdminUsersDetails } from "./redux/actions/admin/adminUserAction";
 import UpdatePassword from "./pages/user/auth/UpdatePassword";
 import ForgotPasswordPage from "./pages/user/auth/ForgotPasswordPage";
 import ProfilePage from "./pages/user/profile/ProfilePage";
 import PrivetRoutes from "./Routes/PrivetRoutes";
 import AuthRoutes from "./Routes/AuthRoutes";
 import ProtectSpecialRoutes from "./Routes/ProtectSpecialRoutes";
-// import RolebaseRoutes from "./Routes/RolebaseRoutes";
 import AdminHome from "./pages/admin/AdminHome";
 import Error404 from "./pages/general/Error404";
 import LoadingBar from "react-top-loading-bar";
 import SplashScreen from "./components/general/SplashScreen";
+import Login from "./pages/user/auth/Login";
+import Register from "./pages/user/auth/Register";
+import Home from "./pages/user/general/Home";
+import OTPpage from "./pages/user/auth/OTPpage";
+import Users from "./pages/admin/Users";
 function App() {
+  //redux
   const { user } = useSelector((state: RootState) => state.user);
-  console.log(user);
+  const { profile } = useSelector((state: RootState) => state.profile);
+  const dispatch = useDispatch<AppDispatch>();
+  const { adminUser } = useSelector((state: RootState) => state.adminUser);
+
+  //local states
   const [progress, setProgress] = useState(0);
   const location = useLocation();
   const [loading, setLoading] = useState(true);
 
+
+  //useeffects
   useEffect(() => {
-    // Start loading bar on route change
     setProgress(20);
     setTimeout(() => {
       setProgress(50);
@@ -37,32 +45,44 @@ function App() {
     setTimeout(() => {
       setProgress(100);
     }, 900);
-
     return () => {
       setProgress(0);
     };
   }, [location]);
 
-  const dispatch = useDispatch<AppDispatch>();
-  // const navigate = useNavigate();
+  
 
   useEffect(() => {
+    console.log("On loading the app user=",user);
+    console.log("On loading the app profile=",profile);
+    console.log("On loading the app profile=",adminUser);
+    
     if (!user) {
       dispatch(getUserDataFirst());
     }
-    // Check if the splash screen has already been shown
+    if(user?.data?._id && user.data.role==="admin"){
+      dispatch(getAdminUsersDetails())
+    }
+    if(user?.data?._id && user.data.role==="user"){
+      dispatch(getProfileDataFirst())
+    }
     const hasVisited = localStorage.getItem("hasVisited");
     if (!hasVisited) {
       setTimeout(() => {
         setLoading(false);
         localStorage.setItem("hasVisited", "true");
-      }, 3000); // Simulate loading for 3 seconds
+      }, 6000); // Simulate loading for 3 seconds
     } else {
       setTimeout(() => {
         setLoading(false);
-      }, 200);
+      }, 2000);
     }
-  }, [dispatch, user?.data?._id]);
+  }, [dispatch,user?.data?._id,profile?.success,adminUser?.success]);
+  // useEffect(()=>{
+  //   if(user?.data._id){    
+  //     dispatch(getProfileDataFirst())
+  //   }
+  // },[user?.data._id])
   return (
     <>
       {loading ? (
@@ -86,6 +106,7 @@ function App() {
               ) : user?.data?.role === "admin" ? (
                 <>
                   <Route path="/" element={<AdminHome />} />
+                  <Route path="/admin/users" element={<Users />} />
                 </>
               ) : (
                 <Route path="/" element={<Navigate to="/login" />} />

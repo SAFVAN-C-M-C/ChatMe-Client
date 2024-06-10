@@ -9,7 +9,7 @@ const Register = () => {
   const { user } = useSelector(
     (state: RootState) => state.user
   );
-console.log("hellop");
+
 
   return (
     <>

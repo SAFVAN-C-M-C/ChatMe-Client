@@ -58,7 +58,7 @@ const OtpVerification = () => {
         type:user?.data?.otpType
       },
     }
-    console.log(newData,"============");
+    
     dispatch(verifyOTP(newData))
   }
   
@@ -74,7 +74,7 @@ const OtpVerification = () => {
       startTimer(119000);
       toast.success("OTP resent successfully");
     } catch (error:any) {
-      console.log(error.message);
+      
       toast.error("Failed to resend OTP");
     }
   };
@@ -108,7 +108,7 @@ const OtpVerification = () => {
 
   //useefects
   useEffect(() => {
-    console.log("timer");
+    
     const storedTimerValue = localStorage.getItem("timerValue");
     const storedTimerEnd = localStorage.getItem("timerEnd");
     if (storedTimerValue && storedTimerEnd) {
@@ -137,12 +137,12 @@ const OtpVerification = () => {
 
   useEffect(() => {
     if (user?.success && user?.data?.reset ) {
-      console.log("hi");
+      console.log("here");
       
       navigate('/update-password' ,{replace:true })
     }
     if (user?.success && user?.data?.details) {
-
+      console.log("there");
       navigate('/register' ,{replace:true })
     }
   }, [user]);

@@ -12,7 +12,6 @@ export const getUserDataFirst = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(`${URL}/auth/`, config);
-      console.log(data, "here in data of getUserDataFirst");
       return data;
     } catch (error: any) {
       return handleError(error, rejectWithValue);
@@ -25,7 +24,6 @@ export const googleLoginOrSignUp = createAsyncThunk(
   "user/googleLoginOrSignUp",
   async (userCredentials: IUserLogin, { rejectWithValue }) => {
     try {
-      console.log("reached in userLogin reducer");
       const { data } = await axios.post(
         `${URL}/auth/google`,
         userCredentials,
@@ -41,10 +39,11 @@ export const googleLoginOrSignUp = createAsyncThunk(
 //logout
 export const logout = createAsyncThunk(
   "user/logout",
-  async (_, { rejectWithValue }) => {
+  async (navigate:any, { rejectWithValue }) => {
     try {
       const { data } = await axios.delete(`${URL}/auth/logout`, config);
       localStorage.removeItem("user");
+      navigate("/login", { replace: true });
       return data;
     } catch (error: any) {
       return handleError(error, rejectWithValue);
@@ -65,14 +64,11 @@ export const RegisterUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      console.log("calling signup");
-      console.log(`${URL}/auth/register`);
       const { data } = await axios.post(
         `${URL}/auth/register`,
         userCredentials.data,
         config
       );
-      console.log(data, "here in data");
       return data;
     } catch (error: any) {
       return handleError(error, rejectWithValue);
@@ -98,14 +94,14 @@ export const addRegisterDetails = createAsyncThunk(
   ) => {
     try {
 
-      console.log("calling signup");
+      
 
       const { data } = await axios.post(
         `${URL}/auth/register/details`,
         userCredentials,
         config
       );
-      console.log(data, "here in data");
+      
       return { ...data, loggined: true };
     } catch (error: any) {
       return handleError(error, rejectWithValue);
@@ -149,7 +145,7 @@ export const forgotPassword = createAsyncThunk(
         {email},
         config
       );
-      console.log("🚀 ~ file: userActions.tsx:99 ~ async ~ data:", data);
+      // consol.log("🚀 ~ file: userActions.tsx:99 ~ async ~ data:", data);
       return data;
     } catch (error: any) {
       return handleError(error, rejectWithValue);
@@ -191,9 +187,6 @@ export const verifyOTP = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log("in user action data",data);
-      
-      
       return data;
     } catch (error: any) {
       return handleError(error, rejectWithValue);

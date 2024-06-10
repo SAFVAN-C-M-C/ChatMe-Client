@@ -15,7 +15,7 @@ const NavBar = () => {
     "Company Requests": ["mdi:company", "/"],
     "Verify Recruiters": ["clarity:employee-group-solid", "/"],
     Reports: ["ph:flag-fill", "/"],
-    Users: ["mdi:user", "/"],
+    Users: ["mdi:user", "/admin/users"],
     Companies: ["mdi:company", "/"],
     "Add Notification": ["mingcute:notification-fill", "/"],
   };
@@ -23,7 +23,7 @@ const NavBar = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const handleLogout = (e: any) => {
-    dispatch(logout());
+    dispatch(logout(navigate));
   };
   type HandleOptionClick = (
     event: React.MouseEvent<HTMLDivElement>,
@@ -36,7 +36,7 @@ const NavBar = () => {
     navigate(`/${option}`);
   };
   return (
-    <div className="Nav-Bar h-[100%] lg:w-[270px] w-[75px] ">
+    <div className="Nav-Bar h-[100%] lg:w-[320px] w-[75px] ">
       <div className="Nav-Bar fixed h-[100vh] lg:w-[270px] w-[75px] border-r-[.5px] border-black">
         <div className="logo-container hidden lg:block p-3 h-[90px]">
           <img

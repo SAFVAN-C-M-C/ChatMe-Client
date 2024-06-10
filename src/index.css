@@ -43,7 +43,7 @@ body {
 
 
 .loading-bar {
-  animation: loading 500ms linear alternate;
+  animation: loading 1s linear forwards;
 }
 
 @keyframes loading {

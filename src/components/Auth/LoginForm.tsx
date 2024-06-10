@@ -55,7 +55,7 @@ const LoginForm = () => {
     dispatch(googleLoginOrSignUp(data));
   };
   useEffect(() => {
-    console.log("hello");
+    
     if (user && user?.data?.details) {
       navigate("/register", { replace: true });
     }
@@ -141,7 +141,7 @@ const LoginForm = () => {
               loginWithGoogle(credentialResponse);
             }}
             onError={() => {
-              console.log("Login Failed");
+              
             }}
           />
         </div>

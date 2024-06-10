@@ -17,3 +17,7 @@ export const validatePhone=(data:string)=>{
   // Test if the phone number matches the regular expression
   return phoneRegex.test(data);
 }
+export const validateName = (data: string) => {
+    const nameRegex = /^[A-Za-z\s]+$/;
+    return nameRegex.test(data.trim()) && data.trim().length > 0;
+}

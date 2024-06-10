@@ -70,7 +70,7 @@ const RegisterForm_2 = () => {
   }, [error]);
   useEffect(() => {
     if (user && user?.success && user?.loggined) {
-      console.log("this is the error");
+      
       
       navigate("/", { replace: true });
     }

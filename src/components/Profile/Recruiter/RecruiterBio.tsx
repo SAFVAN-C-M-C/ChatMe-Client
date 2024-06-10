@@ -1,12 +1,16 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 // import { useState } from "react";
 const RecruiterBio = () => {
+    //redux
+    const { profile } = useSelector((state: RootState) => state.profile);
   return (
     <>
       {/* for phone */}
-      <div className="profile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto rounded-xl bg-slate-50 mt-12 flex md:hidden">
+      <div className="profile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 flex md:hidden">
         <div className="first-row w-full flex justify-center h-[50px]  mt-3 mb-3">
-          <div className="provile-avatar mr-4 w-[30%] flex justify-center">
+          <div className="provile-avatar mr-4 w-[30%] flex justify-center items-center">
             <img
               src="/general/ChatMe-profile.png"
               alt="avatar"
@@ -14,33 +18,44 @@ const RecruiterBio = () => {
             />{" "}
           </div>
           <div className="user-name w-[70%] flex-wrap h-full flex items-center">
-            <span className="text-sm">SAFVAN CMC</span>
+            <span className="text-md mr-1">{profile?.data.name}</span>
+            {
+              profile?.data.isVerified?(<Icon
+                className="text-green-500 ml-1"
+                icon="material-symbols:verified"
+                height={20}
+                width={20}
+              />):null
+            }
           </div>
         </div>
         <div className="second-row w-full flex justify-around h-auto">
           <div className="post">
             <p>
-              <span className="font-bold flex justify-center">3 </span>Posts
+              <span className="font-bold flex justify-center">0 </span>Posts
             </p>
           </div>
           <div className="follower">
             <p>
-              <span className="font-bold flex justify-center">1,661 </span>
+              <span className="font-bold flex justify-center">{profile?.data ? profile.data?.followers?.length : "0"} </span>
               Followers
             </p>
           </div>
           <div className="following ">
             <p>
-              <span className="font-bold flex justify-center">114 </span>
+              <span className="font-bold flex justify-center">{profile?.data ? profile.data?.following?.length : "0"} </span>
               Following
             </p>
           </div>
         </div>
         <div className="thrid-row mt-2 ml-2  flex w-full justify-between">
           <div className="title">
-            <span className="text-gray-500 bg-slate-200 pl-4 pr-4 pt-1 pb-1 rounded-md">
-              Company
+            <span className="text-gray-500 bg-slate-200 pl-4 pr-4 pt-1 pb-1 mr-2 rounded-md">
+              Recruiter
             </span>
+              {/* <span className="text-gray-500 bg-slate-200 pl-4 pr-4 pt-1 pb-1 rounded-md">
+                {profile?.data.campanyId}
+              </span> */}
           </div>
           <div className="action flex mr-3">
             <div className="edit-profile mr-1 flex justify-center items-center">
@@ -61,35 +76,41 @@ const RecruiterBio = () => {
             </div>
           </div>
         </div>
-        <div className="fourth-row ml-2 mt-2 flex">
+        {
+          profile?.data.bio?.location?(<div className="fourth-row ml-2 mt-2 flex">
           <Icon
             className="text-gray-400 mr-1"
             icon="mdi:location"
             width={26}
             height={26}
           />
-          <span className="text-gray-400">Tirur, Kerala</span>
-        </div>
-        <div className="fifth-row ml-2 mt-2 flex">
+          <span className="text-gray-400">{profile?.data.bio?.location}</span>
+        </div>):null
+        }
+        {
+          profile?.data.bio?.phone?(<div className="fifth-row ml-2 mt-2 flex">
           <Icon
             className="text-gray-400 mr-1"
             icon="ic:baseline-phone"
             width={26}
             height={26}
           />
-          <span className="text-gray-400">+91 999 9999999</span>
-        </div>
-        <div className="sixth-row ml-2 mt-2 mb-3 flex">
+          <span className="text-gray-400">+91 {profile?.data.bio?.phone}</span>
+        </div>):null
+        }
+        {
+          profile?.data.email?(<div className="sixth-row ml-2 mt-2 flex">
           <Icon
             className="text-gray-400 mr-1"
             icon="ic:baseline-email"
             width={26}
             height={26}
           />
-          <span className="text-gray-400">sample@gmail.com</span>
-        </div>
+          <span className="text-gray-400">{profile?.data.email}</span>
+        </div>):null
+        }
       </div>
-      <div className="profile-bio w-[80%] border-[.5px] border-gray-600  h-auto rounded-xl bg-slate-50 mt-12 md:flex hidden">
+      <div className="profile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 md:flex hidden">
         <div className="profile-avatar w-[30%] h-full  flex justify-center items-center pt-2 pb-2">
           <img
             src="/general/ChatMe-profile.png"
@@ -100,13 +121,15 @@ const RecruiterBio = () => {
         <div className="profile-details  w-[70%] h-full flex flex-col justify-center ">
           <div className="first-row w-full flex ml-4 mt-3 mb-3">
             <div className="user-name p-2 mr-14 flex items-center">
-              <span>SAFVAN CMC</span>
-              <Icon
-              className="text-green-500 ml-1"
-              icon="material-symbols:verified"
-              height={20}
-              width={20}
-            />
+              <span>{profile?.data.name?profile?.data.name:"User Name"}</span>
+              {
+              profile?.data.isVerified?(<Icon
+                className="text-green-500"
+                icon="material-symbols:verified"  
+                height={20}
+                width={20}
+              />):null
+            }
             </div>
             <div
               className="edit-profile bg-slate-300 mr-5 rounded-md p-2 cursor-pointer"
@@ -125,17 +148,17 @@ const RecruiterBio = () => {
           <div className="second-row md:w-[60%] w-full flex justify-around">
             <div className="post">
               <p>
-                <span className="font-bold">3 </span>Posts
+                <span className="font-bold">0 </span>Posts
               </p>
             </div>
             <div className="follwers">
               <p>
-                <span className="font-bold">1,661 </span>Followers
+                <span className="font-bold">{profile?.data ? profile.data?.followers?.length : "0"} </span>Followers
               </p>
             </div>
             <div className="following">
               <p>
-                <span className="font-bold">114 </span>Following
+                <span className="font-bold">{profile?.data ? profile.data?.following?.length : "0"}</span>Following
               </p>
             </div>
           </div>
@@ -143,37 +166,47 @@ const RecruiterBio = () => {
           <span className="text-gray-500 bg-slate-200 pl-4 pr-4 pt-1 pb-1 mr-3 rounded-md">
               Recruiter
             </span>
-            <span className="text-gray-500 bg-slate-200 pl-4 pr-4 pt-1 pb-1 rounded-md">
+            {/* <span className="text-gray-500 bg-slate-200 pl-4 pr-4 pt-1 pb-1 rounded-md">
               Company Name
-            </span>
+            </span> */}
           </div>
-          <div className="fourth-row ml-4 mt-2 pl-2 flex">
-            <Icon
-              className="text-gray-400 mr-1"
-              icon="mdi:location"
-              width={26}
-              height={26}
-            />
-            <span className="text-gray-400">Tirur, Kerala</span>
-          </div>
-          <div className="fifth-row ml-4 mt-2 pl-2 flex ">
-            <Icon
-              className="text-gray-400 mr-1"
-              icon="ic:baseline-phone"
-              width={26}
-              height={26}
-            />
-            <span className="text-gray-400">+91 999 9999999</span>
-          </div>
-          <div className="sixth-row ml-4 mt-2  mb-3 pl-2 flex ">
-            <Icon
-              className="text-gray-400 mr-1"
-              icon="ic:baseline-email"
-              width={26}
-              height={26}
-            />
-            <span className="text-gray-400">sample@gmail.com</span>
-          </div>
+          {profile?.data?.bio?.location ? (
+            <div className="fourth-row ml-2 mt-2 flex">
+              <Icon
+                className="text-gray-400 mr-1"
+                icon="mdi:location"
+                width={26}
+                height={26}
+              />
+              <span className="text-gray-400">
+                {profile?.data?.bio?.location}
+              </span>
+            </div>
+          ) : null}
+          {profile?.data?.bio?.phone ? (
+            <div className="fifth-row ml-2 mt-2 flex">
+              <Icon
+                className="text-gray-400 mr-1"
+                icon="ic:baseline-phone"
+                width={26}
+                height={26}
+              />
+              <span className="text-gray-400">
+                +91 {profile?.data?.bio?.phone}
+              </span>
+            </div>
+          ) : null}
+          {profile?.data?.email ? (
+            <div className="sixth-row ml-2 mt-2 mb-3 flex">
+              <Icon
+                className="text-gray-400 mr-1"
+                icon="ic:baseline-email"
+                width={26}
+                height={26}
+              />
+              <span className="text-gray-400">{profile?.data?.email}</span>
+            </div>
+          ) : null}
         </div>
       </div>
     </>

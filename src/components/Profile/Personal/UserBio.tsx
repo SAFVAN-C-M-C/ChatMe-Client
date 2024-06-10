@@ -1,10 +1,64 @@
 import { Icon } from "@iconify/react";
 
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
+import { useEffect, useRef, useState } from "react";
+import UserBioEditModal from "../../modals/UserBioEditModal";
+import RecruiterApplicationModal from "../../modals/RecruiterApplicationModal";
+
 const UserBio = () => {
+  const { profile } = useSelector((state: RootState) => state.profile);
+
+
+
+  //local state
+  const [optionActive,setOptionActive]=useState(false)
+  const [editActive,setEditActive]=useState(false)
+  const [requestActive,setRequestActive]=useState(false)
+  const optionRef=useRef<HTMLDivElement | null>(null)
+
+//useEffects
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
+
+  const handleUserBioEditModalOpen=()=>{
+    setEditActive(!editActive)
+  }
+  const handleRecruiterRequestModalOpen=()=>{
+    setRequestActive(!requestActive)
+  }
+  //event handers
+  const handleEditButtonClick=(e:React.MouseEvent<HTMLDivElement>)=>{
+    e.preventDefault();
+    setEditActive(!editActive)
+  }
+  const requestOptionClick=(e:React.MouseEvent<HTMLDivElement>)=>{
+    e.preventDefault();
+    setRequestActive(!requestActive)
+  }
+  const handleClickOutside = (event:MouseEvent) => {
+    if (optionRef.current && !optionRef.current.contains(event.target as Node)) {
+      setOptionActive(false);
+    }
+  };
+  const settingClick=(e:React.MouseEvent<SVGSVGElement>)=>{
+    e.preventDefault();
+    setOptionActive(!optionActive)
+  }
   return (
     <>
+    {editActive?<UserBioEditModal handleUserBioEditModalOpen={handleUserBioEditModalOpen}/>:null}
+    {
+      requestActive?<RecruiterApplicationModal handleRecruiterRequestModalOpen={handleRecruiterRequestModalOpen}/>:null
+    }
       {/* for phone */}
-      <div className="profile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto rounded-xl bg-slate-50 mt-12 flex md:hidden">
+      <div className="profile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 flex md:hidden">
         <div className="first-row w-full flex justify-center h-[50px]  mt-3 mb-3">
           <div className="provile-avatar mr-4 w-[30%] flex justify-center">
             <img
@@ -14,63 +68,107 @@ const UserBio = () => {
             />{" "}
           </div>
           <div className="user-name w-[70%] flex-wrap h-full flex items-center">
-            <span className="text-sm">SAFVAN CMC</span>
+            <span className="text-sm">
+              {profile?.data ? profile?.data?.name : "User Name"}
+            </span>
           </div>
-          
         </div>
         <div className="second-row w-full flex justify-around h-auto">
           <div className="post">
             <p>
-              <span className="font-bold flex justify-center">3 </span>Posts
+              <span className="font-bold flex justify-center">0 </span>Posts
             </p>
           </div>
           <div className="follower">
             <p>
-              <span className="font-bold flex justify-center">1,661 </span>
+              <span className="font-bold flex justify-center">
+                {profile?.data ? profile.data?.followers?.length : "0"}
+              </span>
               Followers
             </p>
           </div>
           <div className="following ">
             <p>
-              <span className="font-bold flex justify-center">114 </span>
+              <span className="font-bold flex justify-center">
+                {profile?.data ? profile.data?.following?.length : "0"}{" "}
+              </span>
               Following
             </p>
           </div>
         </div>
         <div className="thrid-row mt-2 ml-2  flex w-full justify-between">
+          {profile?.data?.title ? (
             <div className="title">
-            <span className="text-gray-500">Web Developer</span>
+              <span className="text-gray-400">Web Developer</span>
             </div>
-            <div className="action flex mr-2">
+          ) : (
+            <div className="title">
+              <span className="text-gray-400 hidden"></span>
+            </div>
+          )}
+          <div className="action flex mr-2">
             <div className="edit-profile mr-1 flex justify-center items-center">
-            <Icon
-              className=" cursor-pointer"
-              icon="mdi:edit"
-              width={20}
-              height={20}
-            />
-          </div>
-          <div className="settings mr-1 flex justify-center items-center cursor-pointer">
-            {" "}
-            <Icon
-              icon="material-symbols:settings-account-box"
-              width={20}
-              height={20}
-            />
-          </div>
+              <Icon
+                className=" cursor-pointer"
+                icon="mdi:edit"
+                width={20}
+                height={20}
+              />
+            </div>
+            <div className="settings mr-1 flex justify-center items-center cursor-pointer">
+              {" "}
+              <Icon
+                icon="material-symbols:settings-account-box"
+                width={20}
+                height={20}
+              />
             </div>
           </div>
-          <div className="fourth-row ml-2 mt-2 ">
-            <span className="text-blue-600">Tirur, Kerala</span>
-          </div>
-          <div className="fourth-row ml-2 mb-2  mt-2 flex">
-            <span className="text-blue-600 flex cursor-pointer">
-              <Icon icon="carbon:document" width={26} height={26} />
-              <p>View Resume</p>
-            </span>
-          </div>
+        </div>
+        {
+          profile?.data.bio?.location?(<div className="fourth-row ml-2 mt-2 flex">
+          <Icon
+            className="text-gray-400 mr-1"
+            icon="mdi:location"
+            width={26}
+            height={26}
+          />
+          <span className="text-gray-400">{profile?.data.bio?.location}</span>
+        </div>):null
+        }
+        {
+          profile?.data.bio?.phone?(<div className="fifth-row ml-2 mt-2 flex">
+          <Icon
+            className="text-gray-400 mr-1"
+            icon="ic:baseline-phone"
+            width={26}
+            height={26}
+          />
+          <span className="text-gray-400">+91 {profile?.data.bio?.phone}</span>
+        </div>):null
+        }
+        {
+          profile?.data.email?(<div className="sixth-row ml-2 mt-2 flex">
+          <Icon
+            className="text-gray-400 mr-1"
+            icon="ic:baseline-email"
+            width={26}
+            height={26}
+          />
+          <span className="text-gray-400">{profile?.data.email}</span>
+        </div>):null
+        }
+        {
+          profile?.data.bio?.resume?(<div className="seventh-row ml-2 mb-2  mt-2 flex">
+          <span className="text-blue-600 flex cursor-pointer">
+            <Icon icon="carbon:document" width={26} height={26} />
+            <p>View Resume</p>
+          </span>
+        </div>):null
+        }
       </div>
-      <div className="profile-bio w-[80%] border-[.5px] border-gray-600  h-[200px] rounded-xl bg-slate-50 mt-12 md:flex hidden">
+      {/* lap */}
+      <div className="profile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 md:flex hidden">
         <div className="profile-avatar w-[30%] h-full  flex justify-center items-center ">
           <img
             src="/general/ChatMe-profile.png"
@@ -79,51 +177,104 @@ const UserBio = () => {
           />
         </div>
         <div className="profile-details  w-[70%] h-full ">
-          <div className="first-row w-full flex ml-4 mt-3 mb-3">
+          <div className="first-row w-full flex h- ml-4 mt-3 mb-3">
             <div className="user-name p-2 mr-14 ">
-              <span>SAFVAN CMC</span>
+              <span>{profile?.data ? profile?.data?.name : "User Name"}</span>
             </div>
-            <div className="edit-profile bg-slate-300 mr-5 rounded-md p-2 cursor-pointer">
-              Edit profile
+            <div onClick={handleEditButtonClick} className="edit-profile h-auto bg-slate-200 mr-5 rounded-md p-2 cursor-pointer">
+              <span>Edit profile</span>
             </div>
             <div className="settings flex justify-center items-center cursor-pointer">
-              {" "}
+          
               <Icon
+                onClick={settingClick}
                 icon="material-symbols:settings-account-box"
                 width={26}
                 height={26}
               />
             </div>
+            {
+              optionActive?(<div ref={optionRef} className="setings-opotions-cover rounded-md relative top-10 left-1 bg-slate-100 w-[200px] h-auto">
+                <div onClick={requestOptionClick} className="options cursor-pointer flex justify-center items-center rounded-b-md w-full border-b-[.5px] border-gray-500 h-[40px]">
+                  <span>Change into Recruiter</span>
+                </div>
+              </div>):null
+            }
+            
           </div>
           <div className="second-row md:w-[60%] w-full flex justify-around">
             <div className="post">
               <p>
-                <span className="font-bold">3 </span>Posts
+                <span className="font-bold">0 </span>Posts
               </p>
             </div>
             <div className="follwers">
               <p>
-                <span className="font-bold">1,661 </span>Followers
+                <span className="font-bold">
+                  {profile?.data ? profile.data?.followers?.length : "0"}{" "}
+                </span>
+                Followers
               </p>
             </div>
             <div className="following">
               <p>
-                <span className="font-bold">114 </span>Following
+                <span className="font-bold">
+                  {profile?.data ? profile.data?.following?.length : "0"}{" "}
+                </span>
+                Following
               </p>
             </div>
           </div>
-          <div className="thrid-row mt-2 ml-4 pl-2">
-            <span className="text-gray-500">Web Developer</span>
-          </div>
-          <div className="fourth-row ml-4 mt-2 pl-2">
-            <span className="text-blue-600">Tirur, Kerala</span>
-          </div>
-          <div className="fourth-row ml-4 pl-2 mt-2 flex">
-            <span className="text-blue-600 flex cursor-pointer">
-              <Icon icon="carbon:document" width={26} height={26} />
-              <p>View Resume</p>
-            </span>
-          </div>
+          {profile?.data?.title ? (
+            <div className="thrid-row mt-2 ml-4 pl-2">
+              <span className="text-gray-500">{profile?.data?.title}</span>
+            </div>
+          ) : null}
+          {profile?.data?.bio?.location ? (
+            <div className="fourth-row ml-2 mt-2 flex">
+              <Icon
+                className="text-gray-400 mr-1"
+                icon="mdi:location"
+                width={26}
+                height={26}
+              />
+              <span className="text-gray-400">
+                {profile?.data?.bio?.location}
+              </span>
+            </div>
+          ) : null}
+          {profile?.data?.bio?.phone ? (
+            <div className="fifth-row ml-2 mt-2 flex">
+              <Icon
+                className="text-gray-400 mr-1"
+                icon="ic:baseline-phone"
+                width={26}
+                height={26}
+              />
+              <span className="text-gray-400">
+                +91 {profile?.data?.bio?.phone}
+              </span>
+            </div>
+          ) : null}
+          {profile?.data?.email ? (
+            <div className="sixth-row ml-2 mt-2 mb-3 flex">
+              <Icon
+                className="text-gray-400 mr-1"
+                icon="ic:baseline-email"
+                width={26}
+                height={26}
+              />
+              <span className="text-gray-400">{profile?.data?.email}</span>
+            </div>
+          ) : null}
+          {profile?.data?.bio?.resume ? (
+            <div className="seventh-row ml-4 pl-2 mt-2 flex">
+              <span className="text-blue-600 flex cursor-pointer">
+                <Icon icon="carbon:document" width={26} height={26} />
+                <p>View Resume</p>
+              </span>
+            </div>
+          ) : null}
         </div>
       </div>
     </>
