@@ -77,6 +77,7 @@ function App() {
         setLoading(false);
       }, 2000);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch,user?.data?._id,profile?.success,adminUser?.success]);
   // useEffect(()=>{
   //   if(user?.data._id){    

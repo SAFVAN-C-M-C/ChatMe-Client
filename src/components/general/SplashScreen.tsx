@@ -6,7 +6,7 @@ const SplashScreen: React.FC = () => {
       <div className="flex flex-col items-center">
         <img src="/logo/ChatMe--full-color.png" alt="App Logo" className="aspect-auto h-[50px] mb-4" />
         <div className="w-64 h-1 bg-gray-200 rounded-full overflow-hidden">
-          <div className="h-full bg-blue-500 loading-bar"></div>
+          <div className="h-full  loading-bar"></div>
         </div>
       </div>
     </div>

@@ -1,12 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
-import * as Yup from "yup";
-import { Formik, Form } from "formik";
 import { Link, useNavigate } from "react-router-dom";
-import { Field } from "formik";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import ReactLoading from 'react-loading';
 import {
   googleLoginOrSignUp,
   loginUser,
@@ -120,7 +120,9 @@ const LoginForm = () => {
               className="w-full rounded-full  bg-gradient-to-r from-blue-500 to-purple-500 hover:from-purple-500 hover:to-blue-500 focus:outline-none h-full text-white flex justify-center items-center transition-all duration-500 delay-200 ease-in-out custom-gradient-transition"
               type="submit"
             >
-              Login
+              {
+                loading?<ReactLoading type={"bubbles"} color={"#fff"} height={'20%'} width={'20%'} />:"Login"
+              }
             </button>
           </div>
         </form>

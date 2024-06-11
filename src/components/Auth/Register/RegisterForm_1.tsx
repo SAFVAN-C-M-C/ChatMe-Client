@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { validateEmail, validatePassword } from "../../../helper/validate";
 import { GoogleLogin } from "@react-oauth/google";
+import ReactLoading from 'react-loading';
 
 const RegisterForm_1 = () => {
   //redux
@@ -167,7 +168,7 @@ const RegisterForm_1 = () => {
               className="w-full outline-none rounded-full hover:outline-none bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-500 focus:outline-none h-full text-white flex justify-center items-center transition-colors duration-500 delay-200"
               type="submit"
             >
-              {loading ? "loading..." : "Verify"}
+              {loading ? <ReactLoading type={"bubbles"} color={"#fff"} height={'20%'} width={'20%'} /> : "Verify"}
             </button>
           </div>
         </form>

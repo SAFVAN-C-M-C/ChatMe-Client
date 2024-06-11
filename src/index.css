@@ -33,24 +33,22 @@ body {
   color: #333333;
 }
 
-
-
-
-
-
-
-
-
-
 .loading-bar {
-  animation: loading 1s linear forwards;
+  background-color: #003476;
+  animation: loading 2s linear infinite;
 }
 
 @keyframes loading {
   0% {
     transform: translateX(-100%);
   }
+  20% {
+    transform: translateX(-90%);
+  }
+  90% {
+    transform: translateX(-20%);
+  }
   100% {
-    transform: translateX(100%);
+    transform: translateX(0%);
   }
 }
