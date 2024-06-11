@@ -1,8 +1,10 @@
-  import { RootState } from "../../redux/store";
-  import { useSelector } from "react-redux";
+  import { AppDispatch, RootState } from "../../redux/store";
+  import { useDispatch, useSelector } from "react-redux";
   import { useEffect, useState } from "react";
   import toast from "react-hot-toast";
-  import { validatePhone } from "../../helper/validate";
+  import { validateField, validateName, validatePhone } from "../../helper/validate";
+import { updateBio } from "../../redux/actions/user/profileActions";
+import { BioDetails } from "../../types/IProfile";
 
   interface UserBioEditModalProps {
     handleUserBioEditModalOpen: () => void;
@@ -11,12 +13,13 @@
     handleUserBioEditModalOpen,
   }) => {
     const { profile, error } = useSelector((state: RootState) => state.profile);
-
+    const dispatch = useDispatch<AppDispatch>();
     useEffect(() => {
       if (error) {
         toast.error(error);
       }
     }, [error]);
+
 
     const [formData, setFormData] = useState({
       email: profile?.data.email,
@@ -45,6 +48,29 @@
       if (!validatePhone(formData?.phone)) {
         toast.error("Enter proper phone number");
         return;
+      }
+      if (!validateName(formData?.name)) {
+        toast.error("Enter proper Name");
+        return;
+      }if (!validateField(formData?.location)) {
+        toast.error("Enter a valid location ");
+        return;
+      }if (!validateField(formData?.title)) {
+        toast.error("Enter title can't be blank");
+        return;
+      }
+      const data:BioDetails={
+        name:formData.name,
+        title:formData.title,
+        bio:{
+            location:formData.location,
+            phone:formData.phone
+        }
+      }
+      dispatch(updateBio(data))
+      if(!error){
+        toast.success("Profile Updated");
+        handleUserBioEditModalOpen()
       }
     };
     return (
@@ -157,7 +183,7 @@
                 </div>
               </div>
               <div className="form-footer flex justify-end  w-full h-[70px]">
-                <div className="actions flex items-center">
+                <div className="actions flex items-center cursor-pointer" onClick={handleUserBioEditModalOpen}>
                   <span className="cancel mr-3 p-2 border-[.7px] border-gray-500 rounded-md w-[100px] flex justify-center">
                     Cancel
                   </span>

@@ -35,7 +35,7 @@ body {
 
 .loading-bar {
   background-color: #003476;
-  animation: loading 2s linear infinite;
+  animation: loading 2s linear forwards;
 }
 
 @keyframes loading {
