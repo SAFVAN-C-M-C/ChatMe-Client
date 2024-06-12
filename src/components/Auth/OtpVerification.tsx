@@ -6,6 +6,7 @@ import { verifyOTP } from "../../redux/actions/user/userActions";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { URL } from "../../common/api";
+import { updateError } from "../../redux/reducers/userSlice";
 
 axios.defaults.withCredentials = true;
 
@@ -46,6 +47,7 @@ const OtpVerification = () => {
   };
   const handleSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
+    dispatch(updateError(null))
     if(otp.length<6){
       toast.error("enter otp")
       return

@@ -182,7 +182,7 @@ const userSlice = createSlice({
       })
       .addCase(verifyOTP.rejected, (state, { payload }) => {
         state.loading = false;
-        state.user = null;
+        // state.user = null;
         state.error = payload;
       });
   },

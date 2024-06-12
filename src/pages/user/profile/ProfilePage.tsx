@@ -14,7 +14,9 @@ import CompanyBio from "../../../components/Profile/Company/CompanyBio";
 import RecruiterBio from "../../../components/Profile/Recruiter/RecruiterBio";
 
 const ProfilePage = () => {
-  const { user } = useSelector((state: RootState) => state.user);
+  // const { user } = useSelector((state: RootState) => state.user);
+  const { profile } = useSelector((state: RootState) => state.profile);
+
 
   return (
     <>
@@ -22,11 +24,11 @@ const ProfilePage = () => {
         <NavigationBar />
         <div className="profile-part w-full   flex flex-col items-center">
           {
-            user?.data?.accountType === "personal" ?<UserBio/>:user?.data?.accountType === "company" ? <CompanyBio/>:user?.data?.accountType === "recruiter" ? <RecruiterBio/>:null
+            profile?.data?.accountType === "personal" ?<UserBio/>:profile?.data?.accountType === "company" ? <CompanyBio/>:profile?.data?.accountType === "recruiter" ? <RecruiterBio/>:null
           }
           
           <About />
-          {user?.data?.accountType === "personal" ? (
+          {profile?.data?.accountType === "personal" ? (
             <>
               <UserEducation />
               <UserExprerience />
@@ -34,11 +36,11 @@ const ProfilePage = () => {
               <UserPreferedJob />
             </>
           ) : null}
-          {user?.data?.accountType === "personal" ? (
+          {profile?.data?.accountType === "personal" ? (
             <UserPostPart />
-          ) : user?.data?.accountType === "company" ? (
+          ) : profile?.data?.accountType === "company" ? (
             <CompanyPostPart />
-          ) : user?.data?.accountType === "recruiter" ? (
+          ) : profile?.data?.accountType === "recruiter" ? (
             <RecruiterPostpart />
           ) : null}
         </div>

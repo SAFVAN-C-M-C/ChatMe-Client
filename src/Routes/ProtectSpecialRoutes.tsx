@@ -15,7 +15,7 @@ const ProtectSpecialRoutes = ({
   const { user,error } = useSelector((state: RootState) => state.user);
 
   if (type === "otp") {
-    if (user?.data?.otp || error) {
+    if (user || error) {
       return <>{children}</>;
     } else {
       return <Navigate to="/login" />;

@@ -12,11 +12,11 @@ const NavBar = () => {
   );
   const options = {
     Home: ["teenyicons:home-solid", "/"],
-    "Company Requests": ["mdi:company", "/"],
-    "Verify Recruiters": ["clarity:employee-group-solid", "/"],
+    "Company Requests": ["mdi:company", "/admin/company/requests"],
+    "Verify Recruiters": ["clarity:employee-group-solid", "/admin/recruiter/requests"],
     Reports: ["ph:flag-fill", "/"],
     Users: ["mdi:user", "/admin/users"],
-    Companies: ["mdi:company", "/"],
+    Companies: ["mdi:company", "/admin/company"],
     "Add Notification": ["mingcute:notification-fill", "/"],
   };
 

@@ -13,6 +13,7 @@ import {
 } from "../../redux/actions/user/userActions";
 import { validateEmail, validatePassword } from "../../helper/validate";
 import { GoogleLogin } from "@react-oauth/google";
+import { updateError } from "../../redux/reducers/userSlice";
 const LoginForm = () => {
   const { user, loading, error } = useSelector(
     (state: RootState) => state.user
@@ -37,6 +38,7 @@ const LoginForm = () => {
 
   const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    dispatch(updateError(null))
     if (!validateEmail(formData?.email)) {
       toast.error("Invalid email");
       return;

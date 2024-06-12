@@ -1,11 +1,10 @@
 import { Icon } from "@iconify/react";
-
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useEffect, useRef, useState } from "react";
-import UserBioEditModal from "../../modals/UserBioEditModal";
 import RecruiterApplicationModal from "../../modals/RecruiterApplicationModal";
 import AvatarViewModal from "../../modals/AvatarViewModal";
+import EditBioModal from "../../modals/EditBioModal";
 
 const UserBio = () => {
   const { profile } = useSelector((state: RootState) => state.profile);
@@ -14,7 +13,7 @@ const UserBio = () => {
 
   //local state
   const [optionActive,setOptionActive]=useState(false)
-  const [editActive,setEditActive]=useState(false)
+  const [openEditBio, setOpenEditBio] = useState(false);
   const [requestActive,setRequestActive]=useState(false)
   const [openAvatarView,setOpenAvatarView]=useState(false)
   const optionRef=useRef<HTMLDivElement | null>(null)
@@ -29,9 +28,9 @@ const UserBio = () => {
 
 
 
-  const handleUserBioEditModalOpen=()=>{
-    setEditActive(!editActive)
-  }
+  // const handleUserBioEditModalOpen=()=>{
+  //   setEditActive(!editActive)
+  // }
   const handleRecruiterRequestModalOpen=()=>{
     setRequestActive(!requestActive)
   }
@@ -39,10 +38,10 @@ const UserBio = () => {
     setOpenAvatarView(!openAvatarView)
   }
   //event handers
-  const handleEditButtonClick=(e:React.MouseEvent<HTMLDivElement>)=>{
-    e.preventDefault();
-    setEditActive(!editActive)
-  }
+  // const handleEditButtonClick=(e:React.MouseEvent<HTMLDivElement>)=>{
+  //   e.preventDefault();
+  //   setEditActive(!editActive)
+  // }
   const requestOptionClick=(e:React.MouseEvent<HTMLDivElement>)=>{
     e.preventDefault();
     setRequestActive(!requestActive)
@@ -60,12 +59,12 @@ const UserBio = () => {
   
   return (
     <>
-    {editActive?<UserBioEditModal handleUserBioEditModalOpen={handleUserBioEditModalOpen}/>:null}
+    {openEditBio?<EditBioModal setOpenEditBio={setOpenEditBio}/>:null}
     {
       requestActive?<RecruiterApplicationModal handleRecruiterRequestModalOpen={handleRecruiterRequestModalOpen}/>:null
     }
     {
-      openAvatarView?<AvatarViewModal photoUrl={profile?.data.bio?.avatar? profile?.data.bio?.avatar:"/general/ChatMe-profile.png"} handleAvaterViewModalOpen={handleAvaterViewModalOpen}/>:null
+      openAvatarView?<AvatarViewModal photoUrl={profile?.data.bio?.avatar? profile?.data.bio?.avatar:"/general/ChatMe-profile.png"} handleAvatarViewModalOpen={handleAvaterViewModalOpen}/>:null
     }
       {/* for phone */}
       <div className="profile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 flex md:hidden">
@@ -182,7 +181,7 @@ const UserBio = () => {
         <div className="profile-avatar w-[30%] h-full  flex justify-center items-center ">
           <img
             onClick={()=>setOpenAvatarView(!openAvatarView)}
-            src="/general/ChatMe-profile.png"
+            src={profile?.data?.bio?.avatar?profile.data.bio.avatar:"/general/ChatMe-profile.png"}
             alt="avatar"
             className="w-[56px] h-[56px] sm:w-[76px] sm:h-[76px] md:w-[96px] md:h-[96px] lg:w-[146px] lg:h-[146px]"
           />
@@ -192,7 +191,7 @@ const UserBio = () => {
             <div className="user-name p-2 mr-14 ">
               <span>{profile?.data ? profile?.data?.name : "User Name"}</span>
             </div>
-            <div onClick={handleEditButtonClick} className="edit-profile h-auto bg-slate-200 mr-5 rounded-md p-2 cursor-pointer">
+            <div onClick={()=>setOpenEditBio(true)} className="edit-profile h-auto bg-slate-200 mr-5 rounded-md p-2 cursor-pointer">
               <span>Edit profile</span>
             </div>
             <div className="settings flex justify-center items-center cursor-pointer">

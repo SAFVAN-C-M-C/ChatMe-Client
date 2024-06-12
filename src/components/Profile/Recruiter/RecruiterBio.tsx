@@ -1,12 +1,16 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { useState } from "react";
+import RecruiterBioEditModal from "../../modals/RecruiterBioEditModal";
 // import { useState } from "react";
 const RecruiterBio = () => {
     //redux
     const { profile } = useSelector((state: RootState) => state.profile);
+    const [openEditBio,setOpenEditBio]=useState(false)
   return (
     <>
+    {openEditBio?<RecruiterBioEditModal setOpenEditBio={setOpenEditBio}/>:null}
       {/* for phone */}
       <div className="profile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 flex md:hidden">
         <div className="first-row w-full flex justify-center h-[50px]  mt-3 mb-3">
@@ -110,10 +114,11 @@ const RecruiterBio = () => {
         </div>):null
         }
       </div>
+      {/* for lap */}
       <div className="profile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 md:flex hidden">
         <div className="profile-avatar w-[30%] h-full  flex justify-center items-center pt-2 pb-2">
           <img
-            src="/general/ChatMe-profile.png"
+            src={profile?.data?.bio?.avatar?profile.data.bio.avatar:"/general/ChatMe-profile.png"}
             alt="avatar"
             className="w-[56px] h-[56px] sm:w-[76px] sm:h-[76px] md:w-[96px] md:h-[96px] lg:w-[146px] lg:h-[146px]"
           />
@@ -131,19 +136,10 @@ const RecruiterBio = () => {
               />):null
             }
             </div>
-            <div
-              className="edit-profile bg-slate-300 mr-5 rounded-md p-2 cursor-pointer"
-            >
-              Edit profile
+            <div onClick={()=>setOpenEditBio(!openEditBio)} className="edit-profile h-auto bg-slate-200 mr-5 rounded-md p-2 cursor-pointer">
+              <span>Edit profile</span>
             </div>
-            <div className="settings flex justify-center items-center cursor-pointer">
-              {" "}
-              <Icon
-                icon="material-symbols:settings-account-box"
-                width={26}
-                height={26}
-              />
-            </div>
+            
           </div>
           <div className="second-row md:w-[60%] w-full flex justify-around">
             <div className="post">

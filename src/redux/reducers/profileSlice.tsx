@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
 import { IProfile } from "../../types/IProfile";
-import { getProfileDataFirst, updateAbout, updateAvatar, updateBio } from "../actions/user/profileActions";
+import { acceptRecruiterRequest, addEducation, addExperience, addPreferedJobs, addSkills, getProfileDataFirst, ignoreRecruiterRequest, updateAbout, updateAvatar, updateBio } from "../actions/user/profileActions";
 export interface ProfilePayload{
     success:boolean;
     data:IProfile;
@@ -78,6 +78,90 @@ const profileSlice = createSlice({
         state.profile = payload;
       })
       .addCase(updateAbout.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.profile = null;
+        state.error = payload;
+
+        //add education
+      }).addCase(addEducation.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addEducation.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.profile = payload;
+      })
+      .addCase(addEducation.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.profile = null;
+        state.error = payload;
+      })
+      //add experience
+      .addCase(addExperience.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addExperience.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.profile = payload;
+      })
+      .addCase(addExperience.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.profile = null;
+        state.error = payload;
+      })
+      //add skills
+      .addCase(addSkills.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addSkills.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.profile = payload;
+      })
+      .addCase(addSkills.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.profile = null;
+        state.error = payload;
+      })
+      //add preferedJobs
+      .addCase(addPreferedJobs.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addPreferedJobs.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.profile = payload;
+      })
+      .addCase(addPreferedJobs.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.profile = null;
+        state.error = payload;
+      })
+      //accept request 
+      .addCase(acceptRecruiterRequest.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(acceptRecruiterRequest.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.profile = payload;
+      })
+      .addCase(acceptRecruiterRequest.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.profile = null;
+        state.error = payload;
+      })
+      //ignore request 
+      .addCase(ignoreRecruiterRequest.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(ignoreRecruiterRequest.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.profile = payload;
+      })
+      .addCase(ignoreRecruiterRequest.rejected, (state, { payload }) => {
         state.loading = false;
         state.profile = null;
         state.error = payload;

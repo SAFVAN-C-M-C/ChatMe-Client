@@ -20,13 +20,22 @@ import Register from "./pages/user/auth/Register";
 import Home from "./pages/user/general/Home";
 import OTPpage from "./pages/user/auth/OTPpage";
 import Users from "./pages/admin/Users";
+import Company from "./pages/admin/Company";
+import CompanyRequests from "./pages/admin/CompanyRequests";
+import RecruiterRequests from "./pages/admin/RecruiterRequests";
+import { getAdminCompanyDetails } from "./redux/actions/admin/adminCompanyAction";
+import { getAdminCompanyRequestsDetails } from "./redux/actions/admin/adminCompanyRequestAction";
+import { getAdminRecruiterRequestDetails } from "./redux/actions/admin/adminRecruiterRequestAction";
 function App() {
   //redux
   const { user } = useSelector((state: RootState) => state.user);
   const { profile } = useSelector((state: RootState) => state.profile);
-  const dispatch = useDispatch<AppDispatch>();
   const { adminUser } = useSelector((state: RootState) => state.adminUser);
-
+  const { adminCompanies } = useSelector((state: RootState) => state.adminCompany);
+  const { adminCompanyRequests } = useSelector((state: RootState) => state.adminCompanyRequest);
+  const { adminRecruiterRequests } = useSelector((state: RootState) => state.adminRecruiterRequest);
+  
+  const dispatch = useDispatch<AppDispatch>();
   //local states
   const [progress, setProgress] = useState(0);
   const location = useLocation();
@@ -62,6 +71,9 @@ function App() {
     }
     if(user?.data?._id && user.data.role==="admin"){
       dispatch(getAdminUsersDetails())
+      dispatch(getAdminCompanyDetails())
+      dispatch(getAdminCompanyRequestsDetails())
+      dispatch(getAdminRecruiterRequestDetails())
     }
     if(user?.data?._id && user.data.role==="user"){
       dispatch(getProfileDataFirst())
@@ -78,7 +90,7 @@ function App() {
       }, 2000);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch,user?.data?._id,profile?.success,adminUser?.success]);
+  }, [dispatch,user?.data?._id,profile?.success,adminUser?.success,adminCompanies?.success,adminCompanyRequests?.success,adminRecruiterRequests?.success]);
   // useEffect(()=>{
   //   if(user?.data._id){    
   //     dispatch(getProfileDataFirst())
@@ -108,6 +120,9 @@ function App() {
                 <>
                   <Route path="/" element={<AdminHome />} />
                   <Route path="/admin/users" element={<Users />} />
+                  <Route path="/admin/company" element={<Company />} />
+                  <Route path="/admin/company/requests" element={<CompanyRequests />} />
+                  <Route path="/admin/recruiter/requests" element={<RecruiterRequests />} />
                 </>
               ) : (
                 <Route path="/" element={<Navigate to="/login" />} />

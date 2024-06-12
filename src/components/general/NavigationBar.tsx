@@ -10,6 +10,7 @@ const NavigationBar = () => {
   const { user, loading, error } = useSelector(
     (state: RootState) => state.user
   );
+  const { profile } = useSelector((state: RootState) => state.profile);
   
   
   const options = {
@@ -70,7 +71,7 @@ const handleOptionClick: HandleOptionClick = (event, option) => {
             />
           </div>
           <div className="option-title w-[60%] text-lg flex justify-start hidden lg:flex">
-            <b className="text-base">{user?.data?.name}</b>
+            <b className="text-base">{profile?.data?.name}</b>
           </div>
         </div>
         {moreActive ? (

@@ -21,3 +21,9 @@ export const validateName = (data: string) => {
     const nameRegex = /^[A-Za-z\s]+$/;
     return nameRegex.test(data.trim()) && data.trim().length > 0;
 }
+
+export const validateYear = (data: string) => {
+    const yearRegex = /^(19|20)\d{2}$/; // Matches any year from 1900 to 2099
+    const trimmedData = data.trim();
+    return trimmedData.length === 4 && yearRegex.test(trimmedData);
+}

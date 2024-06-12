@@ -11,6 +11,7 @@ import SugestedUser from '../../../components/Home/SugestedUser';
 
 const Home = () => {
   const { user } = useSelector((state: RootState) => state.user);
+  const { profile } = useSelector((state: RootState) => state.profile);
   
   
   
@@ -21,7 +22,7 @@ const Home = () => {
     <div className="home-container w-full flex h-auto lg:pl-[42px]">
       <div className="post-list-cover w-[70%]  h-full flex items-center flex-col">
         <div className="greeting w-full h-[50px]  flex items-center pl-4">
-          <span>Hello there, </span><span className='font-bold text-lg ml-1'>{user?.data?.name}</span>
+          <span>Hello there, </span><span className='font-bold text-lg ml-1'>{profile?.data?.name}</span>
         </div>
         <HomePost/>
         <HomePost/>

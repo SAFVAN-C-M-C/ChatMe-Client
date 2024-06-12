@@ -1,36 +1,39 @@
-import React, { useEffect } from "react";
-import NavBar from "../../components/admin/NavBar";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
+import NavBar from "../../components/admin/NavBar";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { blockUser, unBlockUser } from "../../redux/actions/admin/adminUserAction";
+import { blockCompany, unBlockCompany } from "../../redux/actions/admin/adminCompanyAction";
+// import { verifyCompany } from "../../redux/actions/admin/adminCompanyAction";
 
-const Users = () => {
-  const { adminUser,error } = useSelector((state: RootState) => state.adminUser);
+const Company = () => {
+  const { adminCompanies,error } = useSelector(
+    (state: RootState) => state.adminCompany
+  );
   useEffect(() => {
     if (error) {
       toast.error(error);
     }
   }, [error]);
   const dispatch = useDispatch<AppDispatch>();
-  const handleBlock = (email?: string) => {
+  const handleBlock = (email?:string) => {
     const formData = {
       email: email,
       isBlocked: true,
-      type: "user",
+      type: "company",
     };
-    dispatch(blockUser(formData));
+    dispatch(blockCompany(formData));
     if (!error) {
       toast.success("Blocked");
     }
   };
-  const handleUnBlock = (email?: string) => {
+  const handleUnBlock = (email?:string) => {
     const formData = {
       email: email,
       isBlocked: false,
-      type: "user",
+      type: "company",
     };
-    dispatch(unBlockUser(formData));
+    dispatch(unBlockCompany(formData));
     if (!error) {
       toast.success("UnBlocked");
     }
@@ -41,27 +44,32 @@ const Users = () => {
         <NavBar />
         <div className="main-cover w-full   flex flex-col  ml-5 mr-10">
           <div className="greeting ml-14 mt-10 mb-10 felx">
-            <span className="text-3xl font-bold underline">Users</span>
+            <span className="text-3xl font-bold underline">Companies</span>
           </div>
-          {adminUser?.data ? (
-            <table className="w-full overflow-x-scroll ms-5 bg-white border my-4 border-gray-300">
+          {
+            adminCompanies?.data?(<><table className="w-full overflow-x-scroll ms-5 bg-white border my-4 border-gray-300">
               <thead>
                 <tr className="bg-gray-100">
                   <th className="py-2 px-0 border-b">Name</th>
                   <th className="py-2 px-0 border-b">Email</th>
-                  <th className="py-2 px-0 border-b">No.of Actions</th>
                   <th className="py-2 px-0 border-b">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {adminUser?.data.map((user, id) => (
+                {adminCompanies?.data.map((user, id) => (
                   <tr key={id} className="border-b">
                     <td className="py-2 px-4 text-center">{user?.name}</td>
                     <td className="py-2 px-4 text-center">{user?.email}</td>
+  
                     <td className="py-2 px-4 text-center">
-                      {user?.numberOfReportActions}
-                    </td>
-                    <td className="py-2 px-4 text-center">
+                      {/* {user.isVerified === false ? (
+                        <button
+                          // onClick={()=>handleVerify(user.email)}
+                          className="bg-blue-500 mr-2 text-white py-1 px-2 rounded hover:bg-red-700"
+                        >
+                          Verify
+                        </button>
+                      ) : null} */}
                       {user.isBlocked ? (
                         <button
                           onClick={() => handleUnBlock(user.email)}
@@ -81,14 +89,12 @@ const Users = () => {
                   </tr>
                 ))}
               </tbody>
-            </table>
-          ) : (
-            <span>No data</span>
-          )}
+            </table></>):(<><span>No data</span></>)
+          }
         </div>
       </div>
     </>
   );
 };
 
-export default Users;
+export default Company;

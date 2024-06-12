@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
-import { getAdminUsersDetails } from "../../actions/admin/adminUserAction";
+import { blockUser, getAdminUsersDetails, unBlockUser } from "../../actions/admin/adminUserAction";
 
 export interface AdminUsers {
     _id?: string;
@@ -8,7 +8,7 @@ export interface AdminUsers {
     name?: string;
     userId?:string
     numberOfReportActions?: number | null;
-    IsBlocked?: boolean | null;
+    isBlocked?: boolean | null;
     CreatedAt?: Date | null;
     isVerified?:boolean;
 }
@@ -53,6 +53,34 @@ const adminUserSlice = createSlice({
         state.adminUser = null;
         state.error = null;
       })
+      //block user
+      .addCase(blockUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(blockUser.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.adminUser = payload;
+      })
+      .addCase(blockUser.rejected, (state) => {
+        state.loading = false;
+        state.adminUser = null;
+        state.error = null;
+      })
+      //unblock user
+      .addCase(unBlockUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(unBlockUser.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.adminUser = payload;
+      })
+      .addCase(unBlockUser.rejected, (state) => {
+        state.loading = false;
+        state.adminUser = null;
+        state.error = null;
+      });
 
   },
 });

@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { AppDispatch, RootState } from "../../redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import {  RootState } from "../../redux/store";
+import {  useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { validateEmail, validateField, validateName, validatePhone } from "../../helper/validate";
-import { applyForRecruiter } from "../../services/applyForRecruiter";
+import { validateEmail, validateField, validateName } from "../../helper/validate";
 import axios from "axios";
 import { config } from "../../common/configurations";
 import { URL } from "../../common/api";
@@ -17,7 +17,7 @@ const RecruiterApplicationModal: React.FC<RecruiterApplicationModalProps> = ({
 }) => {
 
     const { profile,error } = useSelector((state: RootState) => state.profile);
-    const dispatch = useDispatch<AppDispatch>();
+    // const dispatch = useDispatch<AppDispatch>();
     useEffect(() => {
         if (error) {
           toast.error(error);
@@ -29,7 +29,7 @@ const RecruiterApplicationModal: React.FC<RecruiterApplicationModalProps> = ({
     const [formData, setFormData] = useState({
         companyEmail:"",
         name:profile?.data.name || "",
-        content:profile?.data.bio?.location || "",
+        content:"",
       });
 
 
@@ -45,7 +45,7 @@ const RecruiterApplicationModal: React.FC<RecruiterApplicationModalProps> = ({
         
           try {
             if (!validateEmail(formData?.companyEmail)) {
-              toast.error("Enter valid email ::");
+              toast.error("Enter valid email");
               return;
             }
             if(!validateField(formData?.content)){
@@ -62,7 +62,8 @@ const RecruiterApplicationModal: React.FC<RecruiterApplicationModalProps> = ({
             if(data){
               console.log(data);
               
-              // toast.success("Application send successfully")
+              toast.success("Application send successfully")
+              handleRecruiterRequestModalOpen()
             }  
           } catch (error:any) {
             console.log(error);
@@ -94,7 +95,7 @@ const RecruiterApplicationModal: React.FC<RecruiterApplicationModalProps> = ({
                 <div className="input-field border-[.3px] border-gray-500 bg-slate-100  h-[50px] rounded-md justify-center flex items-center">
                   <input
                     onChange={handleChange}
-                    value={profile?.data.name}
+                    value={formData.name}
                     name="name"
                     id="name"
                     type="text"

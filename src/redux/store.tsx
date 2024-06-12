@@ -3,12 +3,18 @@ import userReducer from "./reducers/userSlice";
 import profileReducer from "./reducers/profileSlice";
 import adminUserReducer from './reducers/admin/adminUsers'
 import { ThunkAction, Action } from '@reduxjs/toolkit';
+import adminCompanies from "./reducers/admin/adminCompanies";
+import adminCompanyRequests from "./reducers/admin/adminCompanyRequests";
+import adminRecruiterRequests from "./reducers/admin/adminRecruiterRequests";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     profile:profileReducer,
-    adminUser:adminUserReducer
+    adminUser:adminUserReducer,
+    adminCompany:adminCompanies,
+    adminCompanyRequest:adminCompanyRequests,
+    adminRecruiterRequest:adminRecruiterRequests
   },
 });
 
