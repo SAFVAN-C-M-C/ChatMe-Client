@@ -17,6 +17,7 @@ export interface User {
   name?:string
   email?: string;
   role?: string;
+  isBlocked:boolean;
   accountType?: AccountType;
   loggined?: boolean;
   isEmailVerified?: boolean;

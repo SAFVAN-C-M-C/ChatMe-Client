@@ -8,17 +8,18 @@ import {
   Slider,
   Typography,
 } from "@mui/material";
-import { Cancel } from "@mui/icons-material";
+
 import CropIcon from "@mui/icons-material/Crop";
 import { useState } from "react";
 import Cropper from "react-easy-crop";
 import React, { Dispatch, SetStateAction } from 'react';
 import getCroppedImg, { PixelCrop } from "./util/cropImage";
 interface CropModalProps {
-  avatarUrl: string;
+  avatarUrl?: string;
+  // formData:FormData
   setOpenCrop: Dispatch<SetStateAction<boolean>>;
-  setAvatarUrl: Dispatch<SetStateAction<string>>;
-  setFile: Dispatch<SetStateAction<File | null>>;
+  setAvatarUrl: Dispatch<SetStateAction<string | undefined>>;
+  setFile: Dispatch<SetStateAction<File | null >>;
 }
 const CropModal: React.FC<CropModalProps> = ({ avatarUrl, setOpenCrop, setAvatarUrl, setFile }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -34,12 +35,13 @@ const CropModal: React.FC<CropModalProps> = ({ avatarUrl, setOpenCrop, setAvatar
   const cropImage=async()=>{
     try {
       const result = await getCroppedImg(
-        avatarUrl,
+        String(avatarUrl),
         croppedAreaPixels,
         rotation
       );
       setAvatarUrl(String(result?.url));
       setFile(result?.file);
+      // if(result?.file)formData.append("avatar",result.file)
       setOpenCrop(false);
     } catch (error) {
       console.log(error);
@@ -100,9 +102,7 @@ const CropModal: React.FC<CropModalProps> = ({ avatarUrl, setOpenCrop, setAvatar
           gap:2,
           flexWrap:"wrap"
         }}>
-          <Button variant="outlined" startIcon={<Cancel />} onClick={()=>setOpenCrop(false)}>
-            Cancel
-          </Button>
+          
           <Button variant="contained" startIcon={<CropIcon/>} onClick={cropImage}>
             Crop
           </Button>

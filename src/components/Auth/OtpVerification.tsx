@@ -179,9 +179,9 @@ const OtpVerification = () => {
                 </span>
             </div>
             <div className="resend m-4">
-                {
-                     !resendButton ?<p className="opacity-40">Resend OTP</p>:<a className="" onClick={resendOTP}>Resend OTP</a>
-                }
+                
+                     <a className="" onClick={resendOTP}>Resend OTP</a>
+                
                 
             </div>
           </div>

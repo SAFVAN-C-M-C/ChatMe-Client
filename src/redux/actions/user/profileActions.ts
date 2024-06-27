@@ -21,26 +21,17 @@ export const getProfileDataFirst = createAsyncThunk(
 
 
   //update user avatar
-  export const updateAvatar= createAsyncThunk(
-    "profile/updateAvatar",
-    async (formData:{
-      avatar: File
-    },{rejectWithValue})=>{
-      try{
-        console.log(formData);
-        
-        const { data } = await axios.post(`${URL}/profile/avatar/upload`,formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        });
-        return data;
-      }catch(error:any){
-        return handleError(error, rejectWithValue);
-      }
+  export const updateAvatar = createAsyncThunk(
+  "profile/updateAvatar",
+  async (formData: {avatar:string},{rejectWithValue}) => {
+    try {
+      const { data } = await axios.put(`${URL}/profile/avatar/upload`, formData, config);
+      return data;
+    } catch (error:any) {
+      return handleError(error, rejectWithValue);
     }
-  )
+  }
+);
 
   //update bio
   export const updateBio= createAsyncThunk(
@@ -48,7 +39,6 @@ export const getProfileDataFirst = createAsyncThunk(
     async (formData:BioDetails,{rejectWithValue})=>{
       try{
         console.log(formData);
-        
         const { data } = await axios.post(`${URL}/profile/bio/update`,formData, config);
         return data;
       }catch(error:any){

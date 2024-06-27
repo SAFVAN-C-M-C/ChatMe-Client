@@ -10,7 +10,6 @@ const UserBio = () => {
   const { profile } = useSelector((state: RootState) => state.profile);
 
 
-
   //local state
   const [optionActive,setOptionActive]=useState(false)
   const [openEditBio, setOpenEditBio] = useState(false);
@@ -28,15 +27,15 @@ const UserBio = () => {
 
 
 
-  // const handleUserBioEditModalOpen=()=>{
-  //   setEditActive(!editActive)
-  // }
+  const handleAvatarViewModalOpen=()=>{
+    setOpenAvatarView(!openAvatarView)
+  }
   const handleRecruiterRequestModalOpen=()=>{
     setRequestActive(!requestActive)
   }
-  const handleAvaterViewModalOpen=()=>{
-    setOpenAvatarView(!openAvatarView)
-  }
+  // const handleAvaterViewModalOpen=()=>{
+  //   setOpenAvatarView(!openAvatarView)
+  // }
   //event handers
   // const handleEditButtonClick=(e:React.MouseEvent<HTMLDivElement>)=>{
   //   e.preventDefault();
@@ -64,7 +63,7 @@ const UserBio = () => {
       requestActive?<RecruiterApplicationModal handleRecruiterRequestModalOpen={handleRecruiterRequestModalOpen}/>:null
     }
     {
-      openAvatarView?<AvatarViewModal photoUrl={profile?.data.bio?.avatar? profile?.data.bio?.avatar:"/general/ChatMe-profile.png"} handleAvatarViewModalOpen={handleAvaterViewModalOpen}/>:null
+      openAvatarView?<AvatarViewModal handleAvatarViewModalOpen={handleAvatarViewModalOpen} photoUrl={profile?.data.bio?.avatar? profile?.data.bio?.avatar:"/general/ChatMe-profile.png"}/>:null
     }
       {/* for phone */}
       <div className="profile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 flex md:hidden">
@@ -183,7 +182,7 @@ const UserBio = () => {
             onClick={()=>setOpenAvatarView(!openAvatarView)}
             src={profile?.data?.bio?.avatar?profile.data.bio.avatar:"/general/ChatMe-profile.png"}
             alt="avatar"
-            className="w-[56px] h-[56px] sm:w-[76px] sm:h-[76px] md:w-[96px] md:h-[96px] lg:w-[146px] lg:h-[146px]"
+            className="w-[56px] h-[56px] sm:w-[76px] sm:h-[76px] md:w-[96px] md:h-[96px] lg:w-[146px] rounded-full lg:h-[146px]"
           />
         </div>
         <div className="profile-details  w-[70%] h-full ">

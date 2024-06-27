@@ -4,6 +4,9 @@ import CropModal from "../crop/CropModal";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
+import { getSignedUrl } from "../../services";
+import ReactLoading from 'react-loading';
+import axios from "axios";
 import { updateAvatar } from "../../redux/actions/user/profileActions";
 
 interface AvatarViewModalProps {
@@ -15,25 +18,28 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
   handleAvatarViewModalOpen,
   photoUrl,
 }) => {
-  const { loading, profile, error } = useSelector((state: RootState) => state.profile);
+  const { loading, error } = useSelector(
+    (state: RootState) => state.profile
+  );
   const dispatch = useDispatch<AppDispatch>();
-
+  const formData = new FormData();
   useEffect(() => {
     if (error) {
       toast.error(error);
     }
   }, [error]);
 
-  useEffect(() => {
-    if (profile?.message === "Avatar updated") {
-      toast.success("Profile Pic updated");
-      handleAvatarViewModalOpen();
-    }
-  }, [profile?.message, handleAvatarViewModalOpen]);
+  // useEffect(() => {
+  //   if (profile?.message === "Avatar updated") {
+  //     toast.success("Profile Pic updated");
+  //     handleAvatarViewModalOpen();
+  //   }
+  // }, [profile?.message, handleAvatarViewModalOpen]);
 
   const [avatarUrl, setAvatarUrl] = useState(photoUrl);
   const [openCrop, setOpenCrop] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [uploding,setUploading]=useState<boolean>(false)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -44,25 +50,45 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
     }
   };
 
-  const handleImageUpload = async(e: FormEvent<HTMLFormElement>) => {
+  const handleImageUpload = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+    setUploading(true)
     if (!file) {
-      toast.error('Please select a picture.');
+      toast.error("Select an image");
       return;
     }
-    
-    
-    const blob = await fetch(avatarUrl).then((r) => r.blob());
-    const croppedFile = new File([blob], 'avatar.jpg', { type: 'image/jpeg' });
-    console.log(croppedFile);
-    
-    
-    const formData={
-      avatar:croppedFile
+  
+    try {
+      const signedUrl: { url: string; media: string } = await getSignedUrl("avatar", "jpeg");
+      
+      const { url, media } = signedUrl;
+      
+      // Ensure the correct Content-Type is used
+      const response = await axios.put(url, file, {
+        headers: {
+          "Content-Type": file.type, // Use the file's MIME type
+        },
+        withCredentials: true,
+      });
+  
+      if (response.status === 200) {
+        console.log("Image uploaded successfully");
+  
+        // Update profile with the new avatar URL
+        const updatedProfileData = {
+          avatar: `https://s3.ap-south-1.amazonaws.com/bucket.chatme.use/${media}`,
+        };
+        dispatch(updateAvatar(updatedProfileData));
+        toast.success("Avatar changed")
+        setUploading(false)
+        handleAvatarViewModalOpen()
+      } else {
+        throw new Error("Failed to upload image");
+      }
+    } catch (error) {
+      console.error("There was a problem with the upload:", error);
+      toast.error("Failed to upload image");
     }
-    
-    dispatch(updateAvatar(formData));
   };
 
   return (
@@ -70,7 +96,9 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
       <div className="fixed inset-0 z-40 bg-black opacity-35"></div>
 
       {openCrop ? (
-        <CropModal {...{ avatarUrl, setOpenCrop, setAvatarUrl, setFile }} />
+        <CropModal
+          {...{ avatarUrl, setOpenCrop, setAvatarUrl, setFile, formData }}
+        />
       ) : (
         <div className="fixed inset-0 z-40 flex justify-center items-center">
           <div
@@ -80,13 +108,16 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
             <span className="text-3xl text-white">x</span>
           </div>
           <div className="main-cover fixed z-50 w-[600px] h-[400px] bg-slate-50 rounded-md flex justify-center items-center">
-            <form onSubmit={handleImageUpload} className="content-cover w-[80%] h-[80%] flex flex-col justify-center items-center">
+            <form
+              onSubmit={handleImageUpload}
+              className="content-cover w-[80%] h-[80%] flex flex-col justify-center items-center"
+            >
               <div className="avatar">
                 <label htmlFor="avatar">
                   <img
                     src={avatarUrl}
                     alt="avatar"
-                    className="w-[200px] h-[200px]"
+                    className="w-[200px] h-[200px] rounded-full"
                   />
                 </label>
                 <input
@@ -110,7 +141,7 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
                   className="ml-2 mr-4 p-2 bg-blue-500 w-[100px] rounded-md text-white"
                   disabled={loading}
                 >
-                  {loading ? "Changing..." : "Change"}
+                  {loading | uploding ? <ReactLoading type={"bubbles"} color={"#fff"} height={'20%'} width={'20%'} /> : "Change"}
                 </button>
               </div>
             </form>
