@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
 // import { handleError } from "./configurations";
 
@@ -122,7 +123,7 @@ export const commonReduxRequest = async (
   body?: any,
   config: AxiosRequestConfig = {}
 ): Promise<any> => {
-  let requestConfig: AxiosRequestConfig = {
+  const requestConfig: AxiosRequestConfig = {
     method,
     url: route,
     data: body,

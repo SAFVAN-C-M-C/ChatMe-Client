@@ -26,6 +26,8 @@ import RecruiterRequests from "./pages/admin/RecruiterRequests";
 import { getAdminCompanyDetails } from "./redux/actions/admin/adminCompanyAction";
 import { getAdminCompanyRequestsDetails } from "./redux/actions/admin/adminCompanyRequestAction";
 import { getAdminRecruiterRequestDetails } from "./redux/actions/admin/adminRecruiterRequestAction";
+import { getHomePosts } from "./redux/actions/posts/homePostsActions";
+import { getMyPosts } from "./redux/actions/posts/userPostsAction";
 function App() {
   //redux
   const { user } = useSelector((state: RootState) => state.user);
@@ -34,6 +36,8 @@ function App() {
   const { adminCompanies } = useSelector((state: RootState) => state.adminCompany);
   const { adminCompanyRequests } = useSelector((state: RootState) => state.adminCompanyRequest);
   const { adminRecruiterRequests } = useSelector((state: RootState) => state.adminRecruiterRequest);
+  const { homePosts } = useSelector((state: RootState) => state.homePosts);
+  const { userPosts } = useSelector((state: RootState) => state.userPosts);
   
   const dispatch = useDispatch<AppDispatch>();
   //local states
@@ -65,6 +69,7 @@ function App() {
     console.log("On loading the app user=",user);
     console.log("On loading the app profile=",profile);
     console.log("On loading the app profile=",adminUser);
+    console.log("On loading the app profile=",);
     
     if (!user) {
       dispatch(getUserDataFirst());
@@ -74,9 +79,12 @@ function App() {
       dispatch(getAdminCompanyDetails())
       dispatch(getAdminCompanyRequestsDetails())
       dispatch(getAdminRecruiterRequestDetails())
+      
     }
     if(user?.data?._id && user.data.role==="user"){
-      dispatch(getProfileDataFirst())
+      dispatch(getHomePosts());
+      dispatch(getProfileDataFirst());
+      dispatch(getMyPosts());
     }
     const hasVisited = localStorage.getItem("hasVisited");
     if (!hasVisited) {
@@ -90,7 +98,7 @@ function App() {
       }, 2000);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch,user?.data?._id,profile?.success,adminUser?.success,adminCompanies?.success,adminCompanyRequests?.success,adminRecruiterRequests?.success]);
+  }, [dispatch,user?.data?._id,profile?.success,adminUser?.success,adminCompanies?.success,adminCompanyRequests?.success,adminRecruiterRequests?.success,homePosts?.data.length,userPosts?.data.length]);
   // useEffect(()=>{
   //   if(user?.data._id){    
   //     dispatch(getProfileDataFirst())
@@ -111,7 +119,7 @@ function App() {
             <Route path="*" element={<Error404 />} />
 
             <Route element={<PrivetRoutes />}>
-              {user?.data?.role === "user" ? (
+              {user?.data?.role === "user" && !user.data.isBlocked ? (
                 <>
                   <Route path="/" element={<Home />} />
                   <Route path="/profile" element={<ProfilePage />} />

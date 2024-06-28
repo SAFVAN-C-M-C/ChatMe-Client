@@ -1,28 +1,65 @@
 import { Icon } from "@iconify/react";
-import React from "react";
-import { IPosts } from "../../../redux/reducers/posts/userPosts";
-import { Button, Menu, MenuItem } from "@mui/material";
+import { Button, Dialog, Menu, MenuItem } from "@mui/material";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+
+import { getFileExtension } from "../../../helper/getExtention";
+import { IPosts } from "../../../types/IPosts";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import toast from "react-hot-toast";
+import { deletePost } from "../../../redux/actions/posts/userPostsAction";
+
 interface ViewPostProps {
-  handlePostViewOpen: () => void;
+  setOpenViewPost: Dispatch<SetStateAction<boolean>>;
+  setOpenEditPost: Dispatch<SetStateAction<boolean>>;
   post: IPosts;
 }
-const ViewPost: React.FC<ViewPostProps> = ({ handlePostViewOpen, post }) => {
+export const ViewPost: React.FC<ViewPostProps> = ({
+  setOpenViewPost,
+  post,
+  setOpenEditPost
+}) => {
+  const { error } = useSelector((state: RootState) => state.userPosts);
+
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+  const handleClose = () => {
+    setOpenViewPost(false);
+  };
+  const handleDelete=()=>{
+    setOpenEditPost(false)
+    setOpenViewPost(false);
+    dispatch(deletePost({_id:String(post._id)}))
+    toast.success("Post deleted")
+  }
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleEditClick = () => {
+    setOpenEditPost(true)
+    setOpenViewPost(false)
   };
+  const [isVideo, setIsVideo] = useState(false);
+  useEffect(() => {
+    setIsVideo(false);
+    if (getFileExtension(String(post.media)) !== "jpeg") {
+      setIsVideo(true);
+    }
+  }, []);
   return (
     <>
       <Menu
-        id="demo-positioned-menu"
-        aria-labelledby="demo-positioned-button"
+        id="post-options"
+        aria-labelledby="post-options-button"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={() => setAnchorEl(null)}
         anchorOrigin={{
           vertical: "top",
           horizontal: "left",
@@ -32,24 +69,21 @@ const ViewPost: React.FC<ViewPostProps> = ({ handlePostViewOpen, post }) => {
           horizontal: "left",
         }}
       >
-        <MenuItem>Edit</MenuItem>
-        <MenuItem>Delete</MenuItem>
+        <MenuItem onClick={handleEditClick}>Edit</MenuItem>
+        <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
-      <div className="fixed inset-0 z-40 bg-black opacity-35"></div>
-      <div className="fixed inset-0 z-40  flex justify-center items-center">
-        <div
-          className="closeButton fixed w-auto h-auto top-5 right-5 "
-          onClick={handlePostViewOpen}
-        >
-          <span className="text-3xl text-white">x</span>
-        </div>
-        <div className="main-cover fixed  z-50 w-[1200px] h-[700px] bg-slate-50 rounded-md flex">
-          <div className="media-part w-[700px] h-[700px]">
-            <img
-              src={post.media}
-              alt="media"
-              className="w-[700px] h-[700px] object-cover rounded-l-md"
-            />
+      <Dialog open fullWidth={true} maxWidth={"lg"} onClose={handleClose}>
+        <div className="main-cover flex">
+          <div className="media-part w-[700px] h-[700px] flex justify-center bg-slate-300">
+            {!isVideo ? (
+              <img
+                src={post.media}
+                alt="media"
+                className="w-[700px] h-[700px] object-cover"
+              />
+            ) : (
+              <video src={post.media} muted controls preload="auto" />
+            )}
           </div>
           <div className="second-part flex flex-col">
             <div className="header flex items-center justify-between border-b-[.5px] border-gray-500 w-[500px] h-[60px]">
@@ -67,9 +101,9 @@ const ViewPost: React.FC<ViewPostProps> = ({ handlePostViewOpen, post }) => {
               </div>
               <div className="option mr-3">
                 <Button
-                variant="text"
-                  id="demo-positioned-button"
-                  aria-controls={open ? "demo-positioned-menu" : undefined}
+                  variant="text"
+                  id="post-options-button"
+                  aria-controls={open ? "post-options" : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? "true" : undefined}
                   onClick={handleClick}
@@ -79,7 +113,11 @@ const ViewPost: React.FC<ViewPostProps> = ({ handlePostViewOpen, post }) => {
               </div>
             </div>
             <div className="comment-list-section border-b-[.5px] border-gray-500 overflow-y-scroll h-[510px] w-[500px]"></div>
-            <div className="actions flex justify-around mt-4 mb-4">
+            <div className="first-row pl-4">
+              <span className="username font-bold ">{post.name}</span>{" "}
+              <span>{post.content} </span>
+            </div>
+            <div className="actions flex justify-around mt-2 ">
               <div className="like flex items-center">
                 <span className="mr-1">{post.likes?.length}</span>
                 <Icon icon="solar:like-bold" width={26} height={26} />
@@ -95,7 +133,7 @@ const ViewPost: React.FC<ViewPostProps> = ({ handlePostViewOpen, post }) => {
                 <span>Save</span>
               </div>
             </div>
-            <div className="comment-section flex items-center border-t-[.5px] w-[500px] h-[58px] mt-4 border-gray-500">
+            <div className="comment-section flex items-center border-t-[.5px] w-[500px] h-[58px] mt-2 border-gray-500">
               <div className="emoji w-[50px] flex justify-center">
                 <Icon icon="fluent:emoji-32-filled" width={26} height={26} />
               </div>
@@ -113,9 +151,7 @@ const ViewPost: React.FC<ViewPostProps> = ({ handlePostViewOpen, post }) => {
             </div>
           </div>
         </div>
-      </div>
+      </Dialog>
     </>
   );
 };
-
-export default ViewPost;

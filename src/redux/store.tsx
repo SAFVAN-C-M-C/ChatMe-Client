@@ -6,6 +6,8 @@ import { ThunkAction, Action } from '@reduxjs/toolkit';
 import adminCompanies from "./reducers/admin/adminCompanies";
 import adminCompanyRequests from "./reducers/admin/adminCompanyRequests";
 import adminRecruiterRequests from "./reducers/admin/adminRecruiterRequests";
+import userPosts from "./reducers/posts/userPosts";
+import homePosts from "./reducers/posts/homePosts";
 
 export const store = configureStore({
   reducer: {
@@ -14,7 +16,9 @@ export const store = configureStore({
     adminUser:adminUserReducer,
     adminCompany:adminCompanies,
     adminCompanyRequest:adminCompanyRequests,
-    adminRecruiterRequest:adminRecruiterRequests
+    adminRecruiterRequest:adminRecruiterRequests,
+    userPosts:userPosts,
+    homePosts:homePosts
   },
 });
 

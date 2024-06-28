@@ -44,7 +44,7 @@ const NavigationOptions: React.FC<NavigationOptionsProps> = ({
   return (
     <>
       {openCreatePostModal && file ? (
-        <CreatePostModal file={file} setOpenCreatePostModal={setOpenCreatePostModal} setOpenSelectFileModal={setOpenSelectFileModal} preview={preview}/>
+        <CreatePostModal file={file} setFile={setFile} setPreview={setPreview} setOpenCreatePostModal={setOpenCreatePostModal} setOpenSelectFileModal={setOpenSelectFileModal} preview={preview}/>
       ):openSelectFileModal ? (
         <SelectFileModal file={file} setFile={setFile} preview={preview} setPreview={setPreview}  setOpenSelectFileModal={setOpenSelectFileModal} setOpenCreatePostModal={setOpenCreatePostModal} />
       ) : null}

@@ -4,6 +4,7 @@ import axios from "axios";
 import { URL } from "../../../common/api";
 import { config, handleError } from "../../../common/configurations";
 import { IUserLogin } from "../../../types/Iuser";
+
 axios.defaults.withCredentials = true;
 
 // get user details
@@ -12,6 +13,9 @@ export const getUserDataFirst = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(`${URL}/auth/`, config);
+      if(data.data.isBlocked){
+        return null
+      }
       return data;
     } catch (error: any) {
       return handleError(error, rejectWithValue);

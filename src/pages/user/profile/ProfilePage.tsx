@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import NavigationBar from "../../../components/general/NavigationBar";
 import UserBio from "../../../components/Profile/Personal/UserBio";
 import About from "../../../components/Profile/General/About";
@@ -8,15 +9,26 @@ import UserPreferedJob from "../../../components/Profile/Personal/UserPreferedJo
 import UserPostPart from "../../../components/Profile/Personal/UserPostPart";
 import CompanyPostPart from "../../../components/Profile/Company/CompanyPostPart";
 import RecruiterPostpart from "../../../components/Profile/Recruiter/RecruiterPostpart";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
 import CompanyBio from "../../../components/Profile/Company/CompanyBio";
 import RecruiterBio from "../../../components/Profile/Recruiter/RecruiterBio";
+import { useEffect } from "react";
+
+import { getUserDataFirst } from "../../../redux/actions/user/userActions";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
-  // const { user } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const { profile } = useSelector((state: RootState) => state.profile);
-
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate=useNavigate()
+  useEffect(()=>{
+    dispatch(getUserDataFirst());
+    if(!user?.data){
+      navigate("/login", { replace: true });
+    }
+  },[user?.data._id])
 
   return (
     <>
