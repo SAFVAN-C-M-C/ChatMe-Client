@@ -5,16 +5,29 @@ import { ViewPost } from "../../modals/post/ViewPost";
 import { getFileExtension } from "../../../helper/getExtention";
 import { IPosts } from "../../../types/IPosts";
 import { EditPost } from "../../modals/post/EditPost";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 interface PostinGridProps {
   post: IPosts;
 }
 
 const PostinGrid: React.FC<PostinGridProps> = ({ post }) => {
+  const { user } = useSelector((state: RootState) => state.user);
   const [showPost, setShowPost] = useState(false);
   const [openEditPost,setOpenEditPost]=useState(false)
+  const [myPost, setMypost] = useState(false);
+  useEffect(()=>{
+    
+    if(post.userId===user?.data._id){
+      setMypost(true)
+    }else{
+      setMypost(false)
+    }
+  },[])
   const handlePostViewOpen = () => {
     setShowPost(!showPost);
   };
+
   const [isVideo,setIsVideo]=useState(false);
   useEffect(()=>{
     setIsVideo(false)
@@ -24,7 +37,7 @@ const PostinGrid: React.FC<PostinGridProps> = ({ post }) => {
   },[])
   return (
     <>
-      {openEditPost?<EditPost post={post} setOpenEditPost={setOpenEditPost}/>:showPost ? <ViewPost setOpenEditPost={setOpenEditPost} setOpenViewPost={setShowPost} post={post} /> : null}
+      {openEditPost?<EditPost post={post} setOpenEditPost={setOpenEditPost}/>:showPost ? <ViewPost myPost={myPost} setOpenEditPost={setOpenEditPost} setOpenViewPost={setShowPost} post={post} /> : null}
       <div
         onClick={handlePostViewOpen}
         className="post  w-[75px] h-[75px] md:w-[200px] bg-slate-600 md:h-[200px] lg:w-[250px] lg:h-[250px] m-1 "

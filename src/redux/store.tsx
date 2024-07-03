@@ -8,6 +8,7 @@ import adminCompanyRequests from "./reducers/admin/adminCompanyRequests";
 import adminRecruiterRequests from "./reducers/admin/adminRecruiterRequests";
 import userPosts from "./reducers/posts/userPosts";
 import homePosts from "./reducers/posts/homePosts";
+import savedPost from "./reducers/posts/savedPost";
 
 export const store = configureStore({
   reducer: {
@@ -18,7 +19,8 @@ export const store = configureStore({
     adminCompanyRequest:adminCompanyRequests,
     adminRecruiterRequest:adminRecruiterRequests,
     userPosts:userPosts,
-    homePosts:homePosts
+    homePosts:homePosts,
+    savedPost:savedPost,
   },
 });
 

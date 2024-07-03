@@ -22,7 +22,18 @@ export interface IComments {
   comment?: string;
   name?: string;
   userAvatar?: string;
-  email?: string;
   userId?: string;
   likes?: string[];
+}
+export interface ISavedPosts {
+  saved:string[]
+  savedPost:IPosts[]
+}
+export interface AddCommentPayload {
+  postId: string;
+  comment: IComments;
+}
+export interface DeleteCommentPayload {
+  postId: string;
+  commentId: string;
 }

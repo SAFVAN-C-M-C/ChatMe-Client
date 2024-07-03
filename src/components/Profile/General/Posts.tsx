@@ -3,7 +3,7 @@ import PostinGrid from "./PostinGrid";
 import { RootState } from "../../../redux/store";
 
 const Posts = () => {
-  const { userPosts, error } = useSelector(
+  const { userPosts } = useSelector(
     (state: RootState) => state.userPosts
   );
   return (

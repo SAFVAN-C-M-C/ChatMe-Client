@@ -1,20 +1,174 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Icon } from "@iconify/react";
-import { IPosts } from "../../redux/reducers/posts/userPosts";
-import { useEffect, useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { getFileExtension } from "../../helper/getExtention";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { config } from "@/common/configurations";
+import { URL } from "@/common/api";
+import axios from "axios";
+
+import { likePost, unlikePost } from "@/redux/reducers/posts/homePosts";
+import { IPosts } from "@/types/IPosts";
+import { likeMyPost, unlikeMyPost } from "@/redux/reducers/posts/userPosts";
+import { getSavedPost } from "@/redux/actions/posts/savedPostAction";
+import { ViewPost } from "../modals/post/ViewPost";
+import { Button, Menu, MenuItem } from "@mui/material";
+import { deletePost } from "@/redux/actions/posts/userPostsAction";
+import toast from "react-hot-toast";
+import { EditPost } from "../modals/post/EditPost";
 interface HomePostProps {
   post: IPosts;
 }
 const HomePost: React.FC<HomePostProps> = ({ post }) => {
+
+  const { user } = useSelector((state: RootState) => state.user);
+  const { savedPosts } = useSelector((state: RootState) => state.savedPost);
+  const dispatch = useDispatch<AppDispatch>();
   const [isVideo,setIsVideo]=useState(false);
+  const [showPost, setShowPost] = useState(false);
+  const [openEditPost,setOpenEditPost]=useState(false)
+  useEffect(()=>{
+    
+    if(post.userId===user?.data._id){
+      setMypost(true)
+    }else{
+      setMypost(false)
+    }
+  },[])
   useEffect(()=>{
     setIsVideo(false)
     if(getFileExtension(String(post.media))!=="jpeg"){
       setIsVideo(true)
     }
   },[])
+  const handleDelete = () => {
+    setOpenEditPost(false);
+    setShowPost(false);
+    dispatch(deletePost({ _id: String(post._id) }));
+    toast.success("Post deleted");
+  };
+  const handleEditClick = () => {
+    setOpenEditPost(true);
+    setShowPost(false);
+  };
+  const [saved, setSaved] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [myPost, setMypost] = useState(false);
+  useEffect(() => {
+    if (savedPosts?.data?.saved?.find((postId) => postId === post._id)) {
+      setSaved(true);
+    } else {
+      setSaved(false);
+    }
+  }, [savedPosts?.data?.saved?.length]);
+  useEffect(() => {
+    if (post.likes?.find((val: string | undefined) => val === user?.data._id)) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+  }, [post.likes]);
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+
+  const handleSave = async () => {
+    try {
+      console.log("clicked save",`${URL}/post/save/${post._id}`);
+
+      const response = await axios.put(`${URL}/post/save/${post._id}`, config);
+      if (response.status === 200) {   
+        dispatch(getSavedPost());
+      }
+    } catch (error: any) {
+      console.log("something went wrong", error.message);
+    }
+  };
+  const handleUnSave = async () => {
+    try {
+      console.log("clicked unsave");
+
+      const response = await axios.put(
+        `${URL}/post/unsave/${post._id}`,
+        config
+      );
+      if (response.status === 200) {
+        dispatch(getSavedPost());
+      }
+    } catch (error: any) {
+      console.log("something went wrong", error.message);
+    }
+  };
+  const handleLike = async () => {
+    try {
+      console.log("clicked");
+      
+      const response = await axios.put(`${URL}/post/like/${post._id}`, config);
+      if(response.status===200){
+        dispatch(likePost({postId:String(post._id),userId:String(user?.data._id)}))
+        if(post.userId===user?.data._id){
+          dispatch(likeMyPost({postId:String(post._id),userId:String(user?.data._id)}))
+        }
+      }
+    } catch (error:any) {
+      console.log("something went wrong",error.message);
+      
+    }
+
+  };
+  const handleUnLike = async () => {
+    try {
+      console.log("clicked");
+      
+      const response = await axios.put(`${URL}/post/unlike/${post._id}`, config);
+      if(response.status===200){
+        dispatch(unlikePost({postId:String(post._id),userId:String(user?.data._id)}))
+        if(post.userId===user?.data._id){
+          dispatch(unlikeMyPost({postId:String(post._id),userId:String(user?.data._id)}))
+        }
+      }
+    } catch (error:any) {
+      console.log("something went wrong",error.message);
+      
+    }
+  }
   return (
     <>
+    
+      {openEditPost?<EditPost post={post} setOpenEditPost={setOpenEditPost}/>:showPost ? <ViewPost myPost={myPost} setOpenEditPost={setOpenEditPost} setOpenViewPost={setShowPost} post={post} /> : null}
+    
+          <Menu
+        id="post-options"
+        aria-labelledby="post-options-button"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={() => setAnchorEl(null)}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+      >
+        {myPost ? (
+          <>
+            <MenuItem onClick={handleEditClick}>Edit</MenuItem>
+            <MenuItem onClick={handleDelete}>Delete</MenuItem>
+          </>
+        ) : (
+          <>
+            <MenuItem onClick={handleEditClick}>Report</MenuItem>
+          </>
+        )}
+      </Menu>
       <div className="post w-[500px] h-auto border-[.4px] border-gray-500  mt-14 rounded-xl flex flex-col">
         <div className="title-part h-[65px]  rounded-t-xl flex items-center justify-between">
           <div className="user flex items-center ml-4">
@@ -29,7 +183,16 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
             </div>
           </div>
           <div className="option mr-4">
-            <Icon icon="mi:options-vertical" width={26} height={26} />
+          <Button
+                  variant="text"
+                  id="post-options-button"
+                  aria-controls={open ? "post-options" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={handleClick}
+                >
+                  <Icon icon="mi:options-vertical" width={26} height={26} />
+                </Button>
           </div>
         </div>
         <div className="media-part w-[500px] h-[500px] bg-slate-500">
@@ -45,16 +208,48 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
           <div className="second-row flex justify-around mt-2 mb-4  ">
             <div className="like flex justify-center items-center">
               <span className="mr-1">{post.likes?.length}</span>
-              <Icon className="mr-1" icon="solar:like-bold" width={26} height={26} />
+              {liked ? (
+                  <Icon
+                    icon="solar:like-bold"
+                    width={26}
+                    height={26}
+                    className="cursor-pointer"
+                    onClick={handleUnLike}
+                  />
+                ) : (
+                  <Icon
+                  onClick={handleLike}
+                    icon="solar:like-broken"
+                    width={26}
+                    className="cursor-pointer"
+                    height={26}
+                  />
+                )}
               <span>Like</span>
             </div>
-            <div className="comment flex justify-center items-center">
+            <div className="comment flex justify-center items-center cursor-pointer" onClick={()=>setShowPost(!showPost)}>
               <span className="mr-1">{post.comments?.length}</span>
-              <Icon className="mr-1" icon="iconamoon:comment" width={26} height={26} />
+              <Icon className="mr-1 " icon="iconamoon:comment" width={26} height={26} />
               <span>Comment</span>
             </div>
             <div className="save flex ">
-              <Icon icon="lucide:bookmark" width={26} height={26} />
+            {saved ? (
+                  <Icon
+                    icon="mdi:bookmark"
+                    width={26}
+                    height={26}
+                    className="cursor-pointer"
+                    onClick={handleUnSave}
+                  />
+                ) : (
+                  <Icon
+                    icon="mdi:bookmark-outline"
+                    width={26}
+                    height={26}
+                    className="cursor-pointer"
+                    onClick={handleSave}
+                  />
+                )}
               <span>Save</span>
             </div>
           </div>

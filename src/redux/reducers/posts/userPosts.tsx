@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice } from "@reduxjs/toolkit";
-import { createPosts, deletePost, editPost, getMyPosts } from "../../actions/posts/userPostsAction";
-import { IComments } from "../../../types/IPosts";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { IComments } from "@/types/IPosts";
+import { createPosts, deletePost, editPost, getMyPosts } from "@/redux/actions/posts/userPostsAction";
+
 
 export interface IUserPosts {
   _id?: string;
@@ -37,6 +38,20 @@ const userPostsSlice = createSlice({
   reducers: {
     updateError: (state, { payload }) => {
       state.error = payload;
+    },
+    likeMyPost(state, action: PayloadAction<{ postId: string; userId: string }>) {
+      const { postId, userId } = action.payload;
+      const post = state.userPosts?.data.find((post) => post._id === postId);
+      if (post && !post.likes?.includes(userId)) {
+        post.likes?.push(userId);
+      }
+    },
+    unlikeMyPost(state,action: PayloadAction<{ postId: string; userId: string }>) {
+      const { postId, userId } = action.payload;
+      const post = state.userPosts?.data.find((post) => post._id === postId);
+      if (post) {
+        post.likes = post.likes?.filter((id: string) => id !== userId);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -100,6 +115,6 @@ const userPostsSlice = createSlice({
   },
 });
 
-export const { updateError } = userPostsSlice.actions;
+export const { updateError,likeMyPost,unlikeMyPost } = userPostsSlice.actions;
 
 export default userPostsSlice.reducer;

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import { IPosts } from "./userPosts";
+
 import { getHomePosts } from "../../actions/posts/homePostsActions";
-
+import { AddCommentPayload, DeleteCommentPayload, IPosts } from "@/types/IPosts";
 
 export interface HomePostsPayload {
   success: boolean;
@@ -29,6 +29,34 @@ const homePostsSlice = createSlice({
     updateError: (state, { payload }) => {
       state.error = payload;
     },
+    likePost(state, action: PayloadAction<{ postId: string; userId: string }>) {
+      const { postId, userId } = action.payload;
+      const post = state.homePosts?.data.find((post) => post._id === postId);
+      if (post && !post.likes?.includes(userId)) {
+        post.likes?.push(userId);
+      }
+    },
+    unlikePost(state,action: PayloadAction<{ postId: string; userId: string }>) {
+      const { postId, userId } = action.payload;
+      const post = state.homePosts?.data.find((post) => post._id === postId);
+      if (post) {
+        post.likes = post.likes?.filter((id: string) => id !== userId);
+      }
+    },
+    addComment(state, action: PayloadAction<AddCommentPayload>) {
+      const { postId, comment } = action.payload;
+      const post = state.homePosts?.data.find((post) => post._id === postId);
+      if (post) {
+        post.comments?.push(comment);
+      }
+    },
+    deleteComment(state, action: PayloadAction<DeleteCommentPayload>) {
+      const { postId, commentId } = action.payload;
+      const post = state.homePosts?.data.find((post) => post._id === postId);
+      if (post) {
+        post.comments = post?.comments?.filter((comment) => comment._id !== commentId);
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -45,11 +73,10 @@ const homePostsSlice = createSlice({
         state.loading = false;
         state.homePosts = null;
         state.error = null;
-      })
-
+      });
   },
 });
 
-export const { updateError } = homePostsSlice.actions;
+export const { updateError,likePost,unlikePost,addComment,deleteComment } = homePostsSlice.actions;
 
 export default homePostsSlice.reducer;

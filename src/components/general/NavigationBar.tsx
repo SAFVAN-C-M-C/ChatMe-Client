@@ -15,7 +15,6 @@ const NavigationBar = () => {
     Notification: ["mingcute:notification-fill", "/"],
     Explore: ["mdi:compass", "/"],
     Chat: ["icon-park-solid:message", "/"],
-    Saved: ["iconamoon:bookmark-fill", "/"],
     "Create Post": ["icons8:plus", "/"],
     Jobs: ["solar:suitcase-bold", "/"],
   };

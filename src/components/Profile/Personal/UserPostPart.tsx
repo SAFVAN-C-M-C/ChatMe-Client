@@ -2,6 +2,8 @@ import { Icon } from "@iconify/react";
 import { useState } from "react";
 import Posts from "../General/Posts";
 import AppliedJobs from "./AppliedJobs";
+import Saved from "../Saved/Saved";
+
 
 const UserPostPart = () => {
     const [postNav, setPostNav] = useState("post");
@@ -38,6 +40,25 @@ const UserPostPart = () => {
           </li>
           <li
             className={
+              postNav === "saved"
+                ? "md:border-t md:border-gray-700 md:-mt-px md:text-gray-700"
+                : ""
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            onClick={(e) => handleNavPostClick("saved")}
+          >
+            <div className=" p-3 flex items-center">
+              <Icon
+                icon="mdi:bookmark"
+                className="mr-1"
+                width={26}
+                height={26}
+              />
+              <span className="hidden md:inline">Saved</span>
+            </div>
+          </li>
+          <li
+            className={
               postNav === "applied_job"
                 ? "md:border-t md:border-gray-700 md:-mt-px md:text-gray-700"
                 : ""
@@ -57,7 +78,7 @@ const UserPostPart = () => {
           </li>
         </ul>
       </div>
-      {postNav === "post" ? <Posts /> : <AppliedJobs />}
+      {postNav === "post" ? <Posts /> : postNav === "saved"? <Saved />: <AppliedJobs />}
     </>
   );
 };

@@ -6,6 +6,8 @@ interface ViewPostProps {
   handlePostViewOpen: () => void;
   post: IPosts;
 }
+//deprecated
+
 const ViewPost: React.FC<ViewPostProps> = ({ handlePostViewOpen, post }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
