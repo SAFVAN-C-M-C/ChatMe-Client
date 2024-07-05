@@ -7,6 +7,7 @@ import RecruiterBioEditModal from "../../modals/RecruiterBioEditModal";
 const RecruiterBio = () => {
     //redux
     const { profile } = useSelector((state: RootState) => state.profile);
+    const { userPosts } = useSelector((state: RootState) => state.userPosts);
     const [openEditBio,setOpenEditBio]=useState(false)
   return (
     <>
@@ -144,7 +145,7 @@ const RecruiterBio = () => {
           <div className="second-row md:w-[60%] w-full flex justify-around">
             <div className="post">
               <p>
-                <span className="font-bold">0 </span>Posts
+                <span className="font-bold">{userPosts?.data? userPosts?.data.length:"0"} </span>Posts
               </p>
             </div>
             <div className="follwers">

@@ -173,3 +173,30 @@ export const getProfileDataFirst = createAsyncThunk(
       }
     }
   )
+
+  export const followUser= createAsyncThunk(
+    "profile/followUser",
+    async (formData:{
+      userId: string,
+    },{rejectWithValue})=>{
+      try{
+        const { data } = await axios.put(`${URL}/profile/users/follow/${formData.userId}`, config);
+        return data;
+      }catch(error:any){
+        return handleError(error, rejectWithValue);
+      }
+    }
+  )
+  export const unFollowUser= createAsyncThunk(
+    "profile/unFollowUser",
+    async (formData:{
+      userId: string,
+    },{rejectWithValue})=>{
+      try{
+        const { data } = await axios.put(`${URL}/profile/users/unfollow/${formData.userId}`, config);
+        return data;
+      }catch(error:any){
+        return handleError(error, rejectWithValue);
+      }
+    }
+  )

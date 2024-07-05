@@ -14,7 +14,7 @@ const NavBar = () => {
     Home: ["teenyicons:home-solid", "/"],
     "Company Requests": ["mdi:company", "/admin/company/requests"],
     "Verify Recruiters": ["clarity:employee-group-solid", "/admin/recruiter/requests"],
-    Reports: ["ph:flag-fill", "/"],
+    Reports: ["ph:flag-fill", "/admin/reports"],
     Users: ["mdi:user", "/admin/users"],
     Companies: ["mdi:company", "/admin/company"],
     "Add Notification": ["mingcute:notification-fill", "/"],

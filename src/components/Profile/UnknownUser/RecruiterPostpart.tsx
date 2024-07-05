@@ -1,12 +1,14 @@
-import { Icon } from "@iconify/react";
-import { useState } from "react";
-import Posts from "../General/Posts";
-import AppliedJobs from "./AppliedJobs";
-import Saved from "../Saved/Saved";
+import { Icon } from '@iconify/react'
+import React, { useState } from 'react';
+import { UserPostsPayload } from '@/redux/reducers/posts/userPosts';
+import Posts from './Posts';
+import RecruiterJobs from '../Recruiter/RecruiterJobs';
 
-
-const UserPostPart = () => {
-    const [postNav, setPostNav] = useState("post");
+interface RecruiterPostpartProps{
+    userPosts:UserPostsPayload|null
+}
+const RecruiterPostpart:React.FC<RecruiterPostpartProps> = ({userPosts}) => {
+    const [postNav, setPostNav] = useState<string | "post" | "jobs" >("post");
     const handleNavPostClick = (value: string) => {
       setPostNav(value);
     };
@@ -40,6 +42,25 @@ const UserPostPart = () => {
           </li>
           <li
             className={
+              postNav === "jobs"
+                ? "md:border-t md:border-gray-700 md:-mt-px md:text-gray-700"
+                : ""
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            onClick={() => handleNavPostClick("jobs")}
+          >
+            <div className="p-3 flex items-center">
+              <Icon
+                icon="solar:suitcase-bold"
+                className="mr-1"
+                width={26}
+                height={26}
+              />
+              <span className="hidden md:inline">Jobs</span>
+            </div>
+          </li>
+          <li
+            className={
               postNav === "saved"
                 ? "md:border-t md:border-gray-700 md:-mt-px md:text-gray-700"
                 : ""
@@ -57,30 +78,11 @@ const UserPostPart = () => {
               <span className="hidden md:inline">Saved</span>
             </div>
           </li>
-          <li
-            className={
-              postNav === "applied_job"
-                ? "md:border-t md:border-gray-700 md:-mt-px md:text-gray-700"
-                : ""
-            }
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onClick={() => handleNavPostClick("applied_job")}
-          >
-            <div className="p-3 flex items-center">
-              <Icon
-                icon="hugeicons:job-search"
-                className="mr-1"
-                width={26}
-                height={26}
-              />
-              <span className="hidden md:inline">Applied Jobs</span>
-            </div>
-          </li>
         </ul>
       </div>
-      {postNav === "post" ? <Posts /> : postNav === "saved"? <Saved />: <AppliedJobs />}
+      {postNav === "post" ? <Posts userPosts={userPosts} /> : <RecruiterJobs />}
     </>
-  );
-};
+  )
+}
 
-export default UserPostPart;
+export default RecruiterPostpart

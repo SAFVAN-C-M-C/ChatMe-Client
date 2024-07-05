@@ -26,7 +26,7 @@ const Home = () => {
                 ))
               : "No data"}
           </div>
-          <div className="sugetion-cover w-[30%] h-full">
+          {/* <div className="sugetion-cover w-[30%] h-full">
             <div className="suggetion-fixed flex flex-col fixed w-[400px] right-0 top-20 h-auto ">
               <div className="header flex w-[400px] justify-between p-5">
                 <div className="title">
@@ -42,7 +42,7 @@ const Home = () => {
               <SugestedUser />
               <SugestedUser />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

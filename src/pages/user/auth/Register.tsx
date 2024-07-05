@@ -4,12 +4,16 @@ import RegisterForm_2 from '../../../components/Auth/Register/RegisterForm_2'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../../redux/store';
+import { updateError } from '@/redux/reducers/userSlice';
 
 const Register = () => {
   const { user } = useSelector(
     (state: RootState) => state.user
   );
-
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(()=>{
+    dispatch(updateError(null))
+  },[])
 
   return (
     <>

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
 import { IProfile } from "../../types/IProfile";
-import { acceptRecruiterRequest, addEducation, addExperience, addPreferedJobs, addSkills, getProfileDataFirst, ignoreRecruiterRequest, updateAbout, updateAvatar, updateBio } from "../actions/user/profileActions";
+import { acceptRecruiterRequest, addEducation, addExperience, addPreferedJobs, addSkills, followUser, getProfileDataFirst, ignoreRecruiterRequest, unFollowUser, updateAbout, updateAvatar, updateBio } from "../actions/user/profileActions";
 export interface ProfilePayload{
     success:boolean;
     data:IProfile;
@@ -92,6 +92,34 @@ const profileSlice = createSlice({
         state.profile = payload;
       })
       .addCase(addEducation.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.profile = null;
+        state.error = payload;
+      })
+      //follow user
+      .addCase(followUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(followUser.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.profile = payload;
+      })
+      .addCase(followUser.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.profile = null;
+        state.error = payload;
+      })
+      //un follow user
+      .addCase(unFollowUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(unFollowUser.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.profile = payload;
+      })
+      .addCase(unFollowUser.rejected, (state, { payload }) => {
         state.loading = false;
         state.profile = null;
         state.error = payload;

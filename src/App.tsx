@@ -29,6 +29,10 @@ import { getAdminRecruiterRequestDetails } from "@/redux/actions/admin/adminRecr
 import { getHomePosts } from "@/redux/actions/posts/homePostsActions";
 import { getMyPosts } from "@/redux/actions/posts/userPostsAction";
 import { getSavedPost } from "./redux/actions/posts/savedPostAction";
+import ChatPage from "./pages/user/Chat/ChatPage";
+import UserProfilePage from "./pages/user/profile/UserProfilePage";
+import Reports from "./pages/admin/Reports";
+import { getReports } from "./redux/actions/admin/adminReportAction";
 
 function App() {
   //redux
@@ -79,7 +83,7 @@ function App() {
       dispatch(getAdminCompanyDetails())
       dispatch(getAdminCompanyRequestsDetails())
       dispatch(getAdminRecruiterRequestDetails())
-      
+      dispatch(getReports())
     }
     if(user?.data?._id && user.data.role==="user"){
       dispatch(getHomePosts());
@@ -125,6 +129,9 @@ function App() {
                 <>
                   <Route path="/" element={<Home />} />
                   <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/u/profile/:userId" element={<UserProfilePage />} />
+                  <Route path="/chat" element={<ChatPage />} />
+                  
                 </>
               ) : user?.data?.role === "admin" ? (
                 <>
@@ -133,6 +140,7 @@ function App() {
                   <Route path="/admin/company" element={<Company />} />
                   <Route path="/admin/company/requests" element={<CompanyRequests />} />
                   <Route path="/admin/recruiter/requests" element={<RecruiterRequests />} />
+                  <Route path="/admin/reports" element={<Reports />} />
                 </>
               ) : (
                 <Route path="/" element={<Navigate to="/login" />} />

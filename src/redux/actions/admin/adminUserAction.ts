@@ -23,7 +23,7 @@ export const getAdminUsersDetails = createAsyncThunk(
     export const blockUser = createAsyncThunk(
       "admin/blockUser",
       async (formData:{
-        email?: string,
+        userId?: string,
         isBlocked?: boolean,
         type?: string| "company" | "user",
       }, { rejectWithValue }) => {

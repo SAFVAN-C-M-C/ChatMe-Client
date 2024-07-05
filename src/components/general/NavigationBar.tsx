@@ -1,23 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Icon } from "@iconify/react";
 import NavigationOptions from "./NavigationOptions";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { logout } from "../../redux/actions/user/userActions";
 import { useNavigate } from "react-router-dom";
 
-
-const NavigationBar = () => {
+interface NavigationBarProps{
+  isChat?:boolean
+}
+const NavigationBar:React.FC<NavigationBarProps> = ({isChat}) => {
   const { profile } = useSelector((state: RootState) => state.profile);
   const options = {
     Home: ["teenyicons:home-solid", "/"],
     Notification: ["mingcute:notification-fill", "/"],
-    Explore: ["mdi:compass", "/"],
-    Chat: ["icon-park-solid:message", "/"],
+    Search: ["tabler:search", "/"],
+    Chat: ["icon-park-solid:message", "/chat"],
     "Create Post": ["icons8:plus", "/"],
     Jobs: ["solar:suitcase-bold", "/"],
   };
+  const [shrink,setShrink]=useState(isChat?isChat:false)
   const [moreActive, setMoreActive] = useState(false);
   // const [theamToggle,setTheamToggle]=useState("light");
   const [darkTheamActive, setDarkTheamActive] = useState(false);
@@ -38,20 +41,22 @@ const NavigationBar = () => {
   // Implement the event handler function
   const handleOptionClick: HandleOptionClick = (event, option) => {
     event.preventDefault();
-    navigate(`/${option}`);
+    navigate(`/${option}`)
   };
   return (
     <>
-      <div className="Nav-Bar h-[100%] lg:w-[270px] w-[75px] ">
-        <div className="Nav-Bar fixed h-[100vh] lg:w-[270px] w-[75px] border-r-[.5px] border-black">
-          <div className="logo-container hidden lg:block p-3 h-[90px]">
+      <div 
+      className={shrink?"Nav-Bar   w-[75px] ":"Nav-Bar h-[100%] lg:w-[270px] w-[75px] "}
+      >
+        <div className={shrink?"Nav-Bar  fixed h-[100vh] w-[75px] border-r-[.5px] border-black":"Nav-Bar fixed h-[100vh] lg:w-[270px] w-[75px] border-r-[.5px] border-black"}>
+          <div className={shrink?"logo-container hidden p-3 h-[90px]":"logo-container hidden lg:block p-3 h-[90px]"}>
             <img
               src="/logo/ChatMe--full-color.png"
               alt="ChatMe"
               className="w-full h-full object-contain"
             />
           </div>
-          <div className="logo-container block lg:hidden p-3 h-[90px]">
+          <div className={shrink?"logo-container block  p-3 h-[90px]":"logo-container block lg:hidden p-3 h-[90px]"}>
             <img
               src="/logo/ChatMe--logo-color.png"
               alt="ChatMe"
@@ -60,13 +65,13 @@ const NavigationBar = () => {
           </div>
           <div className="options-container flex flex-col items-center mt-10">
             {Object.entries(options).map(([title, icon], index) => (
-              <NavigationOptions key={index} title={title} value={icon} />
+              <NavigationOptions shrink={shrink} setShrink={setShrink} key={index} title={title} value={icon} />
             ))}
             <div
               className="options flex justify-center w-[80%] mt-4 mb-4"
               onClick={(e) => handleOptionClick(e, "profile")}
             >
-              <div className="option-icon w-[40%] flex justify-center">
+              <div className="option-icon rounded-full h-auto  w-[40%] flex justify-center">
                 <img
                   src={
                     profile?.data?.bio?.avatar
@@ -74,10 +79,10 @@ const NavigationBar = () => {
                       : "/general/ChatMe-profile.png"
                   }
                   alt="profile"
-                  className="rounded-full w-[26px] h-[26px]"
+                  className={shrink?"rounded-full object-cover w-[24px] h-[24px]":"rounded-full object-cover w-[24px] h-[24px] lg:w-[26px] lg:h-[26px]"}
                 />
               </div>
-              <div className="option-title w-[60%] text-lg  justify-start hidden lg:flex">
+              <div className={shrink?"option-title w-[60%] text-lg  justify-start hidden":"option-title w-[60%] text-lg  justify-start hidden lg:flex"}>
                 <b className="text-base">{profile?.data?.name}</b>
               </div>
             </div>
@@ -124,7 +129,7 @@ const NavigationBar = () => {
               <div className="option-icon w-[40%] flex justify-center">
                 <Icon icon="gg:details-more" width={26} height={26} />
               </div>
-              <div className="option-title w-[60%] text-lg  justify-start hidden lg:flex">
+              <div className={shrink?"option-title w-[60%] text-lg  justify-start hidden":"option-title w-[60%] text-lg  justify-start hidden lg:flex"}>
                 <b>More</b>
               </div>
             </div>

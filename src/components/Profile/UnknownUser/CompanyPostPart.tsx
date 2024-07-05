@@ -1,13 +1,16 @@
 import { Icon } from "@iconify/react";
-import Posts from "../General/Posts";
+
 import { useState } from "react";
-import Jobs from "./Jobs";
-import Recruiters from "./Recruiters";
-import RecruiterRequest from "./RecruiterRequest";
-import Saved from "../Saved/Saved";
 
+import { UserPostsPayload } from "@/redux/reducers/posts/userPosts";
+import Posts from "./Posts";
+import Jobs from "../Company/Jobs";
+import Recruiters from "../Company/Recruiters";
 
-const CompanyPostPart = () => {
+interface CompanyPostPartProps{
+    userPosts:UserPostsPayload|null
+}
+const CompanyPostPart:React.FC<CompanyPostPartProps> = ({userPosts}) => {
     const [postNav, setPostNav] = useState<string | "post" | "jobs" | "recruiter" | "recruiter_request">("post");
     const handleNavPostClick = (value: string) => {
       setPostNav(value);
@@ -118,7 +121,7 @@ const CompanyPostPart = () => {
           </li>
         </ul>
       </div>
-      {postNav === "post" ? <Posts /> : postNav==="jobs"?<Jobs/>:postNav==="recruiter"?<Recruiters/>:postNav==="recruiter_request"?<RecruiterRequest/>:postNav === "saved"? <Saved />:null}
+      {postNav === "post" ? <Posts userPosts={userPosts} /> : postNav==="jobs"?<Jobs/>:postNav==="recruiter"?<Recruiters/>:null}
     </>
   )
 }

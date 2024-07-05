@@ -5,8 +5,15 @@ import LoginForm from "../../../components/Auth/LoginForm";
 import OtpVerification from "../../../components/Auth/OtpVerification";
 import ResetPassword from "../../../components/Auth/ResetPassword";
 import { GOOGLE_ID } from "../../../common/configurations";
+import { updateError } from "@/redux/reducers/userSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
 
 const Login = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(()=>{
+    dispatch(updateError(null))
+  },[])
   return (
     <>
       <div className="main-container w-full h-[100vh] flex">

@@ -13,9 +13,9 @@ const Users = () => {
     }
   }, [error]);
   const dispatch = useDispatch<AppDispatch>();
-  const handleBlock = (email?: string) => {
+  const handleBlock = (userId: string) => {
     const formData = {
-      email: email,
+      userId: userId,
       isBlocked: true,
       type: "user",
     };
@@ -24,9 +24,9 @@ const Users = () => {
       toast.success("Blocked");
     }
   };
-  const handleUnBlock = (email?: string) => {
+  const handleUnBlock = (userId: string) => {
     const formData = {
-      email: email,
+      userId: userId,
       isBlocked: false,
       type: "user",
     };
@@ -47,6 +47,7 @@ const Users = () => {
             <table className="w-full overflow-x-scroll ms-5 bg-white border my-4 border-gray-300">
               <thead>
                 <tr className="bg-gray-100">
+                  <th className="py-2 px-0 border-b">Slno</th>
                   <th className="py-2 px-0 border-b">Name</th>
                   <th className="py-2 px-0 border-b">Email</th>
                   <th className="py-2 px-0 border-b">No.of Actions</th>
@@ -56,6 +57,7 @@ const Users = () => {
               <tbody>
                 {adminUser?.data.map((user, id) => (
                   <tr key={id} className="border-b">
+                    <td className="py-2 px-4 text-center">{id+1}</td>
                     <td className="py-2 px-4 text-center">{user?.name}</td>
                     <td className="py-2 px-4 text-center">{user?.email}</td>
                     <td className="py-2 px-4 text-center">
@@ -64,14 +66,14 @@ const Users = () => {
                     <td className="py-2 px-4 text-center">
                       {user.isBlocked ? (
                         <button
-                          onClick={() => handleUnBlock(user.email)}
+                          onClick={() => handleUnBlock(String(user.userId))}
                           className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-red-700"
                         >
                           UnBlock
                         </button>
                       ) : (
                         <button
-                          onClick={() => handleBlock(user.email)}
+                          onClick={() => handleBlock(String(user.userId))}
                           className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-700"
                         >
                           Block

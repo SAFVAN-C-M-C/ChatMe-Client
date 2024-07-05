@@ -9,6 +9,8 @@ import adminRecruiterRequests from "./reducers/admin/adminRecruiterRequests";
 import userPosts from "./reducers/posts/userPosts";
 import homePosts from "./reducers/posts/homePosts";
 import savedPost from "./reducers/posts/savedPost";
+import searchUsers from "./reducers/Search/searchUsers";
+import adminReports from "./reducers/admin/adminReports";
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +23,8 @@ export const store = configureStore({
     userPosts:userPosts,
     homePosts:homePosts,
     savedPost:savedPost,
+    searchUser:searchUsers,
+    adminReport:adminReports
   },
 });
 

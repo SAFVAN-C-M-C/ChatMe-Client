@@ -37,6 +37,7 @@ function CompanyRequests() {
           <table className="w-full overflow-x-scroll ms-5 bg-white border my-4 border-gray-300">
             <thead>
               <tr className="bg-gray-100">
+                <th className="py-2 px-0 border-b">Slno</th>
                 <th className="py-2 px-0 border-b">Name</th>
                 <th className="py-2 px-0 border-b">Email</th>
                 <th className="py-2 px-0 border-b">Actions</th>
@@ -45,6 +46,7 @@ function CompanyRequests() {
             <tbody>
               {adminCompanyRequests?.data.map((user, id) => (
                 <tr key={id} className="border-b">
+                  <td className="py-2 px-4 text-center">{id+1}</td>
                   <td className="py-2 px-4 text-center">{user?.name}</td>
                   <td className="py-2 px-4 text-center">{user?.email}</td>
 

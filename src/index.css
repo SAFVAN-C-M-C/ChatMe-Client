@@ -10,7 +10,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
 }
+
 
 a {
   font-weight: 500;
@@ -51,4 +53,12 @@ body {
   100% {
     transform: translateX(0%);
   }
+}
+
+
+.chat_main{
+  background-image: url('/general/Chat_bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  
 }

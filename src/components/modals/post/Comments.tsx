@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { URL } from '@/common/api'
 import { config } from '@/common/configurations'
 import { getMyPosts } from '@/redux/actions/posts/userPostsAction'
