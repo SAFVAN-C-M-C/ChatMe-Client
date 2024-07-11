@@ -1,12 +1,15 @@
 export interface IChat {
     _id?: string;
     participants?: string[];
-    messages?:IMessage[];
+    messages:IMessage[];
   }
   export interface IMessage{
     _id?:string;
     senderId?:string;
     receiverId?:string;
     recieverSeen?:boolean;
-    message:string
+    message:string;
+    updatedAt:Date;
+    createdAt:Date;
+    shouldShake?:boolean
   }

@@ -9,7 +9,7 @@ import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GOOGLE_ID } from "./common/configurations.tsx";
-
+import { SocketProvider } from "./context/SocketContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -17,7 +17,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Toaster position="top-center" />
       <GoogleOAuthProvider clientId={`${GOOGLE_ID}`}>
         <BrowserRouter>
-          <App />
+          <SocketProvider>
+            <App />
+          </SocketProvider>
         </BrowserRouter>
       </GoogleOAuthProvider>
     </Provider>

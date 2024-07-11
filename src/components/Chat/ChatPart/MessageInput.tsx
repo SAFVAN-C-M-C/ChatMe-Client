@@ -1,16 +1,57 @@
-import { Icon } from "@iconify/react";
-import React, { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { URL } from "@/common/api";
+import { config } from "@/common/configurations";
+import { ChatContext } from "@/context/ChatContext";
+import { useSocket } from "@/context/SocketContext";
+import { RootState } from "@/redux/store";
+
+import axios from "axios";
+import React, { useContext, useState } from "react";
 import { BsSend } from "react-icons/bs";
+import { useSelector } from "react-redux";
+
 const MessageInput = () => {
+  const { user } = useSelector(
+    (state: RootState) => state.user
+  );
+  const {socket}=useSocket()
+  const appContext = useContext(ChatContext);
+  if (!appContext) {
+    throw new Error('useContext must be used within an AppProvider');
+  }
+  const { chat,getChat,addNewMessage, } = appContext;
   const [message,setMessage]=useState<string>("");
   const handleMessageChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
     e.preventDefault();
     setMessage(e.target.value)
   }
 
-  const handleMessageSend=(e:React.FormEvent<HTMLFormElement>)=>{
+  const handleMessageSend=async(e:React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
-    console.log(message);
+    try {
+      const receiverId=chat?.participants?.filter((val)=>val!==user?.data._id)[0]
+      const formData=new FormData();
+      formData.append("message",message);
+      formData.append("receiverId",String(receiverId));
+      formData.append("chatId",String(chat?._id));
+
+      const res=await axios.post(`${URL}/chat/message`,formData,config);
+      if(res.status===200){
+        getChat(String(chat?._id))
+        console.log(res.data.data,"===message");
+        
+        setMessage('')
+        addNewMessage(res.data.data)
+        if (socket) {
+          socket.emit('newMessage', { obj: res.data.data });
+        } else {
+          console.error('Socket not connected yet, cannot emit message.');
+        }
+      }
+    } catch (error:any) {
+      console.log("Some thing went wrong",error.message);
+      
+    }
     
   }
   return (

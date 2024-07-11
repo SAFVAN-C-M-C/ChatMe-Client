@@ -2,7 +2,7 @@
 /* eslint-disable react-refresh/only-export-components */
 
 import { URL } from "@/common/api";
-import { IChat } from "@/types/IChat";
+import { IChat, IMessage } from "@/types/IChat";
 import axios from "axios";
 import React, {
   createContext,
@@ -21,6 +21,8 @@ export interface ChatContextType {
   setChat: Dispatch<SetStateAction<IChat | null>>;
   setMyChats: Dispatch<SetStateAction<IChat[] | null>>;
   myChats: IChat[] | null;
+  getMyChats:() => Promise<void>;
+  addNewMessage:(newMessage:IMessage)=>void;
 }
 
 // Create the context with a default value
@@ -42,7 +44,21 @@ const ChatContextProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     getMyChats();
   }, []);
-
+  const addNewMessage=(newMessage:IMessage)=>{
+    setChat((prevChat) => {
+      if (!prevChat) {
+        return null; // or handle the case where prevChat is null
+      }
+      
+      return {
+        ...prevChat,
+        messages: [
+          ...prevChat.messages,
+          newMessage
+        ]
+      };
+    });
+  }
   const getChatSearch = async (receiverId: string,navigate:any) => {
     try {
       console.log(receiverId, "here in get chat");
@@ -79,7 +95,7 @@ const ChatContextProvider: React.FC<{ children: ReactNode }> = ({
   };
   return (
     <ChatContext.Provider
-      value={{ getChat, getChatSearch, chat, setChat, myChats, setMyChats }}
+      value={{ getChat, getChatSearch,addNewMessage, chat,getMyChats, setChat, myChats, setMyChats }}
     >
       {children}
     </ChatContext.Provider>
