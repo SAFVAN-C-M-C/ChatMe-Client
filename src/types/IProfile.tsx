@@ -72,3 +72,11 @@ export interface Recruiters {
   name?: string;
   avatar?: string |null;
 }
+export interface UserDetails{
+  _id?:string
+  userId:string,
+  avatar:string,
+  accountType:string,
+  isVerified:boolean
+  name:string
+}

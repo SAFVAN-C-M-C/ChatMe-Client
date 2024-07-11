@@ -13,7 +13,7 @@ import SearchUser from "./SearchUser";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "@/redux/actions/search/searchUserAction";
-import CancelIcon from '@mui/icons-material/Cancel';
+
 import { updateSerachKey } from "@/redux/reducers/Search/searchUsers";
 import { Icon } from "@iconify/react";
 interface SearchModalProps {

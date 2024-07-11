@@ -131,6 +131,7 @@ function App() {
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/u/profile/:userId" element={<UserProfilePage />} />
                   <Route path="/chat" element={<ChatPage />} />
+                  <Route path="/chat/u/:chatId" element={<ChatPage />} />
                   
                 </>
               ) : user?.data?.role === "admin" ? (

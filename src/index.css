@@ -13,6 +13,22 @@
 
 }
 
+/* ::-webkit-scrollbar{
+  width: 1px;
+}
+
+::-webkit-scrollbar-track{
+  background-color: #555;
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: #121212;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover{
+  background-color: #242424;
+} */
+
 
 a {
   font-weight: 500;
@@ -29,6 +45,7 @@ body {
   -ms-user-select: none; /* Disable selection for Internet Explorer/Edge */
   user-select: none; /* Disable selection for general browsers */
   margin: 0;
+  padding: 0;
   min-width: 320px;
   min-height: 100vh;
   background: #fff;
