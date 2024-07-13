@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { URL } from "@/common/api";
 import { config } from "@/common/configurations";
-import { ChatContext } from "@/context/ChatContext";
+import {  useChatContext } from "@/context/ChatContext";
 import { useSocket } from "@/context/SocketContext";
 import { RootState } from "@/redux/store";
-import { IChat } from "@/types/IChat";
+import { IChat, IMessage } from "@/types/IChat";
 import { UserDetails } from "@/types/IProfile";
 import { Icon } from "@iconify/react";
 import axios from "axios";
-import React, { FC, useContext, useEffect, useState } from "react";
+import  { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -17,18 +17,18 @@ interface UserInChatProps {
 }
 const UserInChat: FC<UserInChatProps> = ({ chat }) => {
   const { user } = useSelector((state: RootState) => state.user);
-  const appContext = useContext(ChatContext);
+  console.log("herererere",chat);
+   
   const {onlineUsers}=useSocket()
   const navigate = useNavigate();
-  if (!appContext) {
-    throw new Error("useContext must be used within an AppProvider");
-  }
+ 
   const { chatId } = useParams();
 
-  const { setChat,getChat,myChats } = appContext;
+  const { setChat,getChat,myChats } = useChatContext();
+  const {socket}=useSocket()
   const [isSelectedChat, setIsSelectedChat] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
-
+  const [unread,setUnread]=useState(0)
   useEffect(() => {
     if (chat?._id) {
       if (chat._id === chatId) {
@@ -38,10 +38,26 @@ const UserInChat: FC<UserInChatProps> = ({ chat }) => {
       }
     }
   }, [chatId,myChats]);
+  const getTotalUnread=(messages:IMessage[])=>{
+    let count=0;
+    for(const message of messages){
+      if(!message.recieverSeen && message.receiverId===user?.data._id){
+        count++
+      }
+    }
+    setUnread(count) 
+  }
+  useEffect(()=>{
+    getTotalUnread(chat.messages)
+  },[chat])
   const handleClick = () => {
     setChat(chat);
+    
     navigate(`/chat/u/${chat?._id}`,{replace:true});
     getChat(String(chat._id))
+    if(chat.unread && socket){
+      socket.emit("messageSeen",{chatId:String(chat?._id),receiverId:String(user?.data._id)})
+    }
   };
   const [reciever, setReceiver] = useState<UserDetails | null>(null);
   useEffect(()=>{
@@ -73,7 +89,7 @@ const UserInChat: FC<UserInChatProps> = ({ chat }) => {
   return (
     <>
       <div
-        className={`chat-user w-[95%] h-auto mt-1 ml-3 mr-10  flex items-center rounded-md  border-gray-300 hover:bg-blue-200 ${
+        className={`chat-user relative w-[95%] h-auto mt-1 ml-3 mr-10  flex items-center rounded-md  border-gray-300 hover:bg-blue-200 ${
           isSelectedChat ? "bg-blue-200" : ""
         }`}
         onClick={handleClick}
@@ -109,6 +125,10 @@ const UserInChat: FC<UserInChatProps> = ({ chat }) => {
               />
           ) : null}
         </div>
+        {unread>0?<div className=" absolute right-5 flex justify-end ml-10">
+                  
+          <div className="inline-flex text-white items-center justify-center font-bold w-6 h-6 text-xs border-2 border-white rounded-full bg-blue-700">{unread}</div>
+        </div>:null}
       </div>
       <div className="divider h-1 my-0 ml-2 py-0"></div>
     </>

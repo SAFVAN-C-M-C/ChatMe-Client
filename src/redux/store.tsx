@@ -11,6 +11,7 @@ import homePosts from "./reducers/posts/homePosts";
 import savedPost from "./reducers/posts/savedPost";
 import searchUsers from "./reducers/Search/searchUsers";
 import adminReports from "./reducers/admin/adminReports";
+import notification from "./reducers/notification/notification";
 
 export const store = configureStore({
   reducer: {
@@ -24,7 +25,8 @@ export const store = configureStore({
     homePosts:homePosts,
     savedPost:savedPost,
     searchUser:searchUsers,
-    adminReport:adminReports
+    adminReport:adminReports,
+    notification:notification
   },
 });
 

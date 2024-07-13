@@ -17,8 +17,12 @@ import { useEffect } from "react";
 
 import { getUserDataFirst } from "../../../redux/actions/user/userActions";
 import { useNavigate } from "react-router-dom";
+import UseListenMessages from "@/hooks/UseListenMessages";
+import UseListenNotification from "@/hooks/UseListenNotification";
 
 const ProfilePage = () => {
+  UseListenMessages()
+  UseListenNotification()
   const { user } = useSelector((state: RootState) => state.user);
   const { profile } = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch<AppDispatch>();

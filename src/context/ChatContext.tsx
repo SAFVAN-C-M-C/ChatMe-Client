@@ -2,7 +2,7 @@
 /* eslint-disable react-refresh/only-export-components */
 
 import { URL } from "@/common/api";
-import { IChat, IMessage } from "@/types/IChat";
+import { IChat, ISoccketMessage } from "@/types/IChat";
 import axios from "axios";
 import React, {
   createContext,
@@ -14,6 +14,7 @@ import React, {
   useState,
 } from "react";
 
+
 export interface ChatContextType {
   getChatSearch: (receiverId: string,navigate:any) => Promise<void>;
   getChat: (chatId: string) => Promise<void>;
@@ -22,7 +23,8 @@ export interface ChatContextType {
   setMyChats: Dispatch<SetStateAction<IChat[] | null>>;
   myChats: IChat[] | null;
   getMyChats:() => Promise<void>;
-  addNewMessage:(newMessage:IMessage)=>void;
+  addNewMessage:(newMessage:ISoccketMessage)=>void;
+  setRead:()=>void;
 }
 
 // Create the context with a default value
@@ -34,6 +36,7 @@ const ChatContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [chat, setChat] = useState<IChat | null>(null);
+  
   const [myChats, setMyChats] = useState<IChat[] | null>(null);
   const getMyChats = async () => {
     const res = await axios.get(`${URL}/chat/`);
@@ -44,20 +47,28 @@ const ChatContextProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     getMyChats();
   }, []);
-  const addNewMessage=(newMessage:IMessage)=>{
-    setChat((prevChat) => {
-      if (!prevChat) {
-        return null; // or handle the case where prevChat is null
-      }
-      
-      return {
-        ...prevChat,
-        messages: [
-          ...prevChat.messages,
-          newMessage
-        ]
-      };
-    });
+  const addNewMessage=(newMessage:ISoccketMessage)=>{
+    if(chat?._id===newMessage.chatId){
+      setChat((prevChat) => {
+        if (!prevChat) {
+          return null; // or handle the case where prevChat is null
+        }
+        return {
+          ...prevChat,
+          messages: [
+            ...prevChat.messages,
+            newMessage.obj
+          ]
+        };
+      });
+      getMyChats()
+    }else{
+      getMyChats()
+    }
+    
+  }
+  const setRead=()=>{
+    getMyChats()
   }
   const getChatSearch = async (receiverId: string,navigate:any) => {
     try {
@@ -95,14 +106,19 @@ const ChatContextProvider: React.FC<{ children: ReactNode }> = ({
   };
   return (
     <ChatContext.Provider
-      value={{ getChat, getChatSearch,addNewMessage, chat,getMyChats, setChat, myChats, setMyChats }}
+      value={{ getChat,setRead, getChatSearch,addNewMessage, chat,getMyChats, setChat, myChats, setMyChats }}
     >
       {children}
     </ChatContext.Provider>
   );
 };
 
-export const useChatContext = () => {
-  return useContext(ChatContext);
-};
+
 export default ChatContextProvider;
+export const useChatContext = () => {
+  const context = useContext(ChatContext);
+  if (!context) {
+    throw new Error('useSocket must be used within a SocketProvider');
+  }
+  return context;
+};

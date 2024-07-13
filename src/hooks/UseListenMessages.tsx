@@ -1,15 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChatContext } from "@/context/ChatContext";
+import {  useChatContext } from "@/context/ChatContext";
 import { useSocket } from "@/context/SocketContext";
-import { useContext, useEffect } from "react";
+import {  useEffect } from "react";
 import notificationSound from "@/assets/sounds/notification.mp3";
 const UseListenMessages = () => {
   const { socket } = useSocket();
-  const appContext = useContext(ChatContext);
-  if (!appContext) {
-    throw new Error("useContext must be used within an AppProvider");
-  }
-  const { addNewMessage } = appContext;
+const {addNewMessage,setRead}=useChatContext()
   useEffect(() => {
     if (socket) {
       socket.on("newMessage", (newMessage: any) => {
@@ -21,8 +17,12 @@ const UseListenMessages = () => {
         sound.play().catch((error) => {
           console.error("Error playing sound:", error);
         });
-        addNewMessage(newMessage.obj);
+        addNewMessage(newMessage);
       });
+      socket.on("messageSeen",(data:any)=>{
+        console.log(data);
+        setRead()
+      })
     }
     return () => {
       socket?.off("newMessage");

@@ -33,6 +33,7 @@ import ChatPage from "./pages/user/Chat/ChatPage";
 import UserProfilePage from "./pages/user/profile/UserProfilePage";
 import Reports from "./pages/admin/Reports";
 import { getReports } from "./redux/actions/admin/adminReportAction";
+import { getNotification } from "./redux/actions/notification/notificationAction";
 
 function App() {
   //redux
@@ -90,6 +91,7 @@ function App() {
       dispatch(getProfileDataFirst());
       dispatch(getMyPosts());
       dispatch(getSavedPost());
+      dispatch(getNotification());
     }
     const hasVisited = localStorage.getItem("hasVisited");
     if (!hasVisited) {

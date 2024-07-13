@@ -46,7 +46,7 @@ const NavigationBar:React.FC<NavigationBarProps> = ({isChat}) => {
   return (
     <>
       <div 
-      className={shrink?"Nav-Bar   w-[75px] overflow-hidden":" overflow-hidden Nav-Bar h-[100%] lg:w-[270px] w-[75px] "}
+      className={shrink?"Nav-Bar   w-[90px] overflow-hidden":" overflow-hidden Nav-Bar h-[100%] lg:w-[270px] w-[75px] "}
       >
         <div className={shrink?"Nav-Bars overflow-hidden  fixed h-[100vh] w-[75px] border-r-[.5px] border-black":"Nav-Bars overflow-hidden fixed h-[100vh] lg:w-[270px] w-[75px] border-r-[.5px] border-black"}>
           <div className={shrink?"logo-container overflow-hidden hidden p-3 h-[90px]":" overflow-hidden logo-container hidden lg:block p-3 h-[90px]"}>

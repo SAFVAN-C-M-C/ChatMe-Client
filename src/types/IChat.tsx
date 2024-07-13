@@ -2,6 +2,7 @@ export interface IChat {
     _id?: string;
     participants?: string[];
     messages:IMessage[];
+    unread:boolean
   }
   export interface IMessage{
     _id?:string;
@@ -12,4 +13,9 @@ export interface IChat {
     updatedAt:Date;
     createdAt:Date;
     shouldShake?:boolean
+  }
+
+  export interface ISoccketMessage{
+    obj:IMessage;
+    chatId:string
   }

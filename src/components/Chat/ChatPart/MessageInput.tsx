@@ -43,7 +43,7 @@ const MessageInput = () => {
         setMessage('')
         addNewMessage(res.data.data)
         if (socket) {
-          socket.emit('newMessage', { obj: res.data.data });
+          socket.emit('newMessage', { obj: res.data.data,chatId:chat?._id });
         } else {
           console.error('Socket not connected yet, cannot emit message.');
         }

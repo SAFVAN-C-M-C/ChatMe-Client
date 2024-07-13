@@ -28,7 +28,7 @@ const Messages:FC<MessageProps> = ({reciever}) => {
   const { chat } = appContext;
   return (
     <>
-    <div  className="message-list-area py-2 my-2 h-[80vh] overflow-auto px-4 flex-1">
+    <div  className="message-list-area py-2 my-2 h-[80vh] overflow-y-auto overflow-x-hidden px-4 flex-1">
     {
       chat?.messages? chat.messages.map((message,index)=>(
           <span ref={lastMsgRef} key={index}>

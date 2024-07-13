@@ -1,10 +1,14 @@
 import NavigationBar from "../../../components/general/NavigationBar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { Icon } from "@iconify/react/dist/iconify.js";
+
 import HomePost from "../../../components/Post/HomePost";
-import SugestedUser from "../../../components/Home/SugestedUser";
+
+import UseListenMessages from "@/hooks/UseListenMessages";
+import UseListenNotification from "@/hooks/UseListenNotification";
 const Home = () => {
+  UseListenMessages()
+  UseListenNotification()
   const { profile } = useSelector((state: RootState) => state.profile);
   const { homePosts } = useSelector((state: RootState) => state.homePosts);
   return (

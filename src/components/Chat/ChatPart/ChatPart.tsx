@@ -5,7 +5,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import Messages from "./Messages";
 import MessageInput from "./MessageInput";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ChatContext } from "@/context/ChatContext";
 import axios from "axios";
 import { URL } from "@/common/api";
@@ -31,8 +31,11 @@ const ChatPart: React.FC<ChatPartProps> = () => {
     throw new Error('useContext must be used within an AppProvider');
   }
   const {chatId}=useParams();
-
+  const navigate = useNavigate();
   const { chat,getChat } = appContext;
+  const handleBackToChat=()=>{
+    navigate('/chat',{replace:true}) 
+  }
   useEffect(()=>{
       if(chatId){
         setIsChatSelected(true)
@@ -75,8 +78,10 @@ const ChatPart: React.FC<ChatPartProps> = () => {
   return (
     <>
       {
-        isChatSelected?(<div className="chat_main  h-[100vh] w-[80%]  overflow-hidden">
+        isChatSelected?(<div className="chat_main  h-[100vh] w-full sm:w-[50%] md:w-[60%] lg:w-[80%]  overflow-hidden">
           <div className="header w-full flex  h-[10vh] bg-slate-200 items-center">
+          
+            <Icon className="sm:hidden flex cursor-pointer" icon={"weui:back-filled"} width={26} height={26} onClick={handleBackToChat}/>
             <div className={`avatar ${isOnline?"online":""}`}>
               <div className=" w-10  ml-4 mt-3 mb-3 mr-3 rounded-full">
                 <img

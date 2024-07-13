@@ -16,7 +16,7 @@ const InboxPart:React.FC<InboxPartProps> = () => {
   const { myChats} = appContext;
   return (
     <>
-        <div className="inbox-container w-[25%] h-[100vh] ">
+        <div className="inbox-container w-full sm:w-[40%] lg:w-[25%] md:w-[30%] h-[100vh] ">
             <div className="header w-full flex justify-center h-[10vh] items-center"><span className='font-bold text-2xl'>Chat With ChatMe😊</span></div>
             <SearchInput/>
             <div className="user-container  overflow-y-auto overflow-x-hidden h-[90vh] ">

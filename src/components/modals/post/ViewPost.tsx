@@ -244,8 +244,8 @@ export const ViewPost: React.FC<ViewPostProps> = ({
           </div>
           <div className="second-part flex flex-col">
             <div className="header flex items-center justify-between border-b-[.5px] border-gray-500 w-[500px] h-[60px]">
-              <div className="user flex ml-3">
-                <div className="avatar flex items-center">
+              <div className=" user flex ml-3">
+                <div className="flex items-center">
                   <img
                     src={post.userAvatar}
                     alt="avatar"

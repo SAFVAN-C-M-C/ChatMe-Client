@@ -12,6 +12,7 @@ import UserEducation from "@/components/Profile/UnknownUser/UserEducation";
 import UserExprerience from "@/components/Profile/UnknownUser/UserExprerience";
 import UserPostPart from "@/components/Profile/UnknownUser/UserPostPart";
 import UserSkills from "@/components/Profile/UnknownUser/UserSkills";
+import UseListenNotification from "@/hooks/UseListenNotification";
 import { UserPostsPayload } from "@/redux/reducers/posts/userPosts";
 import { ProfilePayload } from "@/redux/reducers/profileSlice";
 import { RootState } from "@/redux/store";
@@ -27,6 +28,7 @@ import { useParams } from "react-router-dom";
 
 
 const UserProfilePage = () => {
+  UseListenNotification()
   const { profile  } = useSelector((state: RootState) => state.profile);
   const { userId } = useParams();
   const [Userprofile, setUserProfile] = useState<ProfilePayload | null>(null);
