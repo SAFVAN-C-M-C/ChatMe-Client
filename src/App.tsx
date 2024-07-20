@@ -34,6 +34,7 @@ import UserProfilePage from "./pages/user/profile/UserProfilePage";
 import Reports from "./pages/admin/Reports";
 import { getReports } from "./redux/actions/admin/adminReportAction";
 import { getNotification } from "./redux/actions/notification/notificationAction";
+import JobPage from "./pages/user/Jobs/JobPage";
 
 function App() {
   //redux
@@ -134,6 +135,7 @@ function App() {
                   <Route path="/u/profile/:userId" element={<UserProfilePage />} />
                   <Route path="/chat" element={<ChatPage />} />
                   <Route path="/chat/u/:chatId" element={<ChatPage />} />
+                  <Route path="/jobs" element={<JobPage />} />
                   
                 </>
               ) : user?.data?.role === "admin" ? (

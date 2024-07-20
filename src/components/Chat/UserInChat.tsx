@@ -17,7 +17,7 @@ interface UserInChatProps {
 }
 const UserInChat: FC<UserInChatProps> = ({ chat }) => {
   const { user } = useSelector((state: RootState) => state.user);
-  console.log("herererere",chat);
+
    
   const {onlineUsers}=useSocket()
   const navigate = useNavigate();
@@ -89,7 +89,7 @@ const UserInChat: FC<UserInChatProps> = ({ chat }) => {
   return (
     <>
       <div
-        className={`chat-user relative w-[95%] h-auto mt-1 ml-3 mr-10  flex items-center rounded-md  border-gray-300 hover:bg-blue-200 ${
+        className={`chat-user relative w-[95%] h-auto mt-1 ml-3 mr-10  flex items-center rounded-md  border-gray-300 hover:bg-blue-200 hover:text-black ${
           isSelectedChat ? "bg-blue-200" : ""
         }`}
         onClick={handleClick}

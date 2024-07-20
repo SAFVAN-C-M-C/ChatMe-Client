@@ -12,11 +12,22 @@ export default {
       'xl': '1280px',
       '2xl': '1536px',
     },
-    extend: {},
+    extend: {
+      scrollbar: {
+        width: '1px',
+        track: 'bg-[#555]',
+        thumb: 'bg-[#121212] rounded-[5px]',
+        'thumb:hover': 'bg-[#242424]',
+      },
+    },
+
   },
   plugins: [
     // eslint-disable-next-line no-undef
     require('daisyui'),
   ],
+  daisyui: {
+    themes: ["light", "dark"],
+  },
 }
 

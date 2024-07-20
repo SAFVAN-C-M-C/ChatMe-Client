@@ -11,11 +11,12 @@ import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import NotificationModal from "../modals/Notificaiton/NotificationModal";
 import { INotification } from "@/redux/reducers/notification/notification";
+import CreateJobModal from "../modals/CreateJobModals/CreateJobModal";
 type NavigationOptionsProps = {
   value: string[];
   title: string;
-  shrink:boolean
-  setShrink:Dispatch<SetStateAction<boolean>>;
+  shrink: boolean;
+  setShrink: Dispatch<SetStateAction<boolean>>;
 };
 type HandleOptionClick = (
   event: React.MouseEvent<HTMLDivElement>,
@@ -26,72 +27,70 @@ const NavigationOptions: React.FC<NavigationOptionsProps> = ({
   title,
   value,
   shrink,
-  
 }) => {
   const { user } = useSelector((state: RootState) => state.user);
-  const { notifications } = useSelector((state: RootState) => state.notification);
+  const { notifications } = useSelector(
+    (state: RootState) => state.notification
+  );
   //post creations states
-  const {myChats}=useChatContext()
-  const [openSelectFileModal, setOpenSelectFileModal] =useState<boolean>(false);
-  const [openSearchModal, setOpenSearchModal] =useState<boolean>(false);
+  const { myChats } = useChatContext();
+  const [openSelectFileModal, setOpenSelectFileModal] =
+    useState<boolean>(false);
+  const [openSearchModal, setOpenSearchModal] = useState<boolean>(false);
   const [openCreatePostModal, setOpenCreatePostModal] =useState<boolean>(false);
-  const [preview, setPreview] = useState<string | undefined>("/general/drag_img.png");
-  const [file, setFile] = useState<File  | null>(null);
-  
-  const [unReadChats,setUnReadChats]=useState(0)
-  const [unReadNotification,setUnReadNotification]=useState(0)
+  const [openCreateJobModal, setOpenCreateJobModal] =useState<boolean>(false);
 
-  const getTotalUnread=(messages:IMessage[])=>{
-    let count=0;
-    for(const message of messages){
-      if(!message.recieverSeen && message.receiverId===user?.data._id){
-        count++
+  const [preview, setPreview] = useState<string | undefined>(
+    "/general/drag_img.png"
+  );
+  const [file, setFile] = useState<File | null>(null);
+
+  const [unReadChats, setUnReadChats] = useState(0);
+  const [unReadNotification, setUnReadNotification] = useState(0);
+
+  const getTotalUnread = (messages: IMessage[]) => {
+    let count = 0;
+    for (const message of messages) {
+      if (!message.recieverSeen && message.receiverId === user?.data._id) {
+        count++;
       }
     }
-    return count
-  }
-  const getTotalUnreadNotification=(notifications:INotification[])=>{
-    let count=0;
-    for(const notification of notifications){
-      if(!notification.read ){
-        count++
+    return count;
+  };
+  const getTotalUnreadNotification = (notifications: INotification[]) => {
+    let count = 0;
+    for (const notification of notifications) {
+      if (!notification.read) {
+        count++;
       }
     }
-    setUnReadNotification(count)
-  }
-  const getTotalUnreadChats=(chats:IChat[])=>{
-    let count=0;
-    for(const chat of chats){
-      if(getTotalUnread(chat.messages)>0){
-        count++
+    setUnReadNotification(count);
+  };
+  const getTotalUnreadChats = (chats: IChat[]) => {
+    let count = 0;
+    for (const chat of chats) {
+      if (getTotalUnread(chat.messages) > 0) {
+        count++;
       }
     }
-    setUnReadChats(count)
-  }
-  useEffect(()=>{
-    if(myChats && myChats?.length>0){
-      getTotalUnreadChats(myChats)
+    setUnReadChats(count);
+  };
+  useEffect(() => {
+    if (myChats && myChats?.length > 0) {
+      getTotalUnreadChats(myChats);
     }
-  },[myChats])
-  useEffect(()=>{
-    if(notifications?.data && notifications.data.length>0){
-      getTotalUnreadNotification(notifications.data)
+  }, [myChats]);
+  useEffect(() => {
+    if (notifications?.data && notifications.data.length > 0) {
+      getTotalUnreadNotification(notifications.data);
     }
-  },[notifications?.data.length,notifications?.data])
-
-
-
-
+  }, [notifications?.data.length, notifications?.data]);
 
   const navigate = useNavigate();
 
-
-
   //notification part
-  const [openNotificationModal, setOpenNotificationModal] =useState<boolean>(false);
-
-
-
+  const [openNotificationModal, setOpenNotificationModal] =
+    useState<boolean>(false);
 
   const handleOptionClick: HandleOptionClick = (event, option) => {
     event.preventDefault();
@@ -103,8 +102,12 @@ const NavigationOptions: React.FC<NavigationOptionsProps> = ({
       setOpenNotificationModal(true);
       return;
     }
-    if(title==="Search"){
-      setOpenSearchModal(!openSearchModal)
+    if (title === "Search") {
+      setOpenSearchModal(!openSearchModal);
+      return;
+    }
+    if (title === "Create Job Post") {
+      setOpenCreateJobModal(!openCreateJobModal);
       return;
     }
     navigate(`${option}`);
@@ -112,34 +115,86 @@ const NavigationOptions: React.FC<NavigationOptionsProps> = ({
 
   return (
     <>
-    {
-      openSearchModal?<SearchModal setOpenSearchModal={setOpenSearchModal}/>:null
-    }
-        {
-      openNotificationModal?<NotificationModal setOpenNotificationModal={setOpenNotificationModal}/>:null
-    }
-      {openCreatePostModal && file ? (
-        <CreatePostModal file={file} setFile={setFile} setPreview={setPreview} setOpenCreatePostModal={setOpenCreatePostModal} setOpenSelectFileModal={setOpenSelectFileModal} preview={preview}/>
-      ):openSelectFileModal ? (
-        <SelectFileModal file={file} setFile={setFile} preview={preview} setPreview={setPreview}  setOpenSelectFileModal={setOpenSelectFileModal} setOpenCreatePostModal={setOpenCreatePostModal} />
+      {openSearchModal ? (
+        <SearchModal setOpenSearchModal={setOpenSearchModal} />
       ) : null}
-      <div
-        className="options cursor-pointer flex justify-center w-[90%] mt-4 mb-4"
-        onClick={(e) => handleOptionClick(e, value[1])}
-      >
-        <div className="option-icon w-[40%] flex justify-center relative">
-          <Icon icon={value[0]} width={26} height={26} />
-          {
-            title==="Chat" && unReadChats>0?<div className="absolute inline-flex items-center justify-center w-[22px] h-[22px] text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 lg:end-5 dark:border-gray-900">{unReadChats}</div>:null
-          }
-          {
-            title==="Notification" && unReadNotification>0?<div className="absolute inline-flex items-center justify-center w-[22px] h-[22px] text-xs font-bold text-white bg-blue-500 border-2 border-white rounded-full -top-2 -end-2 lg:end-5 dark:border-gray-900">{unReadNotification}</div>:null
-          }
+      {openNotificationModal ? (
+        <NotificationModal
+          setOpenNotificationModal={setOpenNotificationModal}
+        />
+      ) : null}
+      {
+        openCreateJobModal?<CreateJobModal setOpenCreateJobModal={setOpenCreateJobModal}/>:null
+      }
+      {openCreatePostModal && file ? (
+        <CreatePostModal
+          file={file}
+          setFile={setFile}
+          setPreview={setPreview}
+          setOpenCreatePostModal={setOpenCreatePostModal}
+          setOpenSelectFileModal={setOpenSelectFileModal}
+          preview={preview}
+        />
+      ) : openSelectFileModal ? (
+        <SelectFileModal
+          file={file}
+          setFile={setFile}
+          preview={preview}
+          setPreview={setPreview}
+          setOpenSelectFileModal={setOpenSelectFileModal}
+          setOpenCreatePostModal={setOpenCreatePostModal}
+        />
+      ) : null}
+      {title === "Create Job Post" ? (
+        user?.data.accountType === "recruiter" ||
+        user?.data.accountType === "company" ? (
+          <div
+            className="options cursor-pointer flex justify-center w-[90%] mt-4 mb-4"
+            onClick={(e) => handleOptionClick(e, value[1])}
+          >
+            <div className="option-icon w-[40%] flex justify-center relative">
+              <Icon icon={value[0]} width={26} height={26} />
+            </div>
+            <div
+              className={
+                shrink
+                  ? "option-title w-[60%] text-base  justify-start hidden"
+                  : "option-title w-[60%] text-base  justify-start hidden lg:flex"
+              }
+            >
+              <b>{title}</b>
+            </div>
+          </div>
+        ) : null
+      ) : (
+        <div
+          className="options cursor-pointer flex justify-center w-[90%] mt-2 mb-2 pt-2 pb-2 hover:bg-slate-200 hover:text-gray-700 rounded-lg"
+          onClick={(e) => handleOptionClick(e, value[1])}
+        >
+          <div className="option-icon w-[40%] flex justify-center relative">
+            <Icon icon={value[0]} width={26} height={26} />
+            {title === "Chat" && unReadChats > 0 ? (
+              <div className="absolute inline-flex items-center justify-center w-[22px] h-[22px] text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 lg:end-5 dark:border-gray-900">
+                {unReadChats}
+              </div>
+            ) : null}
+            {title === "Notification" && unReadNotification > 0 ? (
+              <div className="absolute inline-flex items-center justify-center w-[22px] h-[22px] text-xs font-bold text-white bg-blue-500 border-2 border-white rounded-full -top-2 -end-2 lg:end-5 dark:border-gray-900">
+                {unReadNotification}
+              </div>
+            ) : null}
+          </div>
+          <div
+            className={
+              shrink
+                ? "option-title w-[60%] text-base  justify-start hidden"
+                : "option-title w-[60%] text-base  justify-start hidden lg:flex"
+            }
+          >
+            <b>{title}</b>
+          </div>
         </div>
-        <div className={shrink?"option-title w-[60%] text-base  justify-start hidden":"option-title w-[60%] text-base  justify-start hidden lg:flex"}>
-          <b>{title}</b>
-        </div>
-      </div>
+      )}
     </>
   );
 };

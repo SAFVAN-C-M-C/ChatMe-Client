@@ -3,17 +3,20 @@ import { useSocket } from "@/context/SocketContext";
 import { RootState } from "@/redux/store";
 import { IMessage } from "@/types/IChat";
 import { UserDetails } from "@/types/IProfile";
-import React, { FC, useEffect } from "react";
+import { FC, useEffect } from "react";
 import { useSelector } from "react-redux";
 interface MessageProps {
   reciever: UserDetails | null;
   fromMe: boolean;
   message: IMessage;
+
 }
+
 const Message: FC<MessageProps> = ({ reciever, fromMe, message }) => {
   const { profile } = useSelector((state: RootState) => state.profile);
   const { socket } = useSocket();
   const { chat } = useChatContext();
+
   useEffect(() => {
     if (!message.recieverSeen && message.receiverId === profile?.data.userId) {
       socket?.emit("messageSeen", {
@@ -22,11 +25,13 @@ const Message: FC<MessageProps> = ({ reciever, fromMe, message }) => {
         messageId: String(message._id),
       });
     }
-  }, []);
+  }, [message, profile, socket, chat]);
+
   const shakeClass = message.shouldShake ? "shake" : "";
+
   return (
     <>
-      <div className={`chat  ${fromMe ? "chat-end" : "chat-start"}`}>
+      <div  className={`chat ${fromMe ? "chat-end" : "chat-start"}`}>
         <div className="chat-image avatar">
           <div className="w-8">
             <img
@@ -43,12 +48,11 @@ const Message: FC<MessageProps> = ({ reciever, fromMe, message }) => {
           </div>
         </div>
         <div
-          className={`chat-bubble ${shakeClass} break-all whitespace-pre-wrap flex flex-wrap text-white bg-blue-500`}
+          className={`chat-bubble ${shakeClass} break-all whitespace-pre-wrap flex flex-wrap text-white ${ fromMe?"bg-blue-200 ":"bg-blue-700"}`}
         >
-          <span>{message.message}</span>
+          <span className={`${ fromMe?"text-black ":"text-white"}`}>{message.message}</span>
         </div>
-        {/* <div className="chat-footer opacity-50  text-sm flex gap-1 items-center">{new Date(message?.createdAt).getHours()}:{new Date(message?.createdAt).getMinutes()}</div> */}
-        <div className="chat-footer  opacity-50  text-sm flex gap-1 items-center">
+        <div className="chat-footer opacity-50 text-sm flex gap-1 items-center">
           {new Date(message?.createdAt).toLocaleTimeString([], {
             hour: "numeric",
             minute: "2-digit",

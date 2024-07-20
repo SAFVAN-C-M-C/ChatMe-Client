@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ChatContext } from "@/context/ChatContext";
+import { ChatContext, useChatContext } from "@/context/ChatContext";
 import { RootState } from "@/redux/store";
 import { IProfile } from "@/types/IProfile";
 import React, { Dispatch, SetStateAction, useContext, useEffect } from "react";
@@ -13,13 +13,8 @@ interface SearchUserProps{
 const SearchUser:React.FC<SearchUserProps> = ({user,setSearchData}) => {
   const { profile } = useSelector((state: RootState) => state.profile);
   const navigate = useNavigate();
-  const appContext = useContext(ChatContext);
 
-  if (!appContext) {
-    throw new Error('useContext must be used within an AppProvider');
-  }
-
-  const { chat,getChatSearch} = appContext;
+  const { chat,getChatSearch} = useChatContext();
   const handleClick=()=>{
     
     
@@ -34,7 +29,7 @@ const SearchUser:React.FC<SearchUserProps> = ({user,setSearchData}) => {
   }
   return (
     <>
-      <div className="user mt-1 flex items-center w-full h-auto hover:bg-slate-300 rounded-md cursor-pointer" onClick={handleClick}>
+      <div className="user mt-1 flex items-center w-full h-auto hover:bg-blue-300 rounded-md cursor-pointer" onClick={handleClick}>
         <div className="avatar w-[35px] h-[35px] m-3">
           <img src={user?.bio?.avatar ||  "/general/ChatMe-profile.png"} alt="avatar"  className="w-full h-full"/>
         </div>

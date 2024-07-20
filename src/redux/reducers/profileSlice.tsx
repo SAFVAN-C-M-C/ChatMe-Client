@@ -1,32 +1,46 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
 import { IProfile } from "../../types/IProfile";
-import { acceptRecruiterRequest, addEducation, addExperience, addPreferedJobs, addSkills, followUser, getProfileDataFirst, ignoreRecruiterRequest, unFollowUser, updateAbout, updateAvatar, updateBio } from "../actions/user/profileActions";
-export interface ProfilePayload{
-    success:boolean;
-    data:IProfile;
-    message:string;
-  }
+import {
+  acceptRecruiterRequest,
+  addEducation,
+  addExperience,
+  addPreferedJobs,
+  addSkills,
+  changeTheam,
+  followUser,
+  getProfileDataFirst,
+  ignoreRecruiterRequest,
+  unFollowUser,
+  updateAbout,
+  updateAvatar,
+  updateBio,
+} from "../actions/user/profileActions";
+export interface ProfilePayload {
+  success: boolean;
+  data: IProfile;
+  message: string;
+}
 export interface ProfileState {
-    error: any | null;
-    profile: ProfilePayload | null;
-    loading: boolean;
-  }
+  error: any | null;
+  profile: ProfilePayload | null;
+  loading: boolean;
+}
 const initialState: ProfileState = {
-    loading: false as boolean,
-    profile: null as any | null,
-    error: null as any | null,
-  };
+  loading: false as boolean,
+  profile: null as any | null,
+  error: null as any | null,
+};
 const profileSlice = createSlice({
-    name: "profile",
-    initialState,
-    reducers: {
-      updateError: (state, { payload }) => {
-        state.error = payload;
-      },
+  name: "profile",
+  initialState,
+  reducers: {
+    updateError: (state, { payload }) => {
+      state.error = payload;
     },
-    extraReducers: (builder) => {
-      builder
+  },
+  extraReducers: (builder) => {
+    builder
       .addCase(getProfileDataFirst.pending, (state) => {
         state.loading = true;
       })
@@ -83,7 +97,8 @@ const profileSlice = createSlice({
         state.error = payload;
 
         //add education
-      }).addCase(addEducation.pending, (state) => {
+      })
+      .addCase(addEducation.pending, (state) => {
         state.loading = true;
       })
       .addCase(addEducation.fulfilled, (state, { payload }) => {
@@ -166,7 +181,7 @@ const profileSlice = createSlice({
         state.profile = null;
         state.error = payload;
       })
-      //accept request 
+      //accept request
       .addCase(acceptRecruiterRequest.pending, (state) => {
         state.loading = true;
       })
@@ -180,7 +195,7 @@ const profileSlice = createSlice({
         state.profile = null;
         state.error = payload;
       })
-      //ignore request 
+      //ignore request
       .addCase(ignoreRecruiterRequest.pending, (state) => {
         state.loading = true;
       })
@@ -193,9 +208,22 @@ const profileSlice = createSlice({
         state.loading = false;
         state.profile = null;
         state.error = payload;
+      })
+      //cahnge theam
+      .addCase(changeTheam.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(changeTheam.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.profile = payload;
+      })
+      .addCase(changeTheam.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
       });
-    },
-  });
+  },
+});
 
-  export const { updateError } = profileSlice.actions;
-  export default profileSlice.reducer;
+export const { updateError } = profileSlice.actions;
+export default profileSlice.reducer;

@@ -13,10 +13,10 @@ const Home = () => {
   const { homePosts } = useSelector((state: RootState) => state.homePosts);
   return (
     <>
-      <div className="flex">
+      <div data-theme={profile?.data.theme || "light"} className="flex">
         <NavigationBar />
         <div className="home-container w-full flex h-auto lg:pl-[42px]">
-          <div className="post-list-cover w-[70%]  h-full flex items-center flex-col">
+          <div className="post-list-cover w-[70%] overflow-auto  h-full flex items-center flex-col">
             <div className="greeting w-full h-[50px]  flex items-center pl-4">
               <span>Hello there, </span>
               <span className="font-bold text-lg ml-1">
@@ -24,11 +24,13 @@ const Home = () => {
               </span>
             </div>
 
+            
             {homePosts?.data && homePosts.data.length !== 0
               ? homePosts.data.map((post, index) => (
                   <HomePost post={post} key={index} />
                 ))
               : "No data"}
+            
           </div>
           {/* <div className="sugetion-cover w-[30%] h-full">
             <div className="suggetion-fixed flex flex-col fixed w-[400px] right-0 top-20 h-auto ">

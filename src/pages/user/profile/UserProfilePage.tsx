@@ -65,7 +65,7 @@ const UserProfilePage = () => {
   }, [userId,profile?.data.following?.length]);
   return (
     <>
-      <div className="flex ">
+      <div className="flex " data-theme={profile?.data.theme || "light"}>
         <NavigationBar />
         <div className="profile-part w-full   flex flex-col items-center">
           {

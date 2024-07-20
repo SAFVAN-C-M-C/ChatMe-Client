@@ -57,12 +57,12 @@ const MessageInput = () => {
   return (
     <>
     <form className=" px-4 mx-8 my-3" onSubmit={handleMessageSend}>
-        <div className="w-full flex bg-gray-700 rounded-lg ">
+        <div className="w-full flex light-dark rounded-lg ">
             <input type="text"
             
             value={message}
             onChange={handleMessageChange}
-            className="border outline-none text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 text-white " placeholder=" Send a message" />
+            className=" outline-none text-sm rounded-lg block w-full p-2.5 light-dark  text-white " placeholder=" Send a message" />
             <button type="submit" className=" m-3 text-white">
                 <BsSend/>
             </button>

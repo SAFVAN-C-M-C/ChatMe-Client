@@ -49,18 +49,7 @@ const ChatContextProvider: React.FC<{ children: ReactNode }> = ({
   }, []);
   const addNewMessage=(newMessage:ISoccketMessage)=>{
     if(chat?._id===newMessage.chatId){
-      setChat((prevChat) => {
-        if (!prevChat) {
-          return null; // or handle the case where prevChat is null
-        }
-        return {
-          ...prevChat,
-          messages: [
-            ...prevChat.messages,
-            newMessage.obj
-          ]
-        };
-      });
+      getChat(chat?._id)
       getMyChats()
     }else{
       getMyChats()

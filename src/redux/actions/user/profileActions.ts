@@ -187,6 +187,19 @@ export const getProfileDataFirst = createAsyncThunk(
       }
     }
   )
+  export const changeTheam= createAsyncThunk(
+    "profile/changeTheam",
+    async (formData:{
+      theam: string,
+    },{rejectWithValue})=>{
+      try{
+        const { data } = await axios.post(`${URL}/profile/theam`,formData, config);
+        return data;
+      }catch(error:any){
+        return handleError(error, rejectWithValue);
+      }
+    }
+  )
   export const unFollowUser= createAsyncThunk(
     "profile/unFollowUser",
     async (formData:{

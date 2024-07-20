@@ -36,7 +36,7 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
   //   }
   // }, [profile?.message, handleAvatarViewModalOpen]);
 
-  const [avatarUrl, setAvatarUrl] = useState(photoUrl);
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(photoUrl);
   const [openCrop, setOpenCrop] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [uploding,setUploading]=useState<boolean>(false)
@@ -112,7 +112,7 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
               onSubmit={handleImageUpload}
               className="content-cover w-[80%] h-[80%] flex flex-col justify-center items-center"
             >
-              <div className="avatar">
+              <div className="avatars">
                 <label htmlFor="avatar">
                   <img
                     src={avatarUrl}
@@ -141,7 +141,7 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
                   className="ml-2 mr-4 p-2 bg-blue-500 w-[100px] rounded-md text-white"
                   disabled={loading}
                 >
-                  {loading | uploding ? <ReactLoading type={"bubbles"} color={"#fff"} height={'20%'} width={'20%'} /> : "Change"}
+                  {loading || uploding ? <ReactLoading type={"bubbles"} color={"#fff"} height={'20%'} width={'20%'} /> : "Change"}
                 </button>
               </div>
             </form>

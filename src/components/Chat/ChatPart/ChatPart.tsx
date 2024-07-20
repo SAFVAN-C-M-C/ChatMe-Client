@@ -2,7 +2,7 @@
 /* eslint-disable no-empty */
 
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import Messages from "./Messages";
 import MessageInput from "./MessageInput";
 import { useNavigate, useParams } from "react-router-dom";
@@ -17,10 +17,17 @@ import { Icon } from "@iconify/react";
 import { useSocket } from "@/context/SocketContext";
 
 
-interface ChatPartProps {}
-const ChatPart: React.FC<ChatPartProps> = () => {
+interface ChatPartProps {
+  serachRef:React.MutableRefObject<HTMLInputElement | null>
+}
+const ChatPart: React.FC<ChatPartProps> = ({
+  serachRef
+}) => {
   const { user } = useSelector(
     (state: RootState) => state.user
+  );
+  const { profile } = useSelector(
+    (state: RootState) => state.profile
   );
   const {onlineUsers}=useSocket()
   const appContext = useContext(ChatContext);
@@ -78,8 +85,8 @@ const ChatPart: React.FC<ChatPartProps> = () => {
   return (
     <>
       {
-        isChatSelected?(<div className="chat_main  h-[100vh] w-full sm:w-[50%] md:w-[60%] lg:w-[80%]  overflow-hidden">
-          <div className="header w-full flex  h-[10vh] bg-slate-200 items-center">
+        isChatSelected?(<div className={` ${profile?.data.theme==="dark"?"chat_dark_main":"chat_main"}  h-[100vh] w-full sm:w-[50%] md:w-[60%] lg:w-[80%]  overflow-hidden`}>
+          <div  className={`header w-full flex ${profile?.data.theme==="dark"? "light-dark":"bg-slate-200"}  h-[10vh]  items-center`}>
           
             <Icon className="sm:hidden flex cursor-pointer" icon={"weui:back-filled"} width={26} height={26} onClick={handleBackToChat}/>
             <div className={`avatar ${isOnline?"online":""}`}>
@@ -113,17 +120,28 @@ const ChatPart: React.FC<ChatPartProps> = () => {
           <Messages reciever={reciever}/>
           <MessageInput/>
   
-        </div>):(<NoChatSelected/>)
+        </div>):(<NoChatSelected theme={profile?.data.theme} serachRef={serachRef}/>)
       }
     </>
   );
 };
-const NoChatSelected=()=>{
+interface NoChatSelectedProps{
+  theme?:string |null
+  serachRef:React.MutableRefObject<HTMLInputElement | null>
+}
+const NoChatSelected:FC<NoChatSelectedProps>=({theme,serachRef})=>{
+  const handleClick = () => {
+    if (serachRef.current) {
+      serachRef.current.value="dffs"
+     
+      serachRef.current.focus(); // Set focus to the input field
+    }
+  };
   return (
     <>
-    <div className=" chat_main h-[100vh] w-[80%] flex justify-center items-center">
+    <div className={`${theme==="dark"?"chat_dark_main":"chat_main"} h-[100vh] w-[80%] flex justify-center items-center`} >
       <div className="btn btn-primary">
-        <span className="text-white">Select a chat</span>
+        <span className="text-white" onClick={handleClick}>Select a chat</span>
       </div>
     </div>
     </>

@@ -3,15 +3,23 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useState } from "react";
 import RecruiterBioEditModal from "../../modals/RecruiterBioEditModal";
+import AvatarViewModal from "@/components/modals/AvatarViewModal";
 // import { useState } from "react";
 const RecruiterBio = () => {
     //redux
     const { profile } = useSelector((state: RootState) => state.profile);
     const { userPosts } = useSelector((state: RootState) => state.userPosts);
     const [openEditBio,setOpenEditBio]=useState(false)
+    const [openAvatarView,setOpenAvatarView]=useState(false)
+    const handleAvatarViewModalOpen=()=>{
+      setOpenAvatarView(!openAvatarView)
+    }
   return (
     <>
     {openEditBio?<RecruiterBioEditModal setOpenEditBio={setOpenEditBio}/>:null}
+    {
+      openAvatarView?<AvatarViewModal handleAvatarViewModalOpen={handleAvatarViewModalOpen} photoUrl={profile?.data.bio?.avatar? profile?.data.bio?.avatar:"/general/ChatMe-profile.png"}/>:null
+    }
       {/* for phone */}
       <div className="profile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 flex md:hidden">
         <div className="first-row w-full flex justify-center h-[50px]  mt-3 mb-3">
@@ -119,9 +127,10 @@ const RecruiterBio = () => {
       <div className="profile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 md:flex hidden">
         <div className="profile-avatar w-[30%] h-full  flex justify-center items-center pt-2 pb-2">
           <img
+          onClick={()=>setOpenAvatarView(!openAvatarView)}
             src={profile?.data?.bio?.avatar?profile.data.bio.avatar:"/general/ChatMe-profile.png"}
             alt="avatar"
-            className="w-[56px] h-[56px] sm:w-[76px] sm:h-[76px] md:w-[96px] md:h-[96px] lg:w-[146px] lg:h-[146px]"
+            className="w-[56px] h-[56px] sm:w-[76px] sm:h-[76px] md:w-[96px] md:h-[96px] lg:w-[146px] rounded-full lg:h-[146px]"
           />
         </div>
         <div className="profile-details  w-[70%] h-full flex flex-col justify-center ">
