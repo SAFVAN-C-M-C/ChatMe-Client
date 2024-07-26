@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
@@ -7,9 +8,9 @@ import NavigationOptions from "../general/NavigationOptions";
 import { Icon } from "@iconify/react";
 
 const NavBar = () => {
-  const { user, loading, error } = useSelector(
-    (state: RootState) => state.user
-  );
+  // const { user, loading, error } = useSelector(
+  //   (state: RootState) => state.user
+  // );
   const options = {
     Home: ["teenyicons:home-solid", "/"],
     "Company Requests": ["mdi:company", "/admin/company/requests"],
@@ -17,7 +18,7 @@ const NavBar = () => {
     Reports: ["ph:flag-fill", "/admin/reports"],
     Users: ["mdi:user", "/admin/users"],
     Companies: ["mdi:company", "/admin/company"],
-    "Add Notification": ["mingcute:notification-fill", "/"],
+    "New Notification": ["mingcute:notification-fill", "/admin/notification"],
   };
 
   const dispatch = useDispatch<AppDispatch>();

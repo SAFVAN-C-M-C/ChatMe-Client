@@ -7,12 +7,15 @@ import { createSlice } from "@reduxjs/toolkit";
 export interface INotification {
   _id:string;
   recipientId?:string;
+  title?:string
   content?:string
   isAdminMessage:boolean
   postId?:string
   fromUserId?:string
   type:string
   read:boolean
+  isSystem:boolean
+  createdAt?:Date
 }
 export interface NotificationPayload {
   success: boolean;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import NavBar from "@/components/admin/NavBar";
 import ReportsRow from "@/components/Reports/ReportsRow";
 import { RootState } from "@/redux/store";
@@ -9,7 +10,7 @@ const Reports = () => {
   const { adminReport } = useSelector((state: RootState) => state.adminReport);
   return (
     <>
-      <div className="flex">
+      <div className="flex" data-theme={"dark"}>
         <NavBar />
         <div className="main-cover w-full   flex flex-col  ml-5 mr-10">
           <div className="greeting ml-14 mt-10 mb-10 felx">

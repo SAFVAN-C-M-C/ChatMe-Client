@@ -28,7 +28,7 @@ function RecruiterRequests() {
   };
   return (
     <>
-    <div className="flex">
+    <div className="flex" data-theme={"dark"}>
         <NavBar />
         <div className="main-cover w-full   flex flex-col  ml-5 mr-10">
         <div className="greeting ml-14 mt-10 mb-10 felx">

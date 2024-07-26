@@ -25,6 +25,7 @@ const UseListenNotification = () => {
         // addNewMessage(newMessage);
         dispatch(getNotification())
       });
+
       socket.on("notificationSeen",(data:any)=>{
         console.log(data);
         dispatch(getNotification())
@@ -34,7 +35,7 @@ const UseListenNotification = () => {
     
 
     return () => {
-      socket?.off("newMessage");
+      socket?.off("newNotification");
     };
   }, [socket]);
 };

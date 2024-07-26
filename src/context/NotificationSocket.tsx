@@ -2,9 +2,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import io, { Socket } from "socket.io-client";
 import { createContext, FC, ReactNode, useContext, useEffect, useState } from "react";
-import { RootState } from "@/redux/store";
-import { useSelector } from "react-redux";
-
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import notificationSound from "@/assets/sounds/notification.mp3";
+import { getNotification } from "@/redux/actions/notification/notificationAction";
+import toast from "react-hot-toast";
 interface NotificationSocketContextProps {
   socket: Socket | null;
   onlineUsers: any[];
@@ -21,6 +23,7 @@ export const NotificationSocketProvider: FC<NotificationSocketProviderProps> = (
   const { user } = useSelector((state: RootState) => state.user);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     if (user && user.data._id) {
       const socket = io("http://localhost:1236", {
@@ -37,7 +40,23 @@ export const NotificationSocketProvider: FC<NotificationSocketProviderProps> = (
       socket.on("getOnlineUsers",(users)=>{
         setOnlineUsers(users)
       })
-
+      socket.on("newAdminNotification", (newNotification: any) => {
+        const sound = new Audio(notificationSound);
+        sound.volume = 1.0; // Ensure the volume is set
+        sound.muted = false; // Ensure the sound is not muted
+        sound.load();
+        if(user.data.role!=="admin"){
+          sound.play().catch((error) => {
+            console.error("Error playing sound:", error);
+          });
+          toast(newNotification.content, {
+            icon: '🔔',
+          });
+        }
+        // dispatch(addNotification(newNotification))
+        // addNewMessage(newMessage);
+        dispatch(getNotification())
+      });
 
       setSocket(socket);
 

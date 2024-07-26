@@ -114,3 +114,10 @@ body {
     transform: translate3d(-4px, 0, 0);
   }
 }
+.job_card{
+  transition: transform 0.3s ease;
+}
+.job_card:hover{
+  z-index: 9999;
+  transform: scale(1.1);
+}

@@ -35,6 +35,7 @@ import Reports from "./pages/admin/Reports";
 import { getReports } from "./redux/actions/admin/adminReportAction";
 import { getNotification } from "./redux/actions/notification/notificationAction";
 import JobPage from "./pages/user/Jobs/JobPage";
+import NotificationPage from "./pages/admin/NotificationPage";
 
 function App() {
   //redux
@@ -146,6 +147,7 @@ function App() {
                   <Route path="/admin/company/requests" element={<CompanyRequests />} />
                   <Route path="/admin/recruiter/requests" element={<RecruiterRequests />} />
                   <Route path="/admin/reports" element={<Reports />} />
+                  <Route path="/admin/notification" element={<NotificationPage />} />
                 </>
               ) : (
                 <Route path="/" element={<Navigate to="/login" />} />
