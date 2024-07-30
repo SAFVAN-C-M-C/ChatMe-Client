@@ -82,6 +82,13 @@ const ChatPart: React.FC<ChatPartProps> = ({
       setIsOnline(false)
     }
   },[reciever?.userId,onlineUsers])
+  const handleUserClick=(userId:string)=>{
+    if(userId===profile?.data.userId){
+      navigate(`/profile`)
+      return
+    }
+    navigate(`/u/profile/${userId}`)
+  }
   return (
     <>
       {
@@ -89,7 +96,7 @@ const ChatPart: React.FC<ChatPartProps> = ({
           <div  className={`header w-full flex ${profile?.data.theme==="dark"? "light-dark":"bg-slate-200"}  h-[10vh]  items-center`}>
           
             <Icon className="sm:hidden flex cursor-pointer" icon={"weui:back-filled"} width={26} height={26} onClick={handleBackToChat}/>
-            <div className={`avatar ${isOnline?"online":""}`}>
+            <div className={`avatar ${isOnline?"online":""} cursor-pointer`} onClick={()=>handleUserClick(String(reciever?.userId))}>
               <div className=" w-10  ml-4 mt-3 mb-3 mr-3 rounded-full">
                 <img
                   src={reciever?.avatar?reciever.avatar:"/general/ChatMe-profile.png"}
@@ -98,7 +105,7 @@ const ChatPart: React.FC<ChatPartProps> = ({
                 />
               </div>
             </div>
-            <div className="name items-center flex"><span>{reciever?.name}</span>
+            <div className="name items-center flex cursor-pointer" onClick={()=>handleUserClick(String(reciever?.userId))}><span>{reciever?.name}</span>
             {reciever?.accountType === "company" && reciever?.isVerified ? (
             <Icon
               className="text-blue-500"

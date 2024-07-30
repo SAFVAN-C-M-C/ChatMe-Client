@@ -9,7 +9,7 @@ interface ExperienceProps{
 const Experience:React.FC<ExperienceProps> = ({nameOfinstitue,position,startYear,endYear}) => {
   return (
     <>
-      <div className="education w-full flex flex-col mb-3">
+      <div  className="education w-full flex flex-col mb-3">
         <div className="education-institute">
           <span className="font-bold text-gray-700">{nameOfinstitue}</span>
         </div>

@@ -8,19 +8,48 @@ import {
 import { blockUser } from "@/redux/actions/admin/adminUserAction";
 import { AppDispatch } from "@/redux/store";
 import { IReport } from "@/types/IReport";
-import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import {
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  styled,
+  TableCell,
+  tableCellClasses,
+  TableRow,
+} from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { ViewPost } from "./ViewPost";
 import { IPosts } from "@/types/IPosts";
+import { UserDetails } from "@/types/IProfile";
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 
 interface ReportProps {
   report: IReport | null;
-  slno:number
+  slno: number;
 }
-const ReportsRow: React.FC<ReportProps> = ({ report,slno }) => {
+const ReportsRow: React.FC<ReportProps> = ({ report, slno }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [openViewPost, setOpenViewPost] = useState(false);
   const [action, setAction] = useState("select");
@@ -40,31 +69,48 @@ const ReportsRow: React.FC<ReportProps> = ({ report,slno }) => {
       toast.success("User blocked succefully");
     }
   };
-  const handlePostView=()=>{
-    setOpenViewPost(true)
-  }
+  const handlePostView = () => {
+    setOpenViewPost(true);
+  };
   const [post, setPost] = useState<IPosts | null>(null);
   const getPost = async (postId: string) => {
     try {
-        
-      const response = await axios.get(`${URL}/post/posts/${postId}`,config);
-      
-      
-      
+      const response = await axios.get(`${URL}/post/posts/${postId}`, config);
+
       if (response.status === 200) {
         console.log(response.data.data);
         setPost(response.data.data as IPosts);
         console.log(post);
-        
       }
     } catch (error: any) {
       console.log("something went wrong", error.message);
     }
   };
+  const [user,setUser]=useState<UserDetails|null>(null)
+  const getUser=async(userId:string)=>{
+      try{
+        try {
+          const res = await axios.get(`${URL}/profile/get/user/${userId}`, config);
+          if (res.status === 200) {
+              setUser(res.data.data);
+          }
+        } catch (error: any) {
+          console.log("Somthing wrong", error.message);
+        }
+      }catch(error:any){
+        console.log("something went wrong",error.message);
+        
+      }
+    }
+    useEffect(()=>{
+  if(report?.suspectId){
+      getUser(report.suspectId)
+  }
+
+},[])
   useEffect(() => {
     getPost(String(report?.postId));
-    console.log(post,"here",String(report?.postId));
-    
+    console.log(post, "here", String(report?.postId));
   }, [report?.postId]);
   useEffect(() => {
     if (action === "deletePost") {
@@ -95,18 +141,14 @@ const ReportsRow: React.FC<ReportProps> = ({ report,slno }) => {
   return (
     <>
       {openViewPost ? (
-        <ViewPost
-          setOpenViewPost={setOpenViewPost}
-          post={post}
-        />
+        <ViewPost setOpenViewPost={setOpenViewPost} post={post} />
       ) : null}
-      <tr className="border-b">
-        <td className="py-2 px-4 text-center" onClick={handlePostView}>{slno}</td>
-        <td className="py-2 px-4 text-center cursor-pointer" onClick={handlePostView}>{report?.postId}</td>
-        <td className="py-2 px-4 text-center">{report?.userId}</td>
-        <td className="py-2 px-4 text-center">{report?.suspectId}</td>
-        <td className="py-2 px-4 text-center">{report?.reason}</td>
-        <td className="py-2 px-4 text-center">
+      <StyledTableRow>
+        <StyledTableCell align="center">{slno}</StyledTableCell>
+        <StyledTableCell align="center" onClick={handlePostView}><span className="cursor-pointer">View Post</span></StyledTableCell>
+        <StyledTableCell align="center">{user?.name}</StyledTableCell>
+        <StyledTableCell align="center">{report?.reason}</StyledTableCell>
+        <StyledTableCell align="center">
           <Select fullWidth value={action} onChange={handleChange}>
             <MenuItem selected value={"select"}>
               Select Action
@@ -115,10 +157,34 @@ const ReportsRow: React.FC<ReportProps> = ({ report,slno }) => {
             <MenuItem value={"block"}>Block User</MenuItem>
             <MenuItem value={"delete"}>Delete Report</MenuItem>
           </Select>
-        </td>
-      </tr>
+        </StyledTableCell>
+      </StyledTableRow>
     </>
   );
 };
 
 export default ReportsRow;
+
+// {openViewPost ? (
+//   <ViewPost
+//     setOpenViewPost={setOpenViewPost}
+//     post={post}
+//   />
+// ) : null}
+// <tr className="border-b">
+//   <td className="py-2 px-4 text-center" onClick={handlePostView}>{slno}</td>
+//   <td className="py-2 px-4 text-center cursor-pointer" onClick={handlePostView}>{report?.postId}</td>
+//   <td className="py-2 px-4 text-center">{report?.userId}</td>
+//   <td className="py-2 px-4 text-center">{report?.suspectId}</td>
+//   <td className="py-2 px-4 text-center">{report?.reason}</td>
+//   <td className="py-2 px-4 text-center">
+// <Select fullWidth value={action} onChange={handleChange}>
+//   <MenuItem selected value={"select"}>
+//     Select Action
+//   </MenuItem>
+//   <MenuItem value={"deletePost"}>Delete Post</MenuItem>
+//   <MenuItem value={"block"}>Block User</MenuItem>
+//   <MenuItem value={"delete"}>Delete Report</MenuItem>
+// </Select>
+//   </td>
+// </tr>

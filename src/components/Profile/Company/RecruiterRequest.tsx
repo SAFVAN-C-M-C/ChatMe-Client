@@ -5,7 +5,7 @@ import { RootState } from "../../../redux/store";
 const RecruiterRequest = () => {
   const { profile } = useSelector((state: RootState) => state.profile);
   return (
-    <div className="applied-jobs-cover w-[80%] flex items-center flex-col h-auto bg-slate-50">
+    <div className="applied-jobs-cover w-[80%] flex items-center flex-col h-auto ">
       {profile?.data.recruiterApplication?.length ? (
         profile?.data.recruiterApplication?.map((application, index) => (
           <RecruiterRequestPost key={index} value={application} />

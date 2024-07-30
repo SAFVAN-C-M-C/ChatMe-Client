@@ -4,6 +4,8 @@ import Posts from '../General/Posts';
 // import Jobs from '../Company/Jobs';
 import RecruiterJobs from './RecruiterJobs';
 import Saved from '../Saved/Saved';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 
 const RecruiterPostpart = () => {
@@ -11,19 +13,20 @@ const RecruiterPostpart = () => {
     const handleNavPostClick = (value: string) => {
       setPostNav(value);
     };
+    const { profile } = useSelector((state: RootState) => state.profile);
   return (
     <>
-      <div className="navigat-part mt-2">
+      <div className="nonlist navigat-part mt-10">
         <ul
-          className="flex items-center justify-around md:justify-center space-x-12  
-                    uppercase tracking-widest font-semibold text-xs text-gray-600
-                    border-t"
+          className={`nonlist flex items-center justify-around md:justify-center space-x-12  
+            uppercase tracking-widest font-semibold text-xs ${profile?.data.theme==="dark"?"text-gray-600  ":"text-gray-600"}
+            border-t`}
         >
           {/* <!-- posts tab is active --> */}
           <li
             className={
               postNav === "post"
-                ? "md:border-t md:border-gray-700 md:-mt-px md:text-gray-700"
+                ? `nonlist md:border-t ${profile?.data.theme==="dark"?"md:border-gray-400 md:text-gray-400":"md:border-gray-700 md:text-gray-700"} md:-mt-px `
                 : ""
             }
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -42,7 +45,7 @@ const RecruiterPostpart = () => {
           <li
             className={
               postNav === "jobs"
-                ? "md:border-t md:border-gray-700 md:-mt-px md:text-gray-700"
+                ? `nonlist md:border-t ${profile?.data.theme==="dark"?"md:border-gray-400 md:text-gray-400":"md:border-gray-700 md:text-gray-700"} md:-mt-px `
                 : ""
             }
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -61,7 +64,7 @@ const RecruiterPostpart = () => {
           <li
             className={
               postNav === "saved"
-                ? "md:border-t md:border-gray-700 md:-mt-px md:text-gray-700"
+                ? `nonlist md:border-t ${profile?.data.theme==="dark"?"md:border-gray-400 md:text-gray-400":"md:border-gray-700 md:text-gray-700"} md:-mt-px `
                 : ""
             }
             // eslint-disable-next-line @typescript-eslint/no-unused-vars

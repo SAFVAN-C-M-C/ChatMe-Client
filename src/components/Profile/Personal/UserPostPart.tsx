@@ -3,6 +3,8 @@ import { useState } from "react";
 import Posts from "../General/Posts";
 import AppliedJobs from "./AppliedJobs";
 import Saved from "../Saved/Saved";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 
 
 const UserPostPart = () => {
@@ -10,19 +12,20 @@ const UserPostPart = () => {
     const handleNavPostClick = (value: string) => {
       setPostNav(value);
     };
+    const { profile } = useSelector((state: RootState) => state.profile);
   return (
     <>
-      <div className="navigat-part mt-2">
-        <ul
-          className="flex items-center justify-around md:justify-center space-x-12  
-                    uppercase tracking-widest font-semibold text-xs text-gray-600
-                    border-t"
+      <div data-theme={profile?.data.theme || "light"} className=" nonlist navigat-part mt-2">
+        <ul data-theme={profile?.data.theme || "light"}
+          className={` nonlist flex items-center justify-around md:justify-center space-x-12  
+                    uppercase tracking-widest font-semibold text-xs 
+                    border-t ${profile?.data.theme==="dark"?"text-gray-600  ":"text-gray-600"}`}
         >
           {/* <!-- posts tab is active --> */}
           <li
             className={
               postNav === "post"
-                ? "md:border-t md:border-gray-700 md:-mt-px md:text-gray-700"
+                ? `nonlist md:border-t ${profile?.data.theme==="dark"?"md:border-gray-400 md:text-gray-400":"md:border-gray-700 md:text-gray-700"} md:-mt-px `
                 : ""
             }
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -41,7 +44,7 @@ const UserPostPart = () => {
           <li
             className={
               postNav === "saved"
-                ? "md:border-t md:border-gray-700 md:-mt-px md:text-gray-700"
+                ? ` nonlist md:border-t ${profile?.data.theme==="dark"?"md:border-gray-400 md:text-gray-400":"md:border-gray-700 md:text-gray-700"} md:-mt-px `
                 : ""
             }
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -60,7 +63,7 @@ const UserPostPart = () => {
           <li
             className={
               postNav === "applied_job"
-                ? "md:border-t md:border-gray-700 md:-mt-px md:text-gray-700"
+                ? `nonlist md:border-t ${profile?.data.theme==="dark"?"md:border-gray-400 md:text-gray-400":"md:border-gray-700 md:text-gray-700"} md:-mt-px `
                 : ""
             }
             // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -16,7 +16,7 @@ const Home = () => {
       <div data-theme={profile?.data.theme || "light"} className="flex">
         <NavigationBar />
         <div className="home-container w-full flex h-auto lg:pl-[42px]">
-          <div className="post-list-cover w-[70%] overflow-auto  h-full flex items-center flex-col">
+          <div className="post-list-cover pb-3 w-[70%] overflow-auto  h-full flex items-center flex-col">
             <div className="greeting w-full h-[50px]  flex items-center pl-4">
               <span>Hello there, </span>
               <span className="font-bold text-lg ml-1">

@@ -12,6 +12,7 @@ import savedPost from "./reducers/posts/savedPost";
 import searchUsers from "./reducers/Search/searchUsers";
 import adminReports from "./reducers/admin/adminReports";
 import notification from "./reducers/notification/notification";
+import jobs from "./reducers/jobs/jobs";
 
 export const store = configureStore({
   reducer: {
@@ -26,7 +27,8 @@ export const store = configureStore({
     savedPost:savedPost,
     searchUser:searchUsers,
     adminReport:adminReports,
-    notification:notification
+    notification:notification,
+    jobs:jobs
   },
 });
 

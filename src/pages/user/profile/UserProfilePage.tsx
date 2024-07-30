@@ -90,9 +90,9 @@ const UserProfilePage = () => {
           {Userprofile?.data?.accountType === "personal" ? (
             <UserPostPart userPosts={userPosts} />
           ) : Userprofile?.data?.accountType === "company" ? (
-            <CompanyPostPart userPosts={userPosts} />
+            <CompanyPostPart user={Userprofile} userPosts={userPosts} userId={String(Userprofile.data.userId)}/>
           ) : Userprofile?.data?.accountType === "recruiter" ? (
-            <RecruiterPostpart userPosts={userPosts} />
+            <RecruiterPostpart userId={String(Userprofile.data.userId)}  userPosts={userPosts} />
           ) : null}
         </div>
       </div>

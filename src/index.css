@@ -121,3 +121,20 @@ body {
   z-index: 9999;
   transform: scale(1.1);
 }
+ ul {
+  list-style-type: disc ;
+  margin-left: 1.5em;
+}
+
+ ol {
+  list-style-type: decimal;
+  margin-left: 1.5em;
+}
+
+ li {
+  margin-bottom: 0.5em;
+}
+
+.nonlist ul{
+  list-style-type: none;
+}

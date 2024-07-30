@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { URL } from "@/common/api";
+import { formatDate } from "@/helper/formateDate";
 import { INotification } from "@/redux/reducers/notification/notification";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import axios from "axios";
@@ -27,14 +28,7 @@ const NotificationCard:FC<NotificationCardProps> = ({notification,getNotificatio
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     setBgColor(randomColor);
   }, []);
-  const formatDate = (date?:Date) => {
-    if (!date) return 'No Date Available';
-    return new Date(date).toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-  };
+
   const handleDelete=async()=>{
     try {
       const res = await axios.post(`${URL}/notification/admin/${notification._id}`, config);

@@ -48,7 +48,7 @@ const RecruiterBio: React.FC<RecruiterBioProps> = ({ Userprofile,postLength }) =
     <>
 
       {/* for phone */}
-      <div className="Userprofile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 flex md:hidden">
+      <div data-theme={profile?.data.theme || "light"} className="Userprofile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 flex md:hidden">
         <div className="first-row w-full flex justify-center h-[50px]  mt-3 mb-3">
           <div className="provile-avatar mr-4 w-[30%] flex justify-center items-center">
             <img
@@ -94,7 +94,7 @@ const RecruiterBio: React.FC<RecruiterBioProps> = ({ Userprofile,postLength }) =
         </div>
         <div className="thrid-row mt-2 ml-2  flex w-full justify-between">
           <div className="title">
-            <span className="text-gray-500 bg-slate-200 pl-4 pr-4 pt-1 pb-1 mr-2 rounded-md">
+            <span className={`text-gray-500  ${profile?.data.theme==="dark"?"bg-gray-600 text-slate-300":"bg-slate-200"} pl-4 pr-4 pt-1 pb-1 mr-2 rounded-md`}>
               Recruiter
             </span>
             {/* <span className="text-gray-500 bg-slate-200 pl-4 pr-4 pt-1 pb-1 rounded-md">
@@ -157,7 +157,7 @@ const RecruiterBio: React.FC<RecruiterBioProps> = ({ Userprofile,postLength }) =
         ) : null}
       </div>
       {/* for lap */}
-      <div className="Userprofile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 md:flex hidden">
+      <div data-theme={profile?.data.theme || "light"} className="Userprofile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 md:flex hidden">
         <div className="Userprofile-avatar w-[30%] h-full  flex justify-center items-center pt-2 pb-2">
           <img
             src={
@@ -166,7 +166,7 @@ const RecruiterBio: React.FC<RecruiterBioProps> = ({ Userprofile,postLength }) =
                 : "/general/ChatMe-Userprofile.png"
             }
             alt="avatar"
-            className="w-[56px] h-[56px] sm:w-[76px] sm:h-[76px] md:w-[96px] md:h-[96px] lg:w-[146px] lg:h-[146px]"
+            className="w-[56px] rounded-full h-[56px] sm:w-[76px] sm:h-[76px] md:w-[96px] md:h-[96px] lg:w-[146px] lg:h-[146px]"
           />
         </div>
         <div className="Userprofile-details  w-[70%] h-full flex flex-col justify-center ">
@@ -224,7 +224,7 @@ const RecruiterBio: React.FC<RecruiterBioProps> = ({ Userprofile,postLength }) =
             </div>
           </div>
           <div className="thrid-row mt-2 ml-4 pl-2 flex">
-            <span className="text-gray-500 bg-slate-200 pl-4 pr-4 pt-1 pb-1 mr-3 rounded-md">
+            <span className={`text-gray-500  ${profile?.data.theme==="dark"?"bg-gray-600 text-slate-300":"bg-slate-200"} pl-4 pr-4 pt-1 pb-1 mr-2 rounded-md`}>
               Recruiter
             </span>
             {/* <span className="text-gray-500 bg-slate-200 pl-4 pr-4 pt-1 pb-1 rounded-md">

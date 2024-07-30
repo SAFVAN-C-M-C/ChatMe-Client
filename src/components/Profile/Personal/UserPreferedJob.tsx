@@ -13,7 +13,7 @@ const UserPreferedJob = () => {
     {
       openAddPreferedJobs?<AddPreferedJobs setOpenAddPreferedJobs={setOpenAddPreferedJobs}/>:null
     }
-      <div className="profile-prefered-job border-[.5px] border-gray-600  w-[80%] h-auto rounded-xl bg-slate-100 mt-12">
+      <div data-theme={profile?.data.theme || "light"} className="profile-prefered-job border-[.5px] border-gray-600  w-[80%] h-auto rounded-xl border-dashed mt-12">
         <div className="title w-full m-4 pr-6 flex justify-between">
           <div className="education-title">
             <span className="font-bold">Set Prefered Job</span>{" "}

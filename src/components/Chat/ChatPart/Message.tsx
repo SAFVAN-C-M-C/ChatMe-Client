@@ -9,7 +9,6 @@ interface MessageProps {
   reciever: UserDetails | null;
   fromMe: boolean;
   message: IMessage;
-
 }
 
 const Message: FC<MessageProps> = ({ reciever, fromMe, message }) => {
@@ -31,7 +30,7 @@ const Message: FC<MessageProps> = ({ reciever, fromMe, message }) => {
 
   return (
     <>
-      <div  className={`chat ${fromMe ? "chat-end" : "chat-start"}`}>
+      <div className={`chat ${fromMe ? "chat-end" : "chat-start"}`}>
         <div className="chat-image avatar">
           <div className="w-8">
             <img
@@ -48,9 +47,25 @@ const Message: FC<MessageProps> = ({ reciever, fromMe, message }) => {
           </div>
         </div>
         <div
-          className={`chat-bubble ${shakeClass} break-all whitespace-pre-wrap flex flex-wrap text-white ${ fromMe?"bg-blue-200 ":"bg-blue-700"}`}
+          className={`chat-bubble ${shakeClass} break-all whitespace-pre-wrap flex flex-wrap text-white ${
+            fromMe ? "bg-blue-200 " : "bg-blue-700"
+          }`}
         >
-          <span className={`${ fromMe?"text-black ":"text-white"}`}>{message.message}</span>
+          {message.type === "text" ? (
+            <span className={`${fromMe ? "text-black " : "text-white"}`}>
+              {message.message}
+            </span>
+          ) : message.type === "image" ? (
+            <span className={`${fromMe ? "text-black " : "text-white "}`}>
+              <img src={message.media} alt=""  className="w-[300px]"/>
+            </span>
+          ) : message.type === "image" ? (
+            <span className={`${fromMe ? "text-black " : "text-white"}`}>
+              <video src={message.media}></video>
+            </span>
+          ) : (
+            ""
+          )}
         </div>
         <div className="chat-footer opacity-50 text-sm flex gap-1 items-center">
           {new Date(message?.createdAt).toLocaleTimeString([], {

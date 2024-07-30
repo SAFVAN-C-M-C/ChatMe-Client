@@ -46,7 +46,7 @@ const UserBio: React.FC<UserBioProps> = ({ Userprofile,postLength}) => {
   return (
     <>
       {/* for phone */}
-      <div className="Userprofile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 flex md:hidden">
+      <div data-theme={profile?.data.theme || "light"} className="Userprofile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 flex md:hidden">
         <div className="first-row w-full flex justify-center h-[50px]  mt-3 mb-3">
           <div className="provile-avatar mr-4 w-[30%] flex justify-center">
             <img
@@ -158,7 +158,7 @@ const UserBio: React.FC<UserBioProps> = ({ Userprofile,postLength}) => {
         ) : null}
       </div>
       {/* lap */}
-      <div className="Userprofile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 md:flex hidden">
+      <div data-theme={profile?.data.theme || "light"} className="Userprofile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 md:flex hidden">
         <div className="Userprofile-avatar w-[30%] h-full  flex justify-center items-center ">
           <img
             src={

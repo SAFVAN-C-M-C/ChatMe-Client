@@ -23,7 +23,7 @@ const CompanyBio = () => {
       openAvatarView?<AvatarViewModal handleAvatarViewModalOpen={handleAvatarViewModalOpen} photoUrl={profile?.data.bio?.avatar? profile?.data.bio?.avatar:"/general/ChatMe-profile.png"}/>:null
     }
       {/* for phone */}
-      <div className="profile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 flex md:hidden">
+      <div data-theme={profile?.data.theme || "light"} className="profile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 flex md:hidden">
         <div className="first-row w-full flex justify-center items-center h-[50px]  mt-3 mb-3">
           <div className="provile-avatar mr-4 w-[30%] flex justify-center items-center">
             <img
@@ -65,7 +65,7 @@ const CompanyBio = () => {
         </div>
         <div className="thrid-row mt-2 ml-2  flex w-full justify-between">
           <div className="title">
-            <span className="text-gray-500 bg-slate-200 pl-4 pr-4 pt-1 pb-1 rounded-md">
+            <span className={`text-gray-500  pl-4 pr-4 pt-1 pb-1 rounded-md  ${profile?.data.theme==="dark"?"bg-gray-600 text-slate-300":"bg-slate-200"}`}>
               Company
             </span>
           </div>
@@ -124,7 +124,7 @@ const CompanyBio = () => {
       </div>
 
     {/* for lap */}
-      <div className="profile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 md:flex hidden">
+      <div data-theme={profile?.data.theme || "light"} className="profile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 md:flex hidden">
         <div className="profile-avatar w-[30%] h-full  flex justify-center items-center pt-2 pb-2">
           <img
           onClick={()=>setOpenAvatarView(!openAvatarView)}
@@ -146,8 +146,8 @@ const CompanyBio = () => {
               />):null
             }
             </div>
-            <div onClick={()=>setOpenEditBio(!openEditBio)} className="edit-profile h-auto bg-slate-200 mr-5 rounded-md p-2 cursor-pointer">
-              <span>Edit profile</span>
+            <div onClick={()=>setOpenEditBio(!openEditBio)} className="edit-profile btn btn-info mr-3">
+              <span className="text-white">Edit profile</span>
             </div>
             
           </div>
@@ -169,7 +169,7 @@ const CompanyBio = () => {
             </div>
           </div>
           <div className="thrid-row mt-2 ml-4 pl-2">
-            <span className="text-gray-500 bg-slate-200 pl-4 pr-4 pt-1 pb-1 rounded-md">
+            <span  className={`text-gray-500 ${profile?.data.theme==="dark"?"bg-gray-600 text-slate-300":"bg-slate-200"} pl-4 pr-4 pt-1 pb-1 rounded-md`}>
               Company
             </span>
           </div>

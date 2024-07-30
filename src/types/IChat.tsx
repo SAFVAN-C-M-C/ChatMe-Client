@@ -12,7 +12,9 @@ export interface IChat {
     message:string;
     updatedAt:Date;
     createdAt:Date;
-    shouldShake?:boolean
+    shouldShake?:boolean;
+    type:string;
+    media?:string
   }
 
   export interface ISoccketMessage{

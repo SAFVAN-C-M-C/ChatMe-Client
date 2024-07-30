@@ -1,12 +1,39 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from "react";
 import NavBar from "../../components/admin/NavBar";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { blockUser, unBlockUser } from "../../redux/actions/admin/adminUserAction";
+import {
+  blockUser,
+  unBlockUser,
+} from "../../redux/actions/admin/adminUserAction";
+import {
+  Paper,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import UserRow from "@/components/admin/UserTable/UserRow";
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 
 const Users = () => {
-  const { adminUser,error } = useSelector((state: RootState) => state.adminUser);
+  const { adminUser, error } = useSelector(
+    (state: RootState) => state.adminUser
+  );
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -44,7 +71,38 @@ const Users = () => {
             <span className="text-3xl font-bold underline">Users</span>
           </div>
           {adminUser?.data ? (
-            <table className="w-full overflow-x-scroll ms-5 bg-white border my-4 border-gray-300">
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="center">Name</StyledTableCell>
+                    <StyledTableCell align="center">Email</StyledTableCell>
+                    <StyledTableCell align="center">Type</StyledTableCell>
+                    <StyledTableCell align="center">
+                      No.of Action
+                    </StyledTableCell>
+                    <StyledTableCell align="center">Action</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {adminUser.data.map((row, index) => (
+                    <UserRow row={row} key={index} />
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <span>No data</span>
+          )}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Users;
+{
+  /* <table className="w-full overflow-x-scroll ms-5 bg-white border my-4 border-gray-300">
               <thead>
                 <tr className="bg-gray-100">
                   <th className="py-2 px-0 border-b">Slno</th>
@@ -83,14 +141,5 @@ const Users = () => {
                   </tr>
                 ))}
               </tbody>
-            </table>
-          ) : (
-            <span>No data</span>
-          )}
-        </div>
-      </div>
-    </>
-  );
-};
-
-export default Users;
+            </table> */
+}

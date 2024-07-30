@@ -1,10 +1,19 @@
-import React, { useEffect } from 'react'
-import { AppDispatch, RootState } from '../../redux/store';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react'
+import {  RootState } from '../../redux/store';
+import {  useSelector } from 'react-redux';
 import NavBar from '../../components/admin/NavBar';
-import { verifyCompany } from '../../redux/actions/admin/adminCompanyRequestAction';
 import toast from 'react-hot-toast';
-
+import { Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow } from '@mui/material';
+import CompanyRequestRow from '@/components/admin/UserTable/CompanyRequestRow';
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 function CompanyRequests() {
   const { adminCompanyRequests,error } = useSelector(
     (state: RootState) => state.adminCompanyRequest
@@ -14,18 +23,8 @@ function CompanyRequests() {
       toast.error(error);
     }
   }, [error]);
-  const dispatch = useDispatch<AppDispatch>();
-  const handleVerify = (email?: string) => {
-    const formData = {
-      email: email,
-      isVerified: true,
-      type: "company",
-    };
-    dispatch(verifyCompany(formData));
-    if (!error) {
-      toast.success("Verified");
-    }
-  };
+
+
   return (
     <>
     <div className="flex" data-theme={"dark"}>
@@ -34,18 +33,35 @@ function CompanyRequests() {
         <div className="greeting ml-14 mt-10 mb-10 felx">
         <span className="text-3xl font-bold underline">Companies Requests</span>
       </div>
-          <table className="w-full overflow-x-scroll ms-5 bg-white border my-4 border-gray-300">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="py-2 px-0 border-b">Slno</th>
-                <th className="py-2 px-0 border-b">Name</th>
-                <th className="py-2 px-0 border-b">Email</th>
-                <th className="py-2 px-0 border-b">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {adminCompanyRequests?.data.map((user, id) => (
-                <tr key={id} className="border-b">
+      <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center">Sl.no</StyledTableCell>
+                  <StyledTableCell align="center">Name</StyledTableCell>
+                  <StyledTableCell align="center">Email</StyledTableCell>
+                  <StyledTableCell align="center">Doc</StyledTableCell>
+                  <StyledTableCell align="center">Action</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+              {adminCompanyRequests?.data.map((row, id) => (
+                <CompanyRequestRow row={row} slno={id+1} key={id}/>
+              ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export default CompanyRequests
+
+
+
+{/* <tr key={id} className="border-b">
                   <td className="py-2 px-4 text-center">{id+1}</td>
                   <td className="py-2 px-4 text-center">{user?.name}</td>
                   <td className="py-2 px-4 text-center">{user?.email}</td>
@@ -59,14 +75,4 @@ function CompanyRequests() {
                         Verify
                       </button>
                   </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </>
-  )
-}
-
-export default CompanyRequests
+                </tr> */}

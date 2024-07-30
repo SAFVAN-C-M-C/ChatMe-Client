@@ -39,6 +39,7 @@ const MessageInput = () => {
       formData.append("message", message);
       formData.append("receiverId", String(receiverId));
       formData.append("chatId", String(chat?._id));
+      formData.append("type", "text");
 
       const res = await axios.post(`${URL}/chat/message`, formData, config);
       if (res.status === 200) {
@@ -60,7 +61,7 @@ const MessageInput = () => {
   return (
     <>
     {
-      openSelectMediaModal?<SelectMedia  setOpenSelectMediaModal={setOpenSelectMediaModal}/>:null
+      openSelectMediaModal?<SelectMedia chat={chat}  setOpenSelectMediaModal={setOpenSelectMediaModal}/>:null
     }
       <form className=" px-4 mx-8 my-3" onSubmit={handleMessageSend}>
         <div className="w-full flex light-dark rounded-lg ">

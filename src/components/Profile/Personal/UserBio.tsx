@@ -67,7 +67,7 @@ const UserBio = () => {
       openAvatarView?<AvatarViewModal handleAvatarViewModalOpen={handleAvatarViewModalOpen} photoUrl={profile?.data.bio?.avatar? profile?.data.bio?.avatar:"/general/ChatMe-profile.png"}/>:null
     }
       {/* for phone */}
-      <div className="profile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 flex md:hidden">
+      <div data-theme={profile?.data.theme || "light"} className={`profile-bio-sm flex-col p-2  w-[80%] border-[.5px] border-dashed border-gray-600  h-auto pb-3 rounded-xl  mt-12 flex md:hidden`}>
         <div className="first-row w-full flex justify-center h-[50px]  mt-3 mb-3">
           <div className="provile-avatar mr-4 w-[30%] flex justify-center">
             <img
@@ -177,7 +177,7 @@ const UserBio = () => {
         }
       </div>
       {/* lap */}
-      <div className="profile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl bg-slate-50 mt-12 md:flex hidden">
+      <div data-theme={profile?.data.theme || "light"} className="profile-bio w-[80%] border-[.5px] border-dashed border-gray-600  h-auto pb-3 rounded-xl mt-12 md:flex hidden">
         <div className="profile-avatar w-[30%] h-full  flex justify-center items-center ">
           <img
             onClick={()=>setOpenAvatarView(!openAvatarView)}
@@ -191,8 +191,8 @@ const UserBio = () => {
             <div className="user-name p-2 mr-14 ">
               <span>{profile?.data ? profile?.data?.name : "User Name"}</span>
             </div>
-            <div onClick={()=>setOpenEditBio(true)} className="edit-profile h-auto bg-slate-200 mr-5 rounded-md p-2 cursor-pointer">
-              <span>Edit profile</span>
+            <div onClick={()=>setOpenEditBio(true)} className="edit-profile btn mr-3 btn-info">
+              <span className="text-white">Edit profile</span>
             </div>
             <div className="settings flex justify-center items-center cursor-pointer">
           
