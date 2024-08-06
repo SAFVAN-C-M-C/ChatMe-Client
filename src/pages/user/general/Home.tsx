@@ -1,16 +1,82 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import NavigationBar from "../../../components/general/NavigationBar";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
 
 import HomePost from "../../../components/Post/HomePost";
 
 import UseListenMessages from "@/hooks/UseListenMessages";
 import UseListenNotification from "@/hooks/UseListenNotification";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import { URL } from "@/common/api";
+import { config } from "@/common/configurations";
+import { addMorePosts } from "@/redux/reducers/posts/homePosts";
+import { CircularProgress } from "@mui/material";
 const Home = () => {
+  
   UseListenMessages()
   UseListenNotification()
   const { profile } = useSelector((state: RootState) => state.profile);
   const { homePosts } = useSelector((state: RootState) => state.homePosts);
+
+  const dispatch = useDispatch<AppDispatch>();
+  console.log("before",homePosts);
+
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const loader = useRef(null);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(`${URL}/post/?page=${page}&limit=5`, config);
+      
+        
+        if(response.status===200){
+          dispatch(addMorePosts(response.data));
+        }
+    
+        if (page >= response.data.totalPages) {
+          setHasMore(false);
+        }
+        
+        
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if(page>1){
+      
+      
+      fetchPosts();
+      console.log(homePosts);
+      
+    }
+}, [page,dispatch]);
+useEffect(() => {
+  const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasMore) {
+          setTimeout(() => {
+            setPage(prevPage => prevPage + 1);
+          }, 1000);
+      }
+  }, { threshold: 1.0 });
+
+  if (loader.current) {
+      observer.observe(loader.current);
+  }
+
+  return () => {
+      if (loader.current) {
+          observer.unobserve(loader.current);
+      }
+  };
+}, [hasMore]);
+
+const loadMore = () => {
+    setPage(prevPage => prevPage + 1);
+};
   return (
     <>
       <div data-theme={profile?.data.theme || "light"} className="flex">
@@ -30,6 +96,8 @@ const Home = () => {
                   <HomePost post={post} key={index} />
                 ))
               : "No data"}
+              {hasMore && <div className="mt-2" ref={loader}><CircularProgress /></div>}
+              {/* {hasMore && <div onClick={loadMore}>Load More</div>} */}
             
           </div>
           {/* <div className="sugetion-cover w-[30%] h-full">

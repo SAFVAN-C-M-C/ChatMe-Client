@@ -57,7 +57,7 @@ const Message: FC<MessageProps> = ({ reciever, fromMe, message }) => {
             </span>
           ) : message.type === "image" ? (
             <span className={`${fromMe ? "text-black " : "text-white "}`}>
-              <img src={message.media} alt=""  className="w-[300px]"/>
+              <img src={message.media} alt="" className="w-[300px]" />
             </span>
           ) : message.type === "image" ? (
             <span className={`${fromMe ? "text-black " : "text-white"}`}>
@@ -68,11 +68,11 @@ const Message: FC<MessageProps> = ({ reciever, fromMe, message }) => {
           )}
         </div>
         <div className="chat-footer opacity-50 text-sm flex gap-1 items-center">
-          {new Date(message?.createdAt).toLocaleTimeString([], {
+          <span className={`text-white`}>{new Date(message?.createdAt).toLocaleTimeString([], {
             hour: "numeric",
             minute: "2-digit",
             hour12: true,
-          })}
+          })}</span>
         </div>
       </div>
     </>

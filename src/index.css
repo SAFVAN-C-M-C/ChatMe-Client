@@ -138,3 +138,22 @@ body {
 .nonlist ul{
   list-style-type: none;
 }
+.message-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px; /* Adjust based on your layout */
+  display: inline-block;
+}
+
+
+.chat-input-container {
+  position: relative;
+}
+
+.emoji-picker-container {
+  position: absolute;
+  bottom: 55px; /* Adjust as needed */
+  left: 0;
+  z-index: 1000;
+}

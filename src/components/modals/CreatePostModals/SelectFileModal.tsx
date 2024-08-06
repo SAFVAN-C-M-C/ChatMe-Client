@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Button,
+  CssBaseline,
   Dialog,
   DialogActions,
   DialogContent,
@@ -9,6 +10,7 @@ import {
   DialogTitle,
   
   styled,
+  ThemeProvider,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
@@ -16,6 +18,9 @@ import { useDropzone } from "react-dropzone";
 
 import toast from "react-hot-toast";
 import CropModal from "../../crop/CropModal";
+import { darkTheme, lightTheme } from "@/helper/theme";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 interface SelectFileModalProps {
   setOpenSelectFileModal: Dispatch<SetStateAction<boolean>>;
   setPreview:Dispatch<SetStateAction<string | undefined>>;
@@ -43,6 +48,7 @@ export const SelectFileModal: React.FC<SelectFileModalProps> = ({
     file,
   setOpenSelectFileModal,
 }) => {
+  const { profile } = useSelector((state: RootState) => state.profile);
   //local states
   
   
@@ -119,6 +125,10 @@ export const SelectFileModal: React.FC<SelectFileModalProps> = ({
         <CropModal avatarUrl={preview}  setAvatarUrl={setPreview} setFile={setFile} setOpenCrop={setOpenCrop}/>
       ) : (
         <>
+        <ThemeProvider
+        theme={profile?.data.theme === "dark" ? darkTheme : lightTheme}
+      >
+        <CssBaseline />
           <Dialog fullWidth={true} open onClose={handleClose}>
             <DialogTitle align="center">Select a file</DialogTitle>
             <DialogContent>
@@ -175,6 +185,7 @@ export const SelectFileModal: React.FC<SelectFileModalProps> = ({
               <Button onClick={handleNext}>Next</Button>
             </DialogActions>
           </Dialog>
+          </ThemeProvider>
         </>
       )}
     </>

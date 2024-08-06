@@ -73,7 +73,10 @@ const UserProfilePage = () => {
           }
           
 
-          <About profile={Userprofile} />
+          {
+            Userprofile?.data.bio.about?<About userProfile={Userprofile} />:null
+          }
+          
           {Userprofile?.data?.accountType === "personal" ? (
             <>
               {Userprofile.data.education?.length !== 0 ? (

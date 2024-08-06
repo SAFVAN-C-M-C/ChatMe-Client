@@ -1,15 +1,16 @@
-import { Dialog, DialogContent, DialogTitle} from "@mui/material";
+import { CssBaseline, Dialog, DialogContent, DialogTitle, ThemeProvider} from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import Notification from "./Notification";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { darkTheme, lightTheme } from "@/helper/theme";
 
 
   interface NotificationModalProps {
     setOpenNotificationModal: Dispatch<SetStateAction<boolean>>;
   }
   const NotificationModal: React.FC<NotificationModalProps> = ({ setOpenNotificationModal }) => {
-
+    const { profile } = useSelector((state: RootState) => state.profile);
     const {notifications}=useSelector((state:RootState)=>state.notification)
     const handleClose = () => {
         setOpenNotificationModal(false);
@@ -18,6 +19,10 @@ import { RootState } from "@/redux/store";
 
     return (
       <>
+      <ThemeProvider
+        theme={profile?.data.theme === "dark" ? darkTheme : lightTheme}
+      >
+        <CssBaseline />
         <Dialog
           open
           onClose={handleClose}
@@ -41,6 +46,7 @@ import { RootState } from "@/redux/store";
             </div>
           </DialogContent>
         </Dialog>
+        </ThemeProvider>
       </>
     );
   };

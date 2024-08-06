@@ -211,7 +211,7 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
         />
       ) : null}
 
-      <Menu
+<Menu
         id="post-options"
         aria-labelledby="post-options-button"
         anchorEl={anchorEl}
@@ -227,14 +227,14 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
         }}
       >
         {myPost ? (
-          <>
-            <MenuItem onClick={handleEditClick}>Edit</MenuItem>
-            <MenuItem onClick={handleDelete}>Delete</MenuItem>
-          </>
+          [
+            <MenuItem key="edit" onClick={handleEditClick}>Edit</MenuItem>,
+            <MenuItem key="delete" onClick={handleDelete}>Delete</MenuItem>,
+          ]
         ) : (
-          <>
-            <MenuItem onClick={handleReportClick}>Report</MenuItem>
-          </>
+          [
+            <MenuItem key="report" onClick={handleReportClick}>Report</MenuItem>,
+          ]
         )}
       </Menu>
       <div className="post w-[500px] h-auto border-[.4px] border-gray-500  mt-14 rounded-xl flex flex-col">

@@ -24,6 +24,7 @@ import {
 import { likeMyPost, unlikeMyPost } from "@/redux/reducers/posts/userPosts";
 import { getSavedPost } from "@/redux/actions/posts/savedPostAction";
 import Comments from "./Comments";
+import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 
 interface ViewPostProps {
   setOpenViewPost: Dispatch<SetStateAction<boolean>>;
@@ -44,6 +45,11 @@ export const ViewPost: React.FC<ViewPostProps> = ({
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
   const [comment, setComment] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+
+  const onEmojiClick = (emojiObject: EmojiClickData) => {
+    setComment((prevMessage) => prevMessage + emojiObject.emoji);
+  };
   useEffect(() => {
     if (post.likes?.find((val) => val === user?.data._id)) {
       setLiked(true);
@@ -271,7 +277,12 @@ export const ViewPost: React.FC<ViewPostProps> = ({
             </div>
             <div className="comment-list-section border-b-[.5px] border-gray-500 overflow-y-scroll h-[510px] w-[500px]">
               {post.comments?.map((comment, index) => (
-                <Comments key={index} postId={String(post._id)} postUser={String(post.userId)} comment={comment}/>
+                <Comments
+                  key={index}
+                  postId={String(post._id)}
+                  postUser={String(post.userId)}
+                  comment={comment}
+                />
               ))}
             </div>
             <div className="first-row pl-4">
@@ -326,9 +337,17 @@ export const ViewPost: React.FC<ViewPostProps> = ({
                 <span>Save</span>
               </div>
             </div>
-            <div className="comment-section flex items-center border-t-[.5px] w-[500px] h-[58px] mt-2 border-gray-500">
-              <div className="emoji w-[50px] flex justify-center">
-                <Icon icon="fluent:emoji-32-filled" width={26} height={26} />
+            <div className="relative comment-section flex items-center border-t-[.5px] w-[500px] h-[58px] mt-2 border-gray-500">
+              {showEmojiPicker && (
+                <div className="emoji-picker-container">
+                  <EmojiPicker  onEmojiClick={onEmojiClick} />
+                </div>
+              )}
+              <div
+                className="emoji w-[50px] flex justify-center"
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              >
+                <Icon icon="mingcute:emoji-line" width={26} height={26} />
               </div>
               <div className="input-section w-[390px]  flex items-center">
                 {" "}

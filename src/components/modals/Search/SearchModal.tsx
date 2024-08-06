@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Box,
+  CssBaseline,
   Dialog,
   DialogContent,
   DialogTitle,
 
   TextField,
+  ThemeProvider,
 } from "@mui/material";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
@@ -16,11 +18,13 @@ import { getUsers } from "@/redux/actions/search/searchUserAction";
 
 import { updateSerachKey } from "@/redux/reducers/Search/searchUsers";
 import { Icon } from "@iconify/react";
+import { darkTheme, lightTheme } from "@/helper/theme";
 interface SearchModalProps {
   setOpenSearchModal: Dispatch<SetStateAction<boolean>>;
 }
 const SearchModal: React.FC<SearchModalProps> = ({ setOpenSearchModal }) => {
-    const { searchUser} = useSelector((state: RootState) => state.searchUser);
+  const { profile } = useSelector((state: RootState) => state.profile);  
+  const { searchUser} = useSelector((state: RootState) => state.searchUser);
     console.log(searchUser);
     
     const dispatch = useDispatch<AppDispatch>();
@@ -45,6 +49,10 @@ const SearchModal: React.FC<SearchModalProps> = ({ setOpenSearchModal }) => {
   }
   return (
     <>
+          <ThemeProvider
+        theme={profile?.data.theme === "dark" ? darkTheme : lightTheme}
+      >
+        <CssBaseline />
       <Dialog
         fullWidth
         open
@@ -80,6 +88,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ setOpenSearchModal }) => {
           </div>
         </DialogContent>
       </Dialog>
+      </ThemeProvider>
     </>
   );
 };

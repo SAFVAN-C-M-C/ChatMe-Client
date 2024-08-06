@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { URL } from "@/common/api";
 import { config } from "@/common/configurations";
@@ -6,11 +7,12 @@ import { ChatContext } from "@/context/ChatContext";
 import { useSocket } from "@/context/SocketContext";
 import { RootState } from "@/redux/store";
 import { Icon } from "@iconify/react";
-
+import Picker, { EmojiClickData } from 'emoji-picker-react';
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { BsSend } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import EmojiPicker from "emoji-picker-react";
 
 const MessageInput = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -58,13 +60,31 @@ const MessageInput = () => {
       console.log("Some thing went wrong", error.message);
     }
   };
+  const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+
+  const onEmojiClick = (emojiObject: EmojiClickData) => {
+    setMessage((prevMessage) => prevMessage + emojiObject.emoji);
+  };
   return (
     <>
+          
     {
       openSelectMediaModal?<SelectMedia chat={chat}  setOpenSelectMediaModal={setOpenSelectMediaModal}/>:null
     }
       <form className=" px-4 mx-8 my-3" onSubmit={handleMessageSend}>
-        <div className="w-full flex light-dark rounded-lg ">
+        <div className="w-full chat-input-container flex light-dark rounded-lg ">
+        {showEmojiPicker && (
+        <div className="emoji-picker-container">
+          <Picker onEmojiClick={onEmojiClick} />
+        </div>
+      )}
+        <div className=" m-3 text-white cursor-pointer" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+            <Icon
+              icon="mingcute:emoji-line"
+              width={26}
+              height={26}
+            />
+          </div>
           <input
             type="text"
             value={message}

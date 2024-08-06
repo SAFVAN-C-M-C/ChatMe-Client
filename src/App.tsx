@@ -91,7 +91,9 @@ function App() {
       dispatch(getReports())
     }
     if(user?.data?._id && user.data.role==="user"){
-      dispatch(getHomePosts());
+      if(!homePosts){
+        dispatch(getHomePosts());
+      }
       dispatch(getJobs());
       dispatch(getProfileDataFirst());
       dispatch(getMyPosts());

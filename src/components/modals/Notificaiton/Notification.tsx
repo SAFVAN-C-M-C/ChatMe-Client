@@ -93,7 +93,7 @@ const Notification: FC<NotificationProps> = ({ notification }) => {
   }
   return (
     <>
-      <div className="Notification-container relative flex items-center rounded-md hover:bg-slate-200 ">
+      <div className={`Notification-container relative flex items-center rounded-md  ${profile?.data.theme==="dark"?"hover:bg-slate-600":"hover:bg-slate-200"}`}>
         <div className="avatar  w-10 m-3 ">
           <div className="img-container rounded-full w-10">
             <img
@@ -149,7 +149,7 @@ const Notification: FC<NotificationProps> = ({ notification }) => {
               />
             </div>
           ) : type === "follow" ? (
-            <div className="follow">
+            <div className="follow mr-1">
                 {
                     following?<span onClick={handleUnfollow} className='btn btn-outline btn-primary hover:text-white'>Following</span>:<span onClick={handlefollow} className='btn btn-primary text-white'>Follow</span> 
                 }

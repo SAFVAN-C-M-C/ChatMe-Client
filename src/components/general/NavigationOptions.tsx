@@ -29,6 +29,7 @@ const NavigationOptions: React.FC<NavigationOptionsProps> = ({
   shrink,
 }) => {
   const { user } = useSelector((state: RootState) => state.user);
+  const { profile } = useSelector((state: RootState) => state.profile);
   const { notifications } = useSelector(
     (state: RootState) => state.notification
   );
@@ -41,7 +42,7 @@ const NavigationOptions: React.FC<NavigationOptionsProps> = ({
   const [openCreateJobModal, setOpenCreateJobModal] =useState<boolean>(false);
 
   const [preview, setPreview] = useState<string | undefined>(
-    "/general/drag_img.png"
+    profile?.data.theme==="dark"?"/general/drag_img_bg_dr.png":"/general/drag_img_bg.png"
   );
   const [file, setFile] = useState<File | null>(null);
 

@@ -1,11 +1,13 @@
 
 import { ProfilePayload } from '@/redux/reducers/profileSlice';
+import { RootState } from '@/redux/store';
+import { useSelector } from 'react-redux';
 
 interface AboutProps{
-    profile: ProfilePayload | null;
+  userProfile: ProfilePayload | null;
 }
-const About:React.FC<AboutProps> = ({profile}) => {
-  
+const About:React.FC<AboutProps> = ({userProfile}) => {
+  const { profile,  } = useSelector((state: RootState) => state.profile);
   return (
     <>
 
@@ -19,7 +21,7 @@ const About:React.FC<AboutProps> = ({profile}) => {
             <div className="about-content w-full p-3 h-auto">
               <p>
                 {
-                  profile?.data.bio?.about?profile?.data.bio?.about:"Enter some about"
+                  userProfile?.data.bio?.about?userProfile?.data.bio?.about:"Enter some about"
                 }
               </p>
             </div>

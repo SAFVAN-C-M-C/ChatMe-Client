@@ -8,6 +8,7 @@ import { AddCommentPayload, DeleteCommentPayload, IPosts } from "@/types/IPosts"
 export interface HomePostsPayload {
   success: boolean;
   data: IPosts[];
+  totalPages:number;
   message: string;
 }
 export interface HomePostsState {
@@ -57,6 +58,14 @@ const homePostsSlice = createSlice({
         post.comments = post?.comments?.filter((comment) => comment._id !== commentId);
       }
     },
+    addMorePosts(state, action: PayloadAction<HomePostsPayload>) {
+      if (state.homePosts) {
+        state.homePosts.data = [...state.homePosts.data, ...action.payload.data];
+        state.homePosts.totalPages = action.payload.totalPages;
+      } else {
+        state.homePosts = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -77,6 +86,6 @@ const homePostsSlice = createSlice({
   },
 });
 
-export const { updateError,likePost,unlikePost,addComment,deleteComment } = homePostsSlice.actions;
+export const { updateError,likePost,unlikePost,addComment,deleteComment,addMorePosts } = homePostsSlice.actions;
 
 export default homePostsSlice.reducer;
