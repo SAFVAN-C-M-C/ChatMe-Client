@@ -57,7 +57,7 @@ const CompanyRequestRow: FC<CompanyRequestRowProps> = ({ row, slno }) => {
         <StyledTableCell align="center">{slno}</StyledTableCell>
         <StyledTableCell align="center">{row?.name}</StyledTableCell>
         <StyledTableCell align="center">{row?.email}</StyledTableCell>
-        <StyledTableCell align="center">{""}</StyledTableCell>
+        <StyledTableCell align="center"><a target="_blank" href={row?.doc}>View Registration</a></StyledTableCell>
         <StyledTableCell align="center">
           <button
             onClick={() => handleVerify(row?.email)}

@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { addRegisterDetails } from "../../../redux/actions/user/userActions";
 import { validateField, validatePhone } from "../../../helper/validate";
 import toast from "react-hot-toast";
+import { getSignedUrl } from "@/services";
+import axios from "axios";
 
 const RegisterForm_2 = () => {
   const { user, loading, error } = useSelector(
@@ -14,8 +16,8 @@ const RegisterForm_2 = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-
   //local states
+  const [file, setFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     location: "",
@@ -25,9 +27,8 @@ const RegisterForm_2 = () => {
   const [userAccount, setUserAccount] = useState<boolean>(true);
   const [companyAccount, setCompanyAccount] = useState<boolean>(false);
 
-
   //event handler
-  const handleAccountRadio = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleAccountRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === "company") {
       setCompanyAccount(true);
       setUserAccount(false);
@@ -42,7 +43,7 @@ const RegisterForm_2 = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  const handleRegisterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegisterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateField(formData?.name)) {
       toast.error("Name is required");
@@ -56,12 +57,56 @@ const RegisterForm_2 = () => {
       toast.error("Enter proper phone number");
       return;
     }
-    const newData = {
-      data: formData,
-    };
-    dispatch(addRegisterDetails(newData));
-  };
+    if (formData.accountType === "company" && !file) {
+      toast.error("Please select a Registration doc For verification");
+      return;
+    }
+    //upload resume
 
+    if (formData.accountType === "company" && file) {
+      console.log(file);
+      const type = file.type.split("/")[0] === "application" ? "pdf" : "jpg";
+      const signedUrl: { url: string; media: string } = await getSignedUrl(
+        "doc",
+        type
+      );
+      console.log(signedUrl);
+      const { url, media } = signedUrl;
+      const res = await axios.put(url, file, {
+        headers: {
+          "Content-Type":
+            file.type.split("/")[0] === "application"
+              ? "application/pdf"
+              : "image/jpeg",
+        },
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        const newData = {
+          data: {
+            name: formData.name,
+            phone: formData.phone,
+            accountType: formData.accountType,
+            location: formData.location,
+            doc: `https://s3.ap-south-1.amazonaws.com/bucket.chatme.use/${media}`,
+          },
+        };
+        dispatch(addRegisterDetails(newData));
+      }
+    } else {
+      const newData = {
+        data: formData,
+      };
+      dispatch(addRegisterDetails(newData));
+    }
+  };
+  const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const file = e.target.files?.[0];
+    if (file) {
+      setFile(file);
+    }
+  };
   //use effects
   useEffect(() => {
     if (error) {
@@ -70,11 +115,9 @@ const RegisterForm_2 = () => {
   }, [error]);
   useEffect(() => {
     if (user && user?.success && user?.loggined) {
-      
-      
       navigate("/", { replace: true });
     }
-  },[user]);
+  }, [user]);
   return (
     <>
       <div className="register-container bg-white rounded-lg w-[90%] m-2 h-[550px] lg:w-[80%] md:w-[90%] sm:w-[60%] flex flex-col items-center border-[.5px] border-gray-500">
@@ -127,7 +170,7 @@ const RegisterForm_2 = () => {
               className="mr-2 text-gray-400"
             />
             <input
-            name="name"
+              name="name"
               onChange={handleChange}
               type="text"
               className="w-full h-full bg-transparent"
@@ -142,7 +185,7 @@ const RegisterForm_2 = () => {
               className="mr-2 text-gray-400"
             />
             <input
-            name="phone"
+              name="phone"
               onChange={handleChange}
               type="tel"
               max={10}
@@ -151,7 +194,11 @@ const RegisterForm_2 = () => {
             />
           </div>
 
-          <div className=" pl-3 register-field mt-5 mb-5 bg-slate-200 w-[80%] h-[50px] rounded-md flex items-center">
+          <div
+            className={` pl-3 register-field mt-5 ${
+              formData.accountType !== "company" ? "mb-5" : ""
+            } bg-slate-200 w-[80%] h-[50px] rounded-md flex items-center`}
+          >
             <Icon
               icon="mdi:location"
               width={24}
@@ -159,20 +206,37 @@ const RegisterForm_2 = () => {
               className="mr-2 text-gray-400"
             />
             <input
-            name="location"
+              name="location"
               onChange={handleChange}
               type="text"
               className="w-full h-full bg-transparent text-gray-500"
               placeholder="Enter the location "
             />
           </div>
+          {formData.accountType === "company" ? (
+            <div className="register-field mt-3 mb-6  w-[80%] h-[50px] rounded-md flex items-center">
+              <label className="form-control w-full ">
+                <div className=" text-gray-800">
+                  <span className="label-text text-black">
+                    Select a Licence Doc
+                  </span>
+                </div>
 
+                <input
+                  onChange={handleSelectFile}
+                  accept=".pdf"
+                  type="file"
+                  className="file-input bg-slate-200 file-input-ghost w-full max-w-xs"
+                />
+              </label>
+            </div>
+          ) : null}
           <div className="login-button w-[30%] h-[40px] bg-blue-600 rounded-full">
             <button
               className="w-full h-full text-white flex justify-center items-center"
               type="submit"
             >
-              {loading?"loading...":"Register"}
+              {loading ? "loading..." : "Register"}
             </button>
           </div>
         </form>

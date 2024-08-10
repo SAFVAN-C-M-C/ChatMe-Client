@@ -91,6 +91,7 @@ export const addRegisterDetails = createAsyncThunk(
         location: string;
         phone: string;
         accountType: string;
+        doc?:string;
       };
 
     },

@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { URL } from "@/common/api";
+import { config } from "@/common/configurations";
 import { formatDate } from "@/helper/formateDate";
 import { INotification } from "@/redux/reducers/notification/notification";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import axios from "axios";
-import { config } from "process";
+
 import { FC, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 

@@ -19,12 +19,12 @@ const SearchUser:React.FC<SearchUserProps> = ({user}) => {
   }
   return (
     <>
-      <div className="user mt-1 flex items-center w-full h-auto hover:bg-slate-200 rounded-md" onClick={handleClick}>
+      <div className={`user mt-1 flex items-center w-full h-auto hover:bg-slate-200  rounded-md ${profile?.data.theme==="dark"?"hover:text-black":"hover:text-white"}`} onClick={handleClick}>
         <div className="avatar w-[35px] h-[35px] m-3">
-          <img src={user?.bio?.avatar ||  "/general/ChatMe-profile.png"} alt="avatar"  className="w-full h-full"/>
+          <img src={user?.bio?.avatar ||  "/general/ChatMe-profile.png"} alt="avatar"  className="w-full rounded-full h-full"/>
         </div>
         <div className="name">
-            <span className="font-semibold ">{user.name||"Name"}</span>
+            <span className={`font-semibold `}>{user.name||"Name"}</span>
         </div>
       </div>
     </>

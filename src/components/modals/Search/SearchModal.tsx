@@ -9,7 +9,7 @@ import {
   TextField,
   ThemeProvider,
 } from "@mui/material";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchUser from "./SearchUser";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -39,14 +39,15 @@ const SearchModal: React.FC<SearchModalProps> = ({ setOpenSearchModal }) => {
   const handleSearch=(e:React.ChangeEvent<HTMLInputElement>)=>{
     try {
         setSerachKey(e.target.value);
-    setTimeout(() => {
-        dispatch(getUsers({searchKey:serachKey}))
-    }, 500);
     } catch (error:any) {
         console.log("Something went wrong",error.message);
-        
     }
   }
+  useEffect(()=>{
+    setTimeout(() => {
+      dispatch(getUsers({searchKey:serachKey}))
+  }, 500);
+  },[dispatch, serachKey])
   return (
     <>
           <ThemeProvider

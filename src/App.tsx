@@ -38,6 +38,8 @@ import JobPage from "./pages/user/Jobs/JobPage";
 import NotificationPage from "./pages/admin/NotificationPage";
 import { getJobs } from "./redux/actions/jobs/jobAction";
 import JobViewPage from "./pages/user/Jobs/JobViewPage";
+import JobApplicationPage from "./pages/user/Jobs/JobApplicationPage";
+import MyJobApplication from "./pages/user/Jobs/MyJobApplication";
 
 function App() {
   //redux
@@ -49,6 +51,7 @@ function App() {
   const { adminRecruiterRequests } = useSelector((state: RootState) => state.adminRecruiterRequest);
   const { homePosts } = useSelector((state: RootState) => state.homePosts);
   const { userPosts } = useSelector((state: RootState) => state.userPosts);
+  const { jobs } = useSelector((state: RootState) => state.jobs);
   
   const dispatch = useDispatch<AppDispatch>();
   //local states
@@ -63,7 +66,7 @@ function App() {
     setTimeout(() => {
       setProgress(50);
     }, 300);
-    setTimeout(() => {
+    setTimeout(() => {  
       setProgress(80);
     }, 600);
     setTimeout(() => {
@@ -94,7 +97,9 @@ function App() {
       if(!homePosts){
         dispatch(getHomePosts());
       }
-      dispatch(getJobs());
+      if(!jobs){
+        dispatch(getJobs({filter:"all"}));
+      }
       dispatch(getProfileDataFirst());
       dispatch(getMyPosts());
       dispatch(getSavedPost());
@@ -143,6 +148,8 @@ function App() {
                   <Route path="/chat/u/:chatId" element={<ChatPage />} />
                   <Route path="/jobs" element={<JobPage />} />
                   <Route path="/jobs/job/:jobId" element={<JobViewPage />} />
+                  <Route path="/jobs/applications/:jobId" element={<JobApplicationPage />} />
+                  <Route path="/jobs/my-applications" element={<MyJobApplication />} />
                   
                 </>
               ) : user?.data?.role === "admin" ? (

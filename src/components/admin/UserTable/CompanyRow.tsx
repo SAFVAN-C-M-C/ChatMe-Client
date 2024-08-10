@@ -92,10 +92,10 @@ const CompanyRow: FC<CompanyRowProps> = ({ row }) => {
   return (
     <>
       <StyledTableRow>
-        <StyledTableCell align="center">{user?.name}</StyledTableCell>
-        <StyledTableCell align="center">{user?.email}</StyledTableCell>
+        <StyledTableCell align="center">{row?.name}</StyledTableCell>
+        <StyledTableCell align="center">{row?.email}</StyledTableCell>
         <StyledTableCell align="center">
-          {row.numberOfReportActions}
+          <a target="_blank" href={row.doc}>View Reg</a>
         </StyledTableCell>
         <StyledTableCell align="center">
           {row.isBlocked ? (

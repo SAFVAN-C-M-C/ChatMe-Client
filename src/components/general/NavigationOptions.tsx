@@ -38,11 +38,14 @@ const NavigationOptions: React.FC<NavigationOptionsProps> = ({
   const [openSelectFileModal, setOpenSelectFileModal] =
     useState<boolean>(false);
   const [openSearchModal, setOpenSearchModal] = useState<boolean>(false);
-  const [openCreatePostModal, setOpenCreatePostModal] =useState<boolean>(false);
-  const [openCreateJobModal, setOpenCreateJobModal] =useState<boolean>(false);
+  const [openCreatePostModal, setOpenCreatePostModal] =
+    useState<boolean>(false);
+  const [openCreateJobModal, setOpenCreateJobModal] = useState<boolean>(false);
 
   const [preview, setPreview] = useState<string | undefined>(
-    profile?.data.theme==="dark"?"/general/drag_img_bg_dr.png":"/general/drag_img_bg.png"
+    profile?.data.theme === "dark"
+      ? "/general/drag_img_bg_dr.png"
+      : "/general/drag_img_bg.png"
   );
   const [file, setFile] = useState<File | null>(null);
 
@@ -124,9 +127,9 @@ const NavigationOptions: React.FC<NavigationOptionsProps> = ({
           setOpenNotificationModal={setOpenNotificationModal}
         />
       ) : null}
-      {
-        openCreateJobModal?<CreateJobModal setOpenCreateJobModal={setOpenCreateJobModal}/>:null
-      }
+      {openCreateJobModal ? (
+        <CreateJobModal setOpenCreateJobModal={setOpenCreateJobModal} />
+      ) : null}
       {openCreatePostModal && file ? (
         <CreatePostModal
           file={file}
@@ -150,7 +153,27 @@ const NavigationOptions: React.FC<NavigationOptionsProps> = ({
         user?.data.accountType === "recruiter" ||
         user?.data.accountType === "company" ? (
           <div
-            className="options cursor-pointer flex justify-center w-[90%] mt-4 mb-4"
+            className="options cursor-pointer flex justify-center w-[90%] mt-2 mb-2 pt-2 pb-2 hover:bg-slate-200 hover:text-gray-700 rounded-lg"
+            onClick={(e) => handleOptionClick(e, value[1])}
+          >
+            <div className="option-icon w-[40%] flex justify-center relative">
+              <Icon icon={value[0]} width={26} height={26} />
+            </div>
+            <div
+              className={
+                shrink
+                  ? "option-title w-[60%] text-base  justify-start hidden"
+                  : "option-title w-[60%] text-base  justify-start hidden lg:flex"
+              }
+            >
+              <b>{title}</b>
+            </div>
+          </div>
+        ) : null
+      ) : title === "My Application" ? (
+        user?.data.accountType === "personal" ? (
+          <div
+            className="options cursor-pointer flex justify-center w-[90%] mt-2 mb-2 pt-2 pb-2 hover:bg-slate-200 hover:text-gray-700 rounded-lg"
             onClick={(e) => handleOptionClick(e, value[1])}
           >
             <div className="option-icon w-[40%] flex justify-center relative">

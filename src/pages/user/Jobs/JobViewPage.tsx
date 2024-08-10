@@ -6,6 +6,7 @@ import NavigationBar from "@/components/general/NavigationBar";
 import EditDropdown from "@/components/Jobs/EditDropdown";
 import JobDescription from "@/components/Jobs/JobDescription";
 import Skills from "@/components/Jobs/Skills";
+import ApplyForJob from "@/components/modals/ApplyForJob/ApplyForJob";
 import { useChatContext } from "@/context/ChatContext";
 import { IJobs } from "@/redux/reducers/jobs/jobs";
 import { RootState } from "@/redux/store";
@@ -19,11 +20,13 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const JobViewPage = () => {
   const { jobId } = useParams();
+  const navigate = useNavigate();
   console.log(jobId);
   const { profile } = useSelector((state: RootState) => state.profile);
   const [job, setJob] = useState<IJobs | null>(null);
   const [company, setCompany] = useState<UserDetails | null>(null);
   const [recruiter, setRecruiter] = useState<UserDetails | null>(null);
+  const [openApplyforJob,setOpenApplyforJob]=useState<boolean>(false)
   const { getChatSearch } = useChatContext();
   const handleUserClick = (userId: string) => {
     if (userId === profile?.data.userId) {
@@ -32,7 +35,7 @@ const JobViewPage = () => {
     }
     navigate(`/u/profile/${userId}`);
   };
-  const navigate = useNavigate();
+  
   const handleClick = (userId: string) => {
     getChatSearch(String(userId), navigate);
   };
@@ -105,8 +108,12 @@ const JobViewPage = () => {
       getRecruiter(job?.recruiterId);
     }
   }, [job?._id, jobId, job?.recruiterId, job?.companyId,job?.updatedAt]);
+
   return (
     <div data-theme={profile?.data.theme || "light"} className="flex">
+      {
+        openApplyforJob && job? <ApplyForJob job={job} setOpenApplyforJob={setOpenApplyforJob}/>:null
+      }
       <NavigationBar />
       <div className="job-details-container px-10 w-full">
         <div className="header mt-10 flex">
@@ -178,7 +185,7 @@ const JobViewPage = () => {
           </div>
         </div>
         <div className="job-details mt-10">
-          <div className="apply-btn btn btn-primary text-white">Apply</div>
+          <div className="apply-btn btn btn-primary text-white cursor-pointer" onClick={()=>setOpenApplyforJob(true)}>Apply</div>
           <div className="hiring-part mt-7 w-[90%] px-2 py-2 border-dashed border-[1px] rounded-lg ">
             <div className="header">
               <span className="text-xl font-medium">Hiring for the job</span>

@@ -37,7 +37,7 @@ const NavBar = () => {
     navigate(`/${option}`);
   };
   return (
-    <div className="Nav-Bar h-[100%] lg:w-[320px] w-[75px] ">
+    <div className="Nav-Bar h-[100%] lg:w-[340px] w-[95px] ">
       <div className="Nav-Bar fixed h-[100vh] lg:w-[270px] w-[75px] border-r-[.5px] border-black">
         <div className="logo-container hidden lg:block p-3 h-[90px]">
           <img

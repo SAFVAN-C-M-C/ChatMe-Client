@@ -64,9 +64,9 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
     setOpenEditPost(true);
     setShowPost(false);
   };
-  const handleReportClick=()=>{
-    setOpenReport(true)
-  }
+  const handleReportClick = () => {
+    setOpenReport(true);
+  };
   const navigate = useNavigate();
   const [saved, setSaved] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -91,26 +91,22 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleUnfollow=()=>{
+  const handleUnfollow = () => {
     try {
       console.log("clicked");
-      dispatch(unFollowUser({userId:String(post?.userId)}))
-      
-      
+      dispatch(unFollowUser({ userId: String(post?.userId) }));
     } catch (error: any) {
       console.log("something went wrong", error.message);
     }
-  }
-  const handlefollow=()=>{
+  };
+  const handlefollow = () => {
     try {
       console.log("clicked");
-      dispatch(followUser({userId:String(post?.userId)}))
-      
-      
+      dispatch(followUser({ userId: String(post?.userId) }));
     } catch (error: any) {
       console.log("something went wrong", error.message);
     }
-  }
+  };
   const handleSave = async () => {
     try {
       console.log("clicked save", `${URL}/post/save/${post._id}`);
@@ -197,9 +193,9 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
   };
   return (
     <>
-    {
-      openReport?<SendReportModal post={post} setOpenReport={setOpenReport}/>:null
-    }
+      {openReport ? (
+        <SendReportModal post={post} setOpenReport={setOpenReport} />
+      ) : null}
       {openEditPost ? (
         <EditPost post={post} setOpenEditPost={setOpenEditPost} />
       ) : showPost ? (
@@ -211,7 +207,7 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
         />
       ) : null}
 
-<Menu
+      <Menu
         id="post-options"
         aria-labelledby="post-options-button"
         anchorEl={anchorEl}
@@ -226,45 +222,55 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
           horizontal: "left",
         }}
       >
-        {myPost ? (
-          [
-            <MenuItem key="edit" onClick={handleEditClick}>Edit</MenuItem>,
-            <MenuItem key="delete" onClick={handleDelete}>Delete</MenuItem>,
-          ]
-        ) : (
-          [
-            <MenuItem key="report" onClick={handleReportClick}>Report</MenuItem>,
-          ]
-        )}
+        {myPost
+          ? [
+              <MenuItem  key="edit" onClick={handleEditClick}>
+                Edit
+              </MenuItem>,
+              <MenuItem key="delete" onClick={handleDelete}>
+                Delete
+              </MenuItem>,
+            ]
+          : [
+              <MenuItem key="report" onClick={handleReportClick}>
+                Report
+              </MenuItem>,
+            ]}
       </Menu>
-      <div className="post w-[500px] h-auto border-[.4px] border-gray-500  mt-14 rounded-xl flex flex-col">
+      <div className="post w-[98%] sm:w-[400px] lg:w-[500px] h-auto border-[.1px] border-gray-500  mt-14 rounded-xl flex flex-col">
         <div className="title-part h-[65px]  rounded-t-xl flex items-center justify-between">
-          <div
-            className="user flex items-center ml-4 cursor-pointer"
-            
-          >
+          <div className="user flex items-center ml-4 cursor-pointer">
             <div className="logo" onClick={handleUserClick}>
               <img
                 src={post.userAvatar}
-                className="w-[35px] h-[35px] rounded-full"
+                className="w-[22px] h-[22px] sm:w-[35px] sm:h-[35px]  rounded-full"
               />
             </div>
-            <div className="name flex items-center ml-2" onClick={handleUserClick}>
-              <span>{post.name}</span>
+            <div
+              className="name flex items-center ml-2"
+              onClick={handleUserClick}
+            >
+              <span className="text-xs sm:text-sm">{post.name}</span>
             </div>
             {!myPost ? (
               !follow ? (
-                <div className="follow flex items-center ml-2 p-2 bg-blue-500 rounded-md" onClick={handlefollow}>
-                  <span className="text-white">Follow</span>
+                <div
+                  className="follow flex items-center ml-7  p-2 bg-blue-500 rounded-md"
+                  onClick={handlefollow}
+                >
+                  <span className="text-white text-xs sm:text-sm">Follow</span>
                 </div>
               ) : (
-                <div className="follow flex items-center ml-2 border-[.3px] border-blue-500 p-2 rounded-md" onClick={handleUnfollow}>
-                  <span>Following</span>
+                <div
+                  className="follow flex items-center ml-7 border-[.3px] border-blue-500 p-2 rounded-md"
+                  onClick={handleUnfollow}
+                >
+                  <span className=" text-xs sm:text-sm">Following</span>
                 </div>
               )
             ) : null}
           </div>
-          <div className="option mr-4">
+          <div className="option">
             <Button
               variant="text"
               id="post-options-button"
@@ -277,12 +283,12 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
             </Button>
           </div>
         </div>
-        <div className="media-part w-[500px] h-[500px] bg-slate-500">
+        <div className="media-part w-full aspect-square  sm:w-[398px] sm:h-[398px]  lg:w-[498px] lg:h-[498px] bg-slate-500">
           {!isVideo ? (
             <img
               src={post.media}
               alt=""
-              className="w-full h-full object-cover"
+              className="w-full  object-cover"
             />
           ) : (
             <video
@@ -295,64 +301,60 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
           )}
         </div>
         <div className="bottom-section w-full h-auto rounded-b-xl ">
-          <div className="first-row pl-4 mt-1 mb-1">
-            <span className="username font-bold ">{post.name}</span>{" "}
-            <span>{post.content} </span>
+          <div className="first-row pl-2 sm:pl-4 mt-1 mb-1">
+            <span className="username font-bold text-xs sm:text-sm ">{post.name}</span>{" "}
+            <span className="username  text-xs sm:text-sm ">{post.content} </span>
           </div>
           <div className="second-row flex justify-around mt-2 mb-4  ">
             <div className="like flex justify-center items-center">
-              <span className="mr-1">{post.likes?.length}</span>
+              <span className="mr-1 text-xs sm:text-sm">{post.likes?.length}</span>
               {liked ? (
                 <Icon
                   icon="solar:like-bold"
-                  width={26}
-                  height={26}
-                  className="cursor-pointer"
+
+                  className="cursor-pointer w-[22px] h-[22px] sm:w-[26px] sm:h-[26px]"
                   onClick={handleUnLike}
                 />
               ) : (
                 <Icon
                   onClick={handleLike}
                   icon="solar:like-broken"
-                  width={26}
-                  className="cursor-pointer"
-                  height={26}
+                  
+                  className="cursor-pointer w-[22px] h-[22px] sm:w-[26px] sm:h-[26px]"
+                  
                 />
               )}
-              <span>Like</span>
+              <span className="text-xs sm:text-sm">Like</span>
             </div>
             <div
               className="comment flex justify-center items-center cursor-pointer"
               onClick={() => setShowPost(!showPost)}
             >
-              <span className="mr-1">{post.comments?.length}</span>
+              <span className="mr-1 text-xs sm:text-sm">{post.comments?.length}</span>
               <Icon
-                className="mr-1 "
+                className="mr-1 w-[22px] h-[22px] sm:w-[26px] sm:h-[26px]"
                 icon="iconamoon:comment"
-                width={26}
-                height={26}
+                
               />
-              <span>Comment</span>
+              <span className="text-xs sm:text-sm">Comment</span>
             </div>
-            <div className="save flex ">
+            <div className="save flex items-center ">
               {saved ? (
                 <Icon
                   icon="mdi:bookmark"
-                  width={26}
-                  height={26}
-                  className="cursor-pointer"
+                  
+                  className="cursor-pointer w-[22px] h-[22px] sm:w-[26px] sm:h-[26px]"
                   onClick={handleUnSave}
                 />
               ) : (
                 <Icon
                   icon="mdi:bookmark-outline"
-                  width={26}
-                  height={26}
-                  className="cursor-pointer"
+                  
+                  className="cursor-pointer w-[22px] h-[22px] sm:w-[26px] sm:h-[26px]"
                   onClick={handleSave}
                 />
               )}
-              <span>Save</span>
+              <span className="text-xs sm:text-sm">Save</span>
             </div>
           </div>
         </div>

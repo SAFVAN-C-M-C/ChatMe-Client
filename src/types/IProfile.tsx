@@ -1,6 +1,6 @@
 // import { AccountType } from "./Iuser";
 
-export interface IProfile{
+export interface IProfile {
   _id?: string;
   email?: string;
   name?: string;
@@ -51,36 +51,54 @@ interface Experience {
 
 export interface RecruiterApplication {
   _id?: string;
-  userId?: string ;
+  userId?: string;
   userEmail?: string;
   content?: string;
   name?: string;
-  avatar?:string
+  avatar?: string;
 }
-export interface BioDetails{
-  name?:string | null;
+export interface BioDetails {
+  name?: string | null;
   title?: string | null;
-  email?:string|null;
-  bio:{
+  email?: string | null;
+  bio: {
     location?: string | null;
     phone?: string | null;
     resume?: string | null;
-    doc?:string | null; 
-  }
+    doc?: string | null;
+  };
 }
 export interface Recruiters {
-  userId?: string ;
+  userId?: string;
   email?: string;
   name?: string;
-  avatar?: string |null;
+  avatar?: string | null;
 }
-export interface UserDetails{
-  _id?:string
-  userId:string,
-  avatar:string,
-  accountType:string,
-  isVerified:boolean
-  name:string;
-  location?:string;
-  email:string
+export interface UserDetails {
+  _id?: string;
+  userId: string;
+  avatar: string;
+  accountType: string;
+  isVerified: boolean;
+  name: string;
+  location?: string;
+  email: string;
+}
+export interface SuggestedUsers {
+  _id: string;
+  userId?: string;
+  accountType?: string;
+  following?: string[] | null;
+  followers?: string[] | null;
+  isVerified?: boolean;
+  bio: {
+    about?: string | null;
+    avatar?: string | null;
+    dob?: Date | null;
+    gender?: string | null;
+    resume?: string | null;
+    location?: string | null;
+    phone?: string | null;
+  };
+  name: string;
 }

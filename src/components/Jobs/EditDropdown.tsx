@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Icon } from "@iconify/react";
 import React, { FC, useState } from "react";
@@ -35,6 +36,9 @@ const EditDropdown:FC<EditDropdownProps> = ({job,getJob}) => {
         
     }
   }
+  const handleViewApplication=()=>{
+    navigate(`/jobs/applications/${job?._id}`)
+  }
   return (
     <>
     {
@@ -48,7 +52,7 @@ const EditDropdown:FC<EditDropdownProps> = ({job,getJob}) => {
           tabIndex={0}
           className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-xl"
         >
-          <li>
+          <li onClick={handleViewApplication}>
             <span>
               <Icon icon="tdesign:view-list" width={26} height={26} />
               View Applications

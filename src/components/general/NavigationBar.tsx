@@ -27,6 +27,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ isChat }) => {
     Search: ["tabler:search", "/"],
     Chat: ["icon-park-solid:message", "/chat"],
     "Create Post": ["icons8:plus", "/"],
+    "My Application":["material-symbols:post-add", "/jobs/my-applications"],
     "Create Job Post": ["material-symbols:post-add", "/"],
     Jobs: ["solar:suitcase-bold", "/jobs"],
   };
@@ -63,7 +64,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ isChat }) => {
         className={
           shrink
             ? "Nav-Bar   w-[90px] overflow-hidden relative"
-            : " overflow-hidden Nav-Bar h-[100%] lg:w-[330px] w-[75px] relative"
+            : " overflow-hidden Nav-Bar h-[100%] lg:w-[330px] w-[95px] relative"
         }
       >
         <div

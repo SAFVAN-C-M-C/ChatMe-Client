@@ -13,6 +13,8 @@ import { URL } from "@/common/api";
 import { config } from "@/common/configurations";
 import { addMorePosts } from "@/redux/reducers/posts/homePosts";
 import { CircularProgress } from "@mui/material";
+
+import Suggestions from "@/components/Home/Suggestions";
 const Home = () => {
   
   UseListenMessages()
@@ -79,10 +81,10 @@ const loadMore = () => {
 };
   return (
     <>
-      <div data-theme={profile?.data.theme || "light"} className="flex">
+      <div data-theme={profile?.data.theme || "light"} className="flex scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-100  hover:scrollbar hover:scrollbar-thumb-gray-900 hover:scrollbar-track-gray-100">
         <NavigationBar />
-        <div className="home-container w-full flex h-auto lg:pl-[42px]">
-          <div className="post-list-cover pb-3 w-[70%] overflow-auto  h-full flex items-center flex-col">
+        <div className="home-container w-full flex h-auto lg:pl-[42px] ">
+          <div className="post-list-cover pb-3 lg:w-[70%] w-full overflow-auto  h-full flex items-center flex-col">
             <div className="greeting w-full h-[50px]  flex items-center pl-4">
               <span>Hello there, </span>
               <span className="font-bold text-lg ml-1">
@@ -100,23 +102,9 @@ const loadMore = () => {
               {/* {hasMore && <div onClick={loadMore}>Load More</div>} */}
             
           </div>
-          {/* <div className="sugetion-cover w-[30%] h-full">
-            <div className="suggetion-fixed flex flex-col fixed w-[400px] right-0 top-20 h-auto ">
-              <div className="header flex w-[400px] justify-between p-5">
-                <div className="title">
-                  <span>Suggested For you</span>
-                </div>
-                <div className="shuffle">
-                  <Icon icon="ph:shuffle" width={26} height={26} />
-                </div>
-              </div>
-              <SugestedUser />
-              <SugestedUser />
-              <SugestedUser />
-              <SugestedUser />
-              <SugestedUser />
-            </div>
-          </div> */}
+          <div className="sugetion-cover hidden lg:flex w-[40%]  h-full">
+                <Suggestions/>
+          </div>
         </div>
       </div>
     </>
