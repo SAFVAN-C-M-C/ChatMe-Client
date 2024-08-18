@@ -20,8 +20,7 @@ import { BioDetails } from "../../types/IProfile";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
 import { darkTheme, lightTheme } from "@/helper/theme";
-import { getSignedUrl } from "@/services";
-import axios from "axios";
+
 
 interface EditBioModalProps {
   setOpenEditBio: Dispatch<SetStateAction<boolean>>;
@@ -88,33 +87,7 @@ const EditBioModal: React.FC<EditBioModalProps> = ({ setOpenEditBio }) => {
         return;
       }
 
-      if (file) {
-        console.log(file);
-        const type=file.type.split("/")[0] === "application"?"pdf":"jpg"
-        const signedUrl: { url: string; media: string } = await getSignedUrl("doc",type);
-        console.log(signedUrl);
-        const { url, media } = signedUrl;
-        const res = await axios.put(url, file, {
-          headers: {
-            "Content-Type":file.type.split("/")[0] === "application"?"application/pdf":"image/jpeg", // Use the file's MIME type
-          },
-          withCredentials: true,
-        });
-        if(res.status===200){
-          console.log("file uploaded successfully");
-          const data: BioDetails = {
-            name: formJson.name,
-            title: formJson.title,
-            bio: {
-              location: formJson.location,
-              phone: formJson.phone,
-              resume:`https://s3.ap-south-1.amazonaws.com/bucket.chatme.use/${media}`
-            },
-          };
-    
-          dispatch(updateBio(data));
-        }
-      } else {
+
         const data: BioDetails = {
           name: formJson.name,
           title: formJson.title,
@@ -125,7 +98,7 @@ const EditBioModal: React.FC<EditBioModalProps> = ({ setOpenEditBio }) => {
         };
   
         dispatch(updateBio(data));
-      }
+      
       
       if (!error) {
         toast.success("Profile Updated");

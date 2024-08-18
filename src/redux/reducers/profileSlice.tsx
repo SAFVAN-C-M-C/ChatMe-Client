@@ -6,8 +6,10 @@ import {
   addEducation,
   addExperience,
   addPreferedJobs,
+  addResume,
   addSkills,
   changeTheam,
+  deleteResume,
   followUser,
   getProfileDataFirst,
   ignoreRecruiterRequest,
@@ -109,6 +111,32 @@ const profileSlice = createSlice({
       .addCase(addEducation.rejected, (state, { payload }) => {
         state.loading = false;
         state.profile = null;
+        state.error = payload;
+      })
+      //add resume
+      .addCase(addResume.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addResume.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.profile = payload;
+      })
+      .addCase(addResume.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
+      })
+      //delete resume
+      .addCase(deleteResume.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteResume.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.error = null;
+        state.profile = payload;
+      })
+      .addCase(deleteResume.rejected, (state, { payload }) => {
+        state.loading = false;
         state.error = payload;
       })
       //follow user

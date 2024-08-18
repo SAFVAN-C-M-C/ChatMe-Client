@@ -12,6 +12,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from "@mui/material";
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
@@ -20,7 +24,12 @@ import styled from "styled-components";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useSelector } from "react-redux";
-import { validateEmail, validateField, validateName, validatePhone } from "@/helper/validate";
+import {
+  validateEmail,
+  validateField,
+  validateName,
+  validatePhone,
+} from "@/helper/validate";
 import { getSignedUrl } from "@/services";
 import axios from "axios";
 import { IJobApplication } from "@/types/IJob";
@@ -30,7 +39,7 @@ import { config } from "@/common/configurations";
 
 interface ApplyForJobProps {
   setOpenApplyforJob: Dispatch<SetStateAction<boolean>>;
-  job:IJobs
+  job: IJobs;
 }
 const StyledQuill = styled(ReactQuill)`
   .ql-toolbar {
@@ -65,16 +74,16 @@ const StyledQuill = styled(ReactQuill)`
     color: white;
   }
 `;
-const ApplyForJob: FC<ApplyForJobProps> = ({ setOpenApplyforJob,job }) => {
+const ApplyForJob: FC<ApplyForJobProps> = ({ setOpenApplyforJob, job }) => {
   const { profile } = useSelector((state: RootState) => state.profile);
   //Local states
   const [coverLetter, setCoverLetter] = useState<string>("");
-  const [file, setFile] = useState<File | null>(null);
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: profile?.data.email,
     name: profile?.data.name || "",
     phone: profile?.data.bio?.phone || "",
+ 
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -88,23 +97,17 @@ const ApplyForJob: FC<ApplyForJobProps> = ({ setOpenApplyforJob,job }) => {
     }
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const file = e.target.files?.[0];
-    if (file) {
-      setFile(file);
-    }
-  };
+
   const handleClose = () => {
     setOpenApplyforJob(false);
   };
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       setLoading(true);
       const formData = new FormData(e.currentTarget);
       const formJson = Object.fromEntries((formData as any).entries());
-      const {name,phone,email}=formJson
+      const { name, phone, email,resume } = formJson;
       if (!validateName(name)) {
         toast.error("Enter a proper Full name");
         setLoading(false);
@@ -125,54 +128,32 @@ const ApplyForJob: FC<ApplyForJobProps> = ({ setOpenApplyforJob,job }) => {
         setLoading(false);
         return;
       }
-      if(!file){
-        toast.error("select a resume pdf");
+      if (!validateField(resume)) {
+        toast.error("Select a resume");
         setLoading(false);
         return;
       }
-      
-        console.log(job);
-        
-      
-      //upload resume
-      
-        console.log(file);
-        const type=file.type.split("/")[0] === "application"?"pdf":"jpg"
-        const signedUrl: { url: string; media: string } = await getSignedUrl("doc",type);
-        console.log(signedUrl);
-        const { url, media } = signedUrl;
-        const res = await axios.put(url, file, {
-          headers: {
-            "Content-Type":file.type.split("/")[0] === "application"?"application/pdf":"image/jpeg",
-          },
-          withCredentials: true,
-        });
-        if(res.status===200){
-          console.log("file uploaded successfully");
-          const data:IJobApplication = {
-            name,
-            email,
-            coverLetter,
-            jobId:job?._id,
-            phone,
-            resume:`https://s3.ap-south-1.amazonaws.com/bucket.chatme.use/${media}`
-          };
-          const response=await axios.post(`${URL}/job/apply/job`, data, config);
-          if(response.status===201){
-            toast.success("Succefully applied");
-            setLoading(false);
-            handleClose()
-          }else{
-            toast.error("Server busy Please try again");
-            setLoading(false);
-            handleClose()
-          }
-        }else{
-          toast.error("Resume upload failed,Please try again");
-          setLoading(false);
-        }
-      
 
+      const data: IJobApplication = {
+        name,
+        email,
+        coverLetter,
+        jobId: job?._id,
+        phone,
+        resume,
+      };
+
+      
+      const response = await axios.post(`${URL}/job/apply/job`, data, config);
+      if (response.status === 201) {
+        toast.success("Succefully applied");
+        setLoading(false);
+        handleClose();
+      } else {
+        toast.error("Server busy Please try again");
+        setLoading(false);
+        handleClose();
+      }
     } catch (error: any) {
       console.log(error.message);
       toast.error("Please try again!");
@@ -272,22 +253,34 @@ const ApplyForJob: FC<ApplyForJobProps> = ({ setOpenApplyforJob,job }) => {
                 }}
               />
             )}
-            <label className="form-control w-full max-w-xs">
-              <div className="label">
-                <span className="label-text">Select a Resume</span>
-              </div>
-              <input
-                onChange={handleSelectFile}
-                accept=".pdf"
-                type="file"
-                className="file-input file-input-bordered file-input-primary w-full max-w-xs"
-              />
-            </label>
+            <FormControl fullWidth sx={{ mt: 1 }}>
+              <InputLabel id="resume-label">Select a Resume</InputLabel>
+              <Select
+                required
+                labelId="resume-label"
+                id="resume"
+                label="Select a Resume"
+                name="resume"
+              >
+                {profile?.data.bio.resume &&
+                profile?.data.bio.resume.length > 0 ? (
+                  profile.data.bio.resume.map((resume, index) => (
+                    <MenuItem key={index} value={String(resume.doc)}>
+                      {resume.name}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value="">No resume found</MenuItem>
+                )}
+              </Select>
+            </FormControl>
           </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">{loading?<CircularProgress />:"Submit"}</Button>
+          <Button type="submit">
+            {loading ? <CircularProgress /> : "Submit"}
+          </Button>
         </DialogActions>
       </Dialog>
     </ThemeProvider>

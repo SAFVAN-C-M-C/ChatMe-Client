@@ -13,7 +13,7 @@ export interface IProfile {
     avatar?: string | null;
     dob?: Date | null;
     gender?: string | null;
-    resume?: string | null;
+    resume?: IResumes[];
     location?: string | null;
     phone?: string | null;
   };
@@ -64,7 +64,7 @@ export interface BioDetails {
   bio: {
     location?: string | null;
     phone?: string | null;
-    resume?: string | null;
+    resume?: IResumes[];
     doc?: string | null;
   };
 }
@@ -96,9 +96,14 @@ export interface SuggestedUsers {
     avatar?: string | null;
     dob?: Date | null;
     gender?: string | null;
-    resume?: string | null;
+    resume?: IResumes[];
     location?: string | null;
     phone?: string | null;
   };
   name: string;
+}
+export interface IResumes {
+  _id: string | null;
+  name: string | null;
+  doc: string | null;
 }

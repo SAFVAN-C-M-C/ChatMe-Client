@@ -19,6 +19,7 @@ import { getUserDataFirst } from "../../../redux/actions/user/userActions";
 import { useNavigate } from "react-router-dom";
 import UseListenMessages from "@/hooks/UseListenMessages";
 import UseListenNotification from "@/hooks/UseListenNotification";
+import ResumePart from "@/components/Profile/Personal/ResumePart";
 
 const ProfilePage = () => {
   UseListenMessages()
@@ -48,6 +49,7 @@ const ProfilePage = () => {
             <>
               <UserEducation />
               <UserExprerience />
+              <ResumePart />
               <UserSkills />
               <UserPreferedJob />
             </>

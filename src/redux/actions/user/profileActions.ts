@@ -102,6 +102,38 @@ export const getProfileDataFirst = createAsyncThunk(
       }
     }
   )
+  export const addResume= createAsyncThunk(
+    "profile/addResume",
+    async (formData:{
+name:string,
+doc:string;
+    },{rejectWithValue})=>{
+      try{
+        
+        const { data } = await axios.post(`${URL}/profile/update/resume/add`,formData, config);
+        console.log(data);
+        
+        return data;
+      }catch(error:any){
+        return handleError(error, rejectWithValue);
+      }
+    }
+  )
+  export const deleteResume= createAsyncThunk(
+    "profile/deleteResume",
+    async (formData:{
+id:string,
+    },{rejectWithValue})=>{
+      try{
+        
+        const { data } = await axios.delete(`${URL}/profile/update/resume/delete/${formData.id}`, config);
+        console.log(data);
+        return data;
+      }catch(error:any){
+        return handleError(error, rejectWithValue);
+      }
+    }
+  )
   export const addSkills= createAsyncThunk(
     "profile/addSkills",
     async (formData:{
