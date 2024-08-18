@@ -15,25 +15,30 @@ export interface IPosts {
   userAvatar?: string;
   content?: string;
   likes?: string[];
-  comments?: IComments[];
+  comments?: string[];
+  createdAt:Date
 }
-export interface IComments {
-  _id?: string;
-  comment?: string;
-  name?: string;
-  userAvatar?: string;
-  userId?: string;
-  likes?: string[];
-}
+
 export interface ISavedPosts {
   saved:string[]
   savedPost:IPosts[]
 }
 export interface AddCommentPayload {
   postId: string;
-  comment: IComments;
+  comment: string;
 }
 export interface DeleteCommentPayload {
   postId: string;
   commentId: string;
+}
+export interface IComments{
+  _id: string;
+  postId: string;
+  comment: string;
+  name: string;
+  userAvatar: string;
+  userId: string;
+  likes: string[];
+  replyId?: string;
+  replys: number;
 }

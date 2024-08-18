@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
-// import { handleError } from "./configurations";
 
 // Constants for API endpoints
 export const URL = "http://localhost:5555/api";
-
 
 const apiInstance = axios.create({
   baseURL: URL,
@@ -12,86 +10,13 @@ const apiInstance = axios.create({
 });
 
 // Response interceptor
-apiInstance.interceptors.response.use((response) => {
-  return response.data;
-}, (error: AxiosError) => {
-  console.log(error.message);
-  throw error; 
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+apiInstance.interceptors.response.use(
+  response => response.data,
+  (error: AxiosError) => {
+    console.error("API Error:", error.message);
+    return Promise.reject(error); // Ensures the error is properly propagated
+  }
+);
 
 // Function to handle common requests
 export const commonRequest = async (
@@ -99,7 +24,7 @@ export const commonRequest = async (
   route: string,
   body?: any,
   config: AxiosRequestConfig = {}
-): Promise<any> => {
+) => {
   const requestConfig: AxiosRequestConfig = {
     method,
     url: route,
@@ -112,17 +37,18 @@ export const commonRequest = async (
     return await apiInstance(requestConfig);
   } catch (error) {
     console.error("Error in commonRequest:", error);
-    return error; 
+    throw error;
   }
 };
 
-export const commonReduxRequest = async (
+// Function to handle Redux-compatible requests
+export const commonReduxRequest = async(
   method: Method,
   route: string,
-  rejectWithValue?: (error: AxiosError) => void, // Now optional
+  rejectWithValue?: (error: AxiosError) => void,
   body?: any,
   config: AxiosRequestConfig = {}
-): Promise<any> => {
+)=> {
   const requestConfig: AxiosRequestConfig = {
     method,
     url: route,
@@ -134,12 +60,12 @@ export const commonReduxRequest = async (
   try {
     const response = await apiInstance(requestConfig);
     return response;
-  } catch (error:any) {
+  } catch (error: any) {
     console.error("Request failed with error:", error);
     if (rejectWithValue) {
-      return rejectWithValue(error);  
+      return rejectWithValue(error);
     } else {
-      throw error;  
+      throw error;
     }
   }
 };

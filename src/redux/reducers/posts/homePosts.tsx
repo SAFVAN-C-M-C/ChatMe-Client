@@ -55,7 +55,7 @@ const homePostsSlice = createSlice({
       const { postId, commentId } = action.payload;
       const post = state.homePosts?.data.find((post) => post._id === postId);
       if (post) {
-        post.comments = post?.comments?.filter((comment) => comment._id !== commentId);
+        post.comments = post?.comments?.filter((comment) => comment !== commentId);
       }
     },
     addMorePosts(state, action: PayloadAction<HomePostsPayload>) {

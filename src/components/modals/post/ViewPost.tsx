@@ -1,10 +1,25 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Icon } from "@iconify/react";
-import { Button, Dialog, Menu, MenuItem, TextField } from "@mui/material";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Button,
+  CircularProgress,
+  Dialog,
+  Menu,
+  MenuItem,
+  TextField,
+} from "@mui/material";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { getFileExtension } from "../../../helper/getExtention";
-import { IPosts } from "../../../types/IPosts";
+import { IComments, IPosts } from "../../../types/IPosts";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import toast from "react-hot-toast";
@@ -25,6 +40,7 @@ import { likeMyPost, unlikeMyPost } from "@/redux/reducers/posts/userPosts";
 import { getSavedPost } from "@/redux/actions/posts/savedPostAction";
 import Comments from "./Comments";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
+import NothingHere from "@/components/general/NothingHere";
 
 interface ViewPostProps {
   setOpenViewPost: Dispatch<SetStateAction<boolean>>;
@@ -45,8 +61,13 @@ export const ViewPost: React.FC<ViewPostProps> = ({
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
   const [comment, setComment] = useState("");
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const loader = useRef(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
+  const [comments, setComments] = useState<IComments[]>([]);
 
+  const commentInput = useRef<HTMLTextAreaElement | null>(null);
   const onEmojiClick = (emojiObject: EmojiClickData) => {
     setComment((prevMessage) => prevMessage + emojiObject.emoji);
   };
@@ -70,6 +91,7 @@ export const ViewPost: React.FC<ViewPostProps> = ({
       toast.error(error);
     }
   }, [error]);
+
   const handleLike = async () => {
     try {
       console.log("clicked");
@@ -92,6 +114,7 @@ export const ViewPost: React.FC<ViewPostProps> = ({
       console.log("something went wrong", error.message);
     }
   };
+
   const handleUnLike = async () => {
     try {
       console.log("clicked");
@@ -172,12 +195,37 @@ export const ViewPost: React.FC<ViewPostProps> = ({
       setIsVideo(true);
     }
   }, []);
+  const getComments = async (postId: string,page:number) => {
+    try {
+      const res = await axios.get(
+        `${URL}/post/get/comment/${postId}?page=${page}&limit=9`
+      );
+      console.log(res);
+
+      if (res.status === 200) {
+        setComments((prev) => [
+          ...prev,
+          ...res.data.data.filter(
+            (newComment: { _id: string }) =>
+              !prev.some(
+                (existingComment) => existingComment._id === newComment._id
+              )
+          ),
+        ]);
+      }
+      if (page >= res.data.totalPages) {
+        setHasMore(false);
+      }
+    } catch (error: any) {
+      console.log("something went wrong", error.message);
+    }
+  };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setComment(e.target.value);
   };
-  const handleCommentPost = async (e: React.MouseEvent<HTMLSpanElement>) => {
+  const handleCommentPost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const formData = new FormData();
@@ -194,16 +242,11 @@ export const ViewPost: React.FC<ViewPostProps> = ({
         dispatch(
           addComment({
             postId: String(post._id),
-            comment: {
-              _id: String(response.data.data),
-              comment: String(formData.get("comment")),
-              likes: [],
-              name: String(profile?.data.name),
-              userAvatar: String(profile?.data.bio.avatar),
-              userId: String(user?.data._id),
-            },
+            comment: response.data.data._id,
           })
         );
+        setComments((old)=>[response.data.data,...old])
+        setComment("");
         if (post.userId === user?.data._id) {
           dispatch(getMyPosts());
         }
@@ -213,6 +256,14 @@ export const ViewPost: React.FC<ViewPostProps> = ({
       toast.error("Something went wrong,please try again!");
     }
   };
+  useEffect(() => {
+    if (post._id) {
+      getComments(post._id,page);
+    }
+  }, [post._id, page]);
+  const loadMore = () => {
+    setPage(prevPage => prevPage + 1);
+};
   return (
     <>
       <Menu
@@ -276,14 +327,28 @@ export const ViewPost: React.FC<ViewPostProps> = ({
               </div>
             </div>
             <div className="comment-list-section border-b-[.5px] border-gray-500 overflow-y-scroll h-[510px] w-[500px]">
-              {post.comments?.map((comment, index) => (
-                <Comments
-                  key={index}
-                  postId={String(post._id)}
-                  postUser={String(post.userId)}
-                  comment={comment}
-                />
-              ))}
+              {comments && comments.length > 0 ? (
+                comments?.map((comment, index) => (
+                  <Comments
+                    comments={comments}
+                    setComments={setComments}
+                    isReply={false}
+                    getComments={getComments}
+                    key={index}
+                    postId={String(post._id)}
+                    postUser={String(post.userId)}
+                    comment={comment}
+                  />
+                ))
+              ) : (
+                <NothingHere />
+              )}
+              {/* {hasMore && (
+                <div className="mt-2" ref={loader}>
+                  <CircularProgress />
+                </div>
+              )} */}
+              {hasMore && <div onClick={loadMore} className="w-full  flex justify-center ">Load More</div>}
             </div>
             <div className="first-row pl-4">
               <span className="username font-bold ">{post.name}</span>{" "}
@@ -337,10 +402,13 @@ export const ViewPost: React.FC<ViewPostProps> = ({
                 <span>Save</span>
               </div>
             </div>
-            <div className="relative comment-section flex items-center border-t-[.5px] w-[500px] h-[58px] mt-2 border-gray-500">
+            <form
+              onSubmit={handleCommentPost}
+              className="relative comment-section flex items-center border-t-[.5px] w-[500px] h-[58px] mt-2 border-gray-500"
+            >
               {showEmojiPicker && (
                 <div className="emoji-picker-container">
-                  <EmojiPicker  onEmojiClick={onEmojiClick} />
+                  <EmojiPicker onEmojiClick={onEmojiClick} />
                 </div>
               )}
               <div
@@ -349,9 +417,11 @@ export const ViewPost: React.FC<ViewPostProps> = ({
               >
                 <Icon icon="mingcute:emoji-line" width={26} height={26} />
               </div>
+
               <div className="input-section w-[390px]  flex items-center">
                 {" "}
                 <TextField
+                  inputRef={commentInput}
                   fullWidth
                   value={comment}
                   onChange={handleCommentChange}
@@ -362,11 +432,11 @@ export const ViewPost: React.FC<ViewPostProps> = ({
                 />
               </div>
               <div className="post-section">
-                <span onClick={handleCommentPost} className="text-blue-600">
+                <button type="submit" className="text-blue-600">
                   Post
-                </span>
+                </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </Dialog>
