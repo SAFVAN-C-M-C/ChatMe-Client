@@ -2,31 +2,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getUsers } from "@/redux/actions/search/searchUserAction";
 import { IProfile } from "@/types/IProfile";
-export interface SearchUserPayload{
+import { IPosts } from "@/types/IPosts";
+export interface SearchPayload{
     success:boolean;
-    data:IProfile[];
+    data:IProfile[] | IPosts[];
     message:string;
     key:string;
   }
-export interface SearchUserState {
+export interface SearchState {
     error: any | null;
-    searchUser: SearchUserPayload | null;
+    searchData: SearchPayload | null;
     loading: boolean;
   }
-const initialState: SearchUserState = {
+const initialState: SearchState = {
     loading: false as boolean,
-    searchUser: null as any | null,
+    searchData: null as any | null,
     error: null as any | null,
   };
-const searchUserSlice = createSlice({
-    name: "searchUser",
+const searchSlice = createSlice({
+    name: "searchData",
     initialState,
     reducers: {
       updateError: (state, { payload }) => {
         state.error = payload;
       },
       updateSerachKey:(state,{payload})=>{
-        state.searchUser=payload
+        state.searchData=payload
       }
     },
     extraReducers: (builder) => {
@@ -38,16 +39,16 @@ const searchUserSlice = createSlice({
       .addCase(getUsers.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.error = null;
-        state.searchUser = payload;
+        state.searchData = payload;
       })
       .addCase(getUsers.rejected, (state, { payload }) => {
         state.loading = false;
-        state.searchUser = null;
+        state.searchData = null;
         state.error = payload;
       })
 
     },
   });
 
-  export const { updateError,updateSerachKey } = searchUserSlice.actions;
-  export default searchUserSlice.reducer;
+  export const { updateError,updateSerachKey } = searchSlice.actions;
+  export default searchSlice.reducer;

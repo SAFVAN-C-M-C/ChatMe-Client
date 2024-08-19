@@ -4,14 +4,16 @@ import { config, handleError } from "@/common/configurations";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// get user details
+// get serach details
 export const getUsers = createAsyncThunk(
     "search/getUsers",
-    async (formData:{searchKey:string}, { rejectWithValue }) => {
+    async (formData:{searchKey:string,filter:string}, { rejectWithValue }) => {
       try {
-        console.log(`${URL}//`);
-        
-        const { data } = await axios.get(`${URL}/profile/users/search?key=${formData.searchKey}`, config);
+        let url=`${URL}/profile/users/search?key=${formData.searchKey}`
+        if(formData.filter==="post"){
+          url=`${URL}/post/posts/search?key=${formData.searchKey}`
+        }
+        const { data } = await axios.get(url, config);
         return data;
       } catch (error: any) {
         return handleError(error, rejectWithValue);

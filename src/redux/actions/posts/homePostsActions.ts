@@ -9,8 +9,12 @@ import { URL } from "../../../common/api";
     "post/getHomePost",
     async (_, { rejectWithValue }) => {
       try {
+        console.log("hi there");
+        
         const { data } = await axios.get(`${URL}/post/`, config);
+        console.log("hi there",data);
         return data;
+        
       } catch (error: any) {
         return handleError(error, rejectWithValue);
       }

@@ -4,6 +4,7 @@ export interface CreatePostCredentials {
   userId?: string;
   media?: string;
   content?: string;
+  tags:string[]
   userAvatar?: string;
 }
 export interface IPosts {

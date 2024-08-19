@@ -60,12 +60,14 @@ const homePostsSlice = createSlice({
     },
     addMorePosts(state, action: PayloadAction<HomePostsPayload>) {
       if (state.homePosts) {
-        state.homePosts.data = [...state.homePosts.data, ...action.payload.data];
+        const existingPostIds = new Set(state.homePosts.data.map(post => post._id));
+        const newPosts = action.payload.data.filter(post => !existingPostIds.has(post._id));
+        state.homePosts.data = [...state.homePosts.data, ...newPosts];
         state.homePosts.totalPages = action.payload.totalPages;
       } else {
         state.homePosts = action.payload;
       }
-    },
+    }
   },
   extraReducers: (builder) => {
     builder

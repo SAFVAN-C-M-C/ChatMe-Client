@@ -15,6 +15,7 @@ import { addMorePosts } from "@/redux/reducers/posts/homePosts";
 import { CircularProgress } from "@mui/material";
 
 import Suggestions from "@/components/Home/Suggestions";
+import { getHomePosts } from "@/redux/actions/posts/homePostsActions";
 const Home = () => {
   
   UseListenMessages()
@@ -28,6 +29,9 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const loader = useRef(null);
+  useEffect(()=>{
+    dispatch(getHomePosts())
+  },[])
   useEffect(() => {
     const fetchPosts = async () => {
       try {

@@ -19,6 +19,7 @@ import { CreatePostCredentials } from "../../../types/IPosts";
 import { updateError } from "../../../redux/reducers/posts/userPosts";
 import { createPosts } from "../../../redux/actions/posts/userPostsAction";
 import { validateField } from "../../../helper/validate";
+import { getHomePosts } from "@/redux/actions/posts/homePostsActions";
 
 interface CreatePostModalProps {
   file: File;
@@ -64,6 +65,10 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
         toast.error("Caption is required")
         return
       }
+      let tags:string[]=[];
+      if(validateField(formJson.tags)){
+        tags=formJson.tags.split('#')
+      }
       const signedUrl: { url: string; media: string } = await getSignedUrl("post", type);
       
       const { url, media } = signedUrl;
@@ -86,11 +91,11 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
           name:profile?.data.name,
           media: `https://s3.ap-south-1.amazonaws.com/bucket.chatme.use/${media}`,
           content:formJson.content,
-          email:profile?.data.email,
-          userId:profile?.data.userId,
-          userAvatar:String(profile?.data.bio.avatar)
+          userAvatar:String(profile?.data.bio.avatar),
+          tags
         };
         dispatch(createPosts(createPostData));
+        dispatch(getHomePosts());
         toast.success("Post Created")
         setUploading(false)
         setOpenSelectFileModal(false)
@@ -148,6 +153,18 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             fullWidth
             variant="standard"
           />
+                    <TextField
+            autoFocus
+            margin="dense"
+            id="tags"
+            name="tags"
+            placeholder="Enter a good tags"
+            label="Enter a tags"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+          <p className="text-sm text-blue-600">Enter new tag with a '#' without space.It will help to find your post more easly</p>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
