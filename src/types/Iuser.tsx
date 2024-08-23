@@ -3,10 +3,10 @@ export interface IUserLogin {
   email: string | null;
   google?: boolean;
 }
-export enum AccountType{
-  personal="personal",
-  company="company",
-  recruiter="recruiter"
+export enum AccountType {
+  personal = "personal",
+  company = "company",
+  recruiter = "recruiter",
 }
 
 export interface UserState {
@@ -19,7 +19,7 @@ export interface UserType {
   id: string;
   email: string;
   name: string;
-  role: string
+  role: string;
 }
 
 export interface ErrorType {
@@ -30,7 +30,7 @@ export interface ErrorType {
 }
 
 export interface IUserSelector {
-  user:UserState,
-  loading: boolean,
-  error: null | string
+  user: UserState;
+  loading: boolean;
+  error: null | string;
 }

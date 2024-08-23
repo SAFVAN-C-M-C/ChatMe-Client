@@ -2,16 +2,10 @@
 import { Icon } from "@iconify/react";
 import { FC } from "react";
 
-
-
-interface ControlsProps{
-
-}
-const Controls:FC<ControlsProps> = () => {
-
+interface ControlsProps {}
+const Controls: FC<ControlsProps> = () => {
   return (
     <>
-
       <div className="dropdown dropdown-end absolute right-2">
         <div tabIndex={0} role="button" className=" m-1">
           <Icon className="" icon="cil:options" width={26} height={26} />
@@ -26,13 +20,13 @@ const Controls:FC<ControlsProps> = () => {
               View Applications
             </span>
           </li>
-          <li >
+          <li>
             <span>
               <Icon icon="ic:outline-edit" width={26} height={26} />
               Edit
             </span>
           </li>
-          <li >
+          <li>
             <span>
               <Icon icon="material-symbols:delete" width={26} height={26} />
               Delete{" "}

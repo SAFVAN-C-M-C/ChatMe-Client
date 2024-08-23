@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { getUserDataFirst } from "@/redux/actions/user/userActions";
 import { getProfileDataFirst } from "@/redux/actions/user/profileActions";
 import { getAdminUsersDetails } from "@/redux/actions/admin/adminUserAction";
@@ -46,19 +46,25 @@ function App() {
   const { user } = useSelector((state: RootState) => state.user);
   const { profile } = useSelector((state: RootState) => state.profile);
   const { adminUser } = useSelector((state: RootState) => state.adminUser);
-  const { adminCompanies } = useSelector((state: RootState) => state.adminCompany);
-  const { adminCompanyRequests } = useSelector((state: RootState) => state.adminCompanyRequest);
-  const { adminRecruiterRequests } = useSelector((state: RootState) => state.adminRecruiterRequest);
+  const { adminCompanies } = useSelector(
+    (state: RootState) => state.adminCompany
+  );
+  const { adminCompanyRequests } = useSelector(
+    (state: RootState) => state.adminCompanyRequest
+  );
+  const { adminRecruiterRequests } = useSelector(
+    (state: RootState) => state.adminRecruiterRequest
+  );
+  const { adminReport } = useSelector((state: RootState) => state.adminReport);
   const { homePosts } = useSelector((state: RootState) => state.homePosts);
   const { userPosts } = useSelector((state: RootState) => state.userPosts);
   const { jobs } = useSelector((state: RootState) => state.jobs);
-  
+
   const dispatch = useDispatch<AppDispatch>();
   //local states
   const [progress, setProgress] = useState(0);
   const location = useLocation();
   const [loading, setLoading] = useState(true);
-
 
   //useeffects
   useEffect(() => {
@@ -66,7 +72,7 @@ function App() {
     setTimeout(() => {
       setProgress(50);
     }, 300);
-    setTimeout(() => {  
+    setTimeout(() => {
       setProgress(80);
     }, 600);
     setTimeout(() => {
@@ -78,27 +84,32 @@ function App() {
   }, [location]);
 
   useEffect(() => {
-    console.log("On loading the app user=",user);
-    console.log("On loading the app profile=",profile);
-    console.log("On loading the app profile=",adminUser);
-    console.log("On loading the app profile=",);
-    
     if (!user) {
       dispatch(getUserDataFirst());
     }
-    if(user?.data?._id && user.data.role==="admin"){
-      dispatch(getAdminUsersDetails())
-      dispatch(getAdminCompanyDetails())
-      dispatch(getAdminCompanyRequestsDetails())
-      dispatch(getAdminRecruiterRequestDetails())
-      dispatch(getReports())
+    if (user?.data?._id && user.data.role === "admin") {
+      if (!adminUser) {
+        dispatch(getAdminUsersDetails({ page: 1 }));
+      }
+      if (!adminCompanies) {
+        dispatch(getAdminCompanyDetails({ page: 1 }));
+      }
+      if (!adminCompanyRequests) {
+        dispatch(getAdminCompanyRequestsDetails({ page: 1 }));
+      }
+      if (!adminRecruiterRequests) {
+        dispatch(getAdminRecruiterRequestDetails({ page: 1 }));
+      }
+      if (!adminReport) {
+        dispatch(getReports({ page: 1 }));
+      }
     }
-    if(user?.data?._id && user.data.role==="user"){
-      if(!homePosts){
+    if (user?.data?._id && user.data.role === "user") {
+      if (!homePosts) {
         dispatch(getHomePosts());
       }
-      if(!jobs){
-        dispatch(getJobs({filter:"all"}));
+      if (!jobs) {
+        dispatch(getJobs({ filter: "all" }));
       }
       dispatch(getProfileDataFirst());
       dispatch(getMyPosts());
@@ -116,14 +127,24 @@ function App() {
         setLoading(false);
       }, 2000);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch,user?.data?._id,profile?.success,adminUser?.success,adminCompanies?.success,adminCompanyRequests?.success,adminRecruiterRequests?.success,homePosts?.data.length,userPosts?.data.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dispatch,
+    user?.data?._id,
+    profile?.success,
+    adminUser?.success,
+    adminCompanies?.success,
+    adminCompanyRequests?.success,
+    adminRecruiterRequests?.success,
+    homePosts?.data.length,
+    userPosts?.data.length,
+  ]);
   // useEffect(()=>{
-  //   if(user?.data._id){    
+  //   if(user?.data._id){
   //     dispatch(getProfileDataFirst())
   //   }
   // },[user?.data._id])
-  
+
   return (
     <>
       {loading ? (
@@ -143,24 +164,41 @@ function App() {
                 <>
                   <Route path="/" element={<Home />} />
                   <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/u/profile/:userId" element={<UserProfilePage />} />
+                  <Route
+                    path="/u/profile/:userId"
+                    element={<UserProfilePage />}
+                  />
                   <Route path="/chat" element={<ChatPage />} />
                   <Route path="/chat/u/:chatId" element={<ChatPage />} />
                   <Route path="/jobs" element={<JobPage />} />
                   <Route path="/jobs/job/:jobId" element={<JobViewPage />} />
-                  <Route path="/jobs/applications/:jobId" element={<JobApplicationPage />} />
-                  <Route path="/jobs/my-applications" element={<MyJobApplication />} />
-                  
+                  <Route
+                    path="/jobs/applications/:jobId"
+                    element={<JobApplicationPage />}
+                  />
+                  <Route
+                    path="/jobs/my-applications"
+                    element={<MyJobApplication />}
+                  />
                 </>
               ) : user?.data?.role === "admin" ? (
                 <>
                   <Route path="/" element={<AdminHome />} />
                   <Route path="/admin/users" element={<Users />} />
                   <Route path="/admin/company" element={<Company />} />
-                  <Route path="/admin/company/requests" element={<CompanyRequests />} />
-                  <Route path="/admin/recruiter/requests" element={<RecruiterRequests />} />
+                  <Route
+                    path="/admin/company/requests"
+                    element={<CompanyRequests />}
+                  />
+                  <Route
+                    path="/admin/recruiter/requests"
+                    element={<RecruiterRequests />}
+                  />
                   <Route path="/admin/reports" element={<Reports />} />
-                  <Route path="/admin/notification" element={<NotificationPage />} />
+                  <Route
+                    path="/admin/notification"
+                    element={<NotificationPage />}
+                  />
                 </>
               ) : (
                 <Route path="/" element={<Navigate to="/login" />} />

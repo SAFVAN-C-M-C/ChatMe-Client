@@ -92,9 +92,13 @@ const UserBio = () => {
         <div className="first-row w-full flex justify-center h-[50px]  mt-3 mb-3">
           <div className="provile-avatar mr-4 w-[30%] flex justify-center">
             <img
-              src="/general/ChatMe-profile.png"
+              src={
+                profile?.data.bio?.avatar
+                  ? profile?.data.bio?.avatar
+                  : "/general/ChatMe-profile.png"
+              }
               alt="avatar"
-              className="w-[40px] h-[40px]"
+              className="w-[40px] h-[40px] rounded-full"
             />{" "}
           </div>
           <div className="user-name w-[70%] flex-wrap h-full flex items-center">
@@ -106,7 +110,7 @@ const UserBio = () => {
         <div className="second-row w-full flex justify-around h-auto">
           <div className="post">
             <p>
-              <span className="font-bold flex justify-center">0 </span>Posts
+              <span className="font-bold flex justify-center">{userPosts?.data ? userPosts?.data.length : "0"}{" "} </span>Posts
             </p>
           </div>
           <div className="follower">
@@ -129,7 +133,7 @@ const UserBio = () => {
         <div className="thrid-row mt-2 ml-2  flex w-full justify-between">
           {profile?.data?.title ? (
             <div className="title">
-              <span className="text-gray-400">Web Developer</span>
+              <span className="text-gray-400">{profile?.data?.title}</span>
             </div>
           ) : (
             <div className="title">
@@ -188,14 +192,6 @@ const UserBio = () => {
               height={26}
             />
             <span className="text-gray-400">{profile?.data.email}</span>
-          </div>
-        ) : null}
-        {profile?.data.bio?.resume ? (
-          <div className="seventh-row ml-2 mb-2  mt-2 flex">
-            <span className="text-blue-600 flex cursor-pointer">
-              <Icon icon="carbon:document" width={26} height={26} />
-              <p>View Resume</p>
-            </span>
           </div>
         ) : null}
       </div>
@@ -323,23 +319,7 @@ const UserBio = () => {
               <span className="text-gray-400">{profile?.data?.email}</span>
             </div>
           ) : null}
-          {profile?.data?.bio?.resume ? (
-            <div className="sixth-row ml-2 mt-2 mb-3 flex">
-              <a
-                href={profile.data.bio.resume}
-                target="_blank"
-                className="flex"
-              >
-                <Icon
-                  className="text-gray-400 mr-1"
-                  icon="carbon:document"
-                  width={26}
-                  height={26}
-                />
-                <span className="text-gray-400">View Resume</span>
-              </a>
-            </div>
-          ) : null}
+          
         </div>
       </div>
     </>

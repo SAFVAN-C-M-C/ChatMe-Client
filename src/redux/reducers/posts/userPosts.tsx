@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IComments } from "@/types/IPosts";
-import { createPosts, deletePost, editPost, getMyPosts } from "@/redux/actions/posts/userPostsAction";
-
+import {
+  createPosts,
+  deletePost,
+  editPost,
+  getMyPosts,
+} from "@/redux/actions/posts/userPostsAction";
 
 export interface IUserPosts {
   _id?: string;
@@ -10,10 +13,10 @@ export interface IUserPosts {
   name?: string;
   userId?: string;
   media?: string;
-  userAvatar?:string
+  userAvatar?: string;
   content?: string;
   likes?: string[];
-  comments?: IComments[];
+  comments?: string[];
 }
 export interface UserPostsPayload {
   success: boolean;
@@ -39,14 +42,20 @@ const userPostsSlice = createSlice({
     updateError: (state, { payload }) => {
       state.error = payload;
     },
-    likeMyPost(state, action: PayloadAction<{ postId: string; userId: string }>) {
+    likeMyPost(
+      state,
+      action: PayloadAction<{ postId: string; userId: string }>
+    ) {
       const { postId, userId } = action.payload;
       const post = state.userPosts?.data.find((post) => post._id === postId);
       if (post && !post.likes?.includes(userId)) {
         post.likes?.push(userId);
       }
     },
-    unlikeMyPost(state,action: PayloadAction<{ postId: string; userId: string }>) {
+    unlikeMyPost(
+      state,
+      action: PayloadAction<{ postId: string; userId: string }>
+    ) {
       const { postId, userId } = action.payload;
       const post = state.userPosts?.data.find((post) => post._id === postId);
       if (post) {
@@ -84,8 +93,8 @@ const userPostsSlice = createSlice({
         state.userPosts = null;
         state.error = null;
       })
-       //edit my posts
-       .addCase(editPost.pending, (state) => {
+      //edit my posts
+      .addCase(editPost.pending, (state) => {
         state.loading = true;
       })
       .addCase(editPost.fulfilled, (state, { payload }) => {
@@ -115,6 +124,6 @@ const userPostsSlice = createSlice({
   },
 });
 
-export const { updateError,likeMyPost,unlikeMyPost } = userPostsSlice.actions;
+export const { updateError, likeMyPost, unlikeMyPost } = userPostsSlice.actions;
 
 export default userPostsSlice.reducer;

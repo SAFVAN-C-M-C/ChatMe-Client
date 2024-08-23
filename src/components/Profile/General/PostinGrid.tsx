@@ -40,7 +40,7 @@ const PostinGrid: React.FC<PostinGridProps> = ({ post }) => {
       {openEditPost?<EditPost post={post} setOpenEditPost={setOpenEditPost}/>:showPost ? <ViewPost myPost={myPost} setOpenEditPost={setOpenEditPost} setOpenViewPost={setShowPost} post={post} /> : null}
       <div
         onClick={handlePostViewOpen}
-        className="post  w-[75px] h-[75px] md:w-[200px] bg-slate-600 md:h-[200px] lg:w-[250px] lg:h-[250px] m-1 "
+        className="post bg-slate-600 w-[100px] h-[100px] sm:w-[150px] sm:h-[150px] md:w-[200px] md:h-[200px] lg:w-[250px] lg:h-[250px]"
       >
         {
           !isVideo?

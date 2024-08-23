@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-refresh/only-export-components */
 import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
 
-// Constants for API endpoints
-export const URL = "http://localhost:5555/api";
+export const URL = import.meta.env.VITE_CHAT_ME_APP_SERVER_URL;
 
 const apiInstance = axios.create({
   baseURL: URL,
@@ -11,7 +11,7 @@ const apiInstance = axios.create({
 
 // Response interceptor
 apiInstance.interceptors.response.use(
-  response => response.data,
+  (response) => response.data,
   (error: AxiosError) => {
     console.error("API Error:", error.message);
     return Promise.reject(error); // Ensures the error is properly propagated
@@ -42,13 +42,13 @@ export const commonRequest = async (
 };
 
 // Function to handle Redux-compatible requests
-export const commonReduxRequest = async(
+export const commonReduxRequest = async (
   method: Method,
   route: string,
   rejectWithValue?: (error: AxiosError) => void,
   body?: any,
   config: AxiosRequestConfig = {}
-)=> {
+) => {
   const requestConfig: AxiosRequestConfig = {
     method,
     url: route,

@@ -11,7 +11,7 @@ export default function Saved() {
       
       return (
         <>
-          <div className="post-cover flex justify-start flex-wrap w-[250px] lg:w-[780px] md:w-[630px] h-auto  rounded-xl  mt-12">
+          <div className="flex justify-start flex-wrap w-[80%] gap-2  h-auto  mt-12">
             {savedPosts?.data?.savedPost?.length !== 0
               ? savedPosts?.data?.savedPost?.map((post, index) => <PostinGrid  key={index} post={post}/>)
               : "No data"}

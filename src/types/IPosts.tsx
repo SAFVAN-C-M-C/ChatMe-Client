@@ -4,7 +4,7 @@ export interface CreatePostCredentials {
   userId?: string;
   media?: string;
   content?: string;
-  tags:string[]
+  tags: string[];
   userAvatar?: string;
 }
 export interface IPosts {
@@ -17,12 +17,12 @@ export interface IPosts {
   content?: string;
   likes?: string[];
   comments?: string[];
-  createdAt:Date
+  createdAt: Date;
 }
 
 export interface ISavedPosts {
-  saved:string[]
-  savedPost:IPosts[]
+  saved: string[];
+  savedPost: IPosts[];
 }
 export interface AddCommentPayload {
   postId: string;
@@ -32,7 +32,7 @@ export interface DeleteCommentPayload {
   postId: string;
   commentId: string;
 }
-export interface IComments{
+export interface IComments {
   _id: string;
   postId: string;
   comment: string;

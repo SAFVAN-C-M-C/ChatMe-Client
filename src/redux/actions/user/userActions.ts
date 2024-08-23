@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { URL } from "../../../common/api";
+
 import { config, handleError } from "../../../common/configurations";
 import { IUserLogin } from "../../../types/Iuser";
+import { URL } from "@/common/api";
 
 axios.defaults.withCredentials = true;
 
@@ -13,8 +14,8 @@ export const getUserDataFirst = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(`${URL}/auth/`, config);
-      if(data.data.isBlocked){
-        return null
+      if (data.data.isBlocked) {
+        return null;
       }
       return data;
     } catch (error: any) {
@@ -43,7 +44,7 @@ export const googleLoginOrSignUp = createAsyncThunk(
 //logout
 export const logout = createAsyncThunk(
   "user/logout",
-  async (navigate:any, { rejectWithValue }) => {
+  async (navigate: any, { rejectWithValue }) => {
     try {
       const { data } = await axios.delete(`${URL}/auth/logout`, config);
       localStorage.removeItem("user");
@@ -91,22 +92,18 @@ export const addRegisterDetails = createAsyncThunk(
         location: string;
         phone: string;
         accountType: string;
-        doc?:string;
+        doc?: string;
       };
-
     },
     { rejectWithValue }
   ) => {
     try {
-
-      
-
       const { data } = await axios.post(
         `${URL}/auth/register/details`,
         userCredentials,
         config
       );
-      
+
       return { ...data, loggined: true };
     } catch (error: any) {
       return handleError(error, rejectWithValue);
@@ -126,7 +123,6 @@ export const loginUser = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-  
       const res = await axios.post(
         `${URL}/auth/login`,
         userCredentials.data,
@@ -147,7 +143,7 @@ export const forgotPassword = createAsyncThunk(
     try {
       const { data } = await axios.post(
         `${URL}/auth/forgotpassword`,
-        {email},
+        { email },
         config
       );
       // consol.log("🚀 ~ file: userActions.tsx:99 ~ async ~ data:", data);
@@ -160,9 +156,13 @@ export const forgotPassword = createAsyncThunk(
 //update password
 export const updatePassword = createAsyncThunk(
   "reset/password",
-  async (password:string, { rejectWithValue }) => {
+  async (password: string, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`${URL}/auth/reset-password`,{password}, config);
+      const { data } = await axios.post(
+        `${URL}/auth/reset-password`,
+        { password },
+        config
+      );
       return data;
     } catch (error: any) {
       return handleError(error, rejectWithValue);

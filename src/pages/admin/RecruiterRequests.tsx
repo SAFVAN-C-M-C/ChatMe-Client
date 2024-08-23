@@ -1,9 +1,10 @@
-import  { useEffect } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../../components/admin/NavBar";
-import {  RootState } from "../../redux/store";
-import {  useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import {
+  Pagination,
   Paper,
   styled,
   Table,
@@ -15,6 +16,7 @@ import {
   TableRow,
 } from "@mui/material";
 import RecruiterRequestRow from "@/components/admin/UserTable/RecruiterRequestRow";
+import { getAdminRecruiterRequestDetails } from "@/redux/actions/admin/adminRecruiterRequestAction";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -28,12 +30,30 @@ function RecruiterRequests() {
   const { adminRecruiterRequests, error } = useSelector(
     (state: RootState) => state.adminRecruiterRequest
   );
+  const dispatch = useDispatch<AppDispatch>();
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   useEffect(() => {
     if (error) {
       toast.error(error);
     }
   }, [error]);
-
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    event.preventDefault();
+    setCurrentPage(value);
+  };
+  useEffect(() => {
+    dispatch(getAdminRecruiterRequestDetails({ page: currentPage }));
+    if (adminRecruiterRequests?.totalPages) {
+      setTotalPages(adminRecruiterRequests.totalPages);
+    }
+    if(adminRecruiterRequests?.currentPage){
+      setCurrentPage(adminRecruiterRequests.currentPage)
+    }
+  }, [adminRecruiterRequests?.currentPage, adminRecruiterRequests?.totalPages, currentPage, dispatch]);
   return (
     <>
       <div className="flex" data-theme={"dark"}>
@@ -61,6 +81,14 @@ function RecruiterRequests() {
               </TableBody>
             </Table>
           </TableContainer>
+          <div className="w-full flex justify-end m-3">
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              sx={{ "& .MuiPaginationItem-root": { color: "white" } }} // Custom styling for pagination
+            />
+          </div>
         </div>
       </div>
     </>
@@ -75,12 +103,12 @@ export default RecruiterRequests;
 
 //                   <td className="py-2 px-4 text-center">
 
-                      // <button
-                      //   onClick={() => handleVerify(user.email)}
-                      //   className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-red-700"
-                      // >
-                      //   Verify
-                      // </button>
+// <button
+//   onClick={() => handleVerify(user.email)}
+//   className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-red-700"
+// >
+//   Verify
+// </button>
 
 //                   </td>
 //                 </tr>

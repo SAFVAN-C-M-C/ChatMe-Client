@@ -1,21 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
-import { getAdminCompanyRequestsDetails, verifyCompany } from "../../actions/admin/adminCompanyRequestAction";
+import {
+  getAdminCompanyRequestsDetails,
+  verifyCompany,
+} from "../../actions/admin/adminCompanyRequestAction";
 
 export interface AdminCompanyRequests {
-    _id?: string;
-    email?: string;
-    name?: string;
-    userId?:string
-    numberOfReportActions?: number | null;
-    IsBlocked?: boolean | null;
-    CreatedAt?: Date | null;
-    isVerified?:boolean;
+  _id?: string;
+  email?: string;
+  name?: string;
+  userId?: string;
+  numberOfReportActions?: number | null;
+  IsBlocked?: boolean | null;
+  CreatedAt?: Date | null;
+  isVerified?: boolean;
 }
-export interface AdminCompanyRequestPayload{
-  success:boolean;
-  data:AdminCompanyRequests[];
-  message:string;
+export interface AdminCompanyRequestPayload {
+  success: boolean;
+  data: AdminCompanyRequests[];
+  totalPages: number;
+  currentPage: number;
+  message: string;
 }
 export interface AdminCompanyRequestState {
   error: any | null;
@@ -28,8 +33,6 @@ const initialState: AdminCompanyRequestState = {
   adminCompanyRequests: null as any | null,
   error: null as any | null,
 };
-
-
 
 const adminCompanyRequestsSlice = createSlice({
   name: "adminCompanyRequests",
@@ -45,11 +48,14 @@ const adminCompanyRequestsSlice = createSlice({
       .addCase(getAdminCompanyRequestsDetails.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getAdminCompanyRequestsDetails.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.error = null;
-        state.adminCompanyRequests = payload;
-      })
+      .addCase(
+        getAdminCompanyRequestsDetails.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.error = null;
+          state.adminCompanyRequests = payload;
+        }
+      )
       .addCase(getAdminCompanyRequestsDetails.rejected, (state) => {
         state.loading = false;
         state.adminCompanyRequests = null;

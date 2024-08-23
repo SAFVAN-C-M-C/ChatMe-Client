@@ -12,7 +12,7 @@ const ProtectSpecialRoutes = ({
   type,
   children,
 }: ProtectSpecialRoutesProps) => {
-  const { user,error } = useSelector((state: RootState) => state.user);
+  const { user, error } = useSelector((state: RootState) => state.user);
 
   if (type === "otp") {
     if (user || error) {

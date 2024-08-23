@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig } from "axios";
 
 // Interface for API response errors
 interface ApiResponseError extends Error {
@@ -6,12 +6,12 @@ interface ApiResponseError extends Error {
     data?: {
       message?: string;
     };
-    status?: number;  // HTTP status code
+    status?: number;
   };
 }
 
 // Environment variable for Google ID
-export const GOOGLE_ID = import.meta.env.VITE_REACT_APP_GOOGLE_ID;
+export const GOOGLE_ID = import.meta.env.VITE_CHAT_ME_APP_GOOGLE_ID;
 
 // Common Axios configuration
 export const config: AxiosRequestConfig = {
@@ -31,19 +31,14 @@ export const configMultiPart: AxiosRequestConfig = {
 
 // Error handler function
 export const handleError = (
-  error: ApiResponseError, 
+  error: ApiResponseError,
   rejectWithValue: (value: string | unknown) => void
 ) => {
-  console.error('Error occurred:', error);
-
   if (error.response?.data?.message) {
-    console.log('Server error:', error.response.data.message);
     return rejectWithValue(error.response.data.message);
   } else if (error.message) {
-    console.log('Error message:', error.message);
     return rejectWithValue(error.message);
   } else {
-    console.log('Generic error handler triggered.');
     return rejectWithValue("An unknown error occurred");
   }
 };

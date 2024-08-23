@@ -14,25 +14,25 @@ import {
 import { AccountType } from "../../types/Iuser";
 export interface User {
   _id?: string;
-  name?:string
+  name?: string;
   email?: string;
   role?: string;
-  isBlocked:boolean;
+  isBlocked: boolean;
   accountType?: AccountType;
   loggined?: boolean;
   isEmailVerified?: boolean;
   isDetailsComplete?: boolean;
-  otp?:boolean;
-  details?:boolean;
-  reset?:boolean;
-  otpType?:string
+  otp?: boolean;
+  details?: boolean;
+  reset?: boolean;
+  otpType?: string;
 }
-export interface UserPayload{
-  success:boolean;
-  data:User;
-  message:string;
-  loggined?:boolean;
-  detailsFilled?:boolean;
+export interface UserPayload {
+  success: boolean;
+  data: User;
+  message: string;
+  loggined?: boolean;
+  detailsFilled?: boolean;
 }
 export interface UserState {
   error: any | null;

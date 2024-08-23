@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
-import { getAdminRecruiterRequestDetails, verifyRecruiter } from "../../actions/admin/adminRecruiterRequestAction";
+import {
+  getAdminRecruiterRequestDetails,
+  verifyRecruiter,
+} from "../../actions/admin/adminRecruiterRequestAction";
 
 export interface AdminRecruiterRequests {
   _id: string;
@@ -9,10 +12,12 @@ export interface AdminRecruiterRequests {
   companyId?: string;
   companyName?: string;
 }
-export interface AdminRecruiterRequestPayload{
-  success:boolean;
-  data:AdminRecruiterRequests[];
-  message:string;
+export interface AdminRecruiterRequestPayload {
+  success: boolean;
+  data: AdminRecruiterRequests[];
+  totalPages: number;
+  currentPage: number;
+  message: string;
 }
 export interface AdminRecruiterRequestState {
   error: any | null;
@@ -25,8 +30,6 @@ const initialState: AdminRecruiterRequestState = {
   adminRecruiterRequests: null as any | null,
   error: null as any | null,
 };
-
-
 
 const adminRecruiterRequestsSlice = createSlice({
   name: "adminRecruiterRequests",
@@ -42,11 +45,14 @@ const adminRecruiterRequestsSlice = createSlice({
       .addCase(getAdminRecruiterRequestDetails.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getAdminRecruiterRequestDetails.fulfilled, (state, { payload }) => {
-        state.loading = false;
-        state.error = null;
-        state.adminRecruiterRequests = payload;
-      })
+      .addCase(
+        getAdminRecruiterRequestDetails.fulfilled,
+        (state, { payload }) => {
+          state.loading = false;
+          state.error = null;
+          state.adminRecruiterRequests = payload;
+        }
+      )
       .addCase(getAdminRecruiterRequestDetails.rejected, (state) => {
         state.loading = false;
         state.adminRecruiterRequests = null;

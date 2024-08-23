@@ -1,20 +1,19 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../redux/actions/user/userActions";
 import NavigationOptions from "../general/NavigationOptions";
 import { Icon } from "@iconify/react";
 
 const NavBar = () => {
-  // const { user, loading, error } = useSelector(
-  //   (state: RootState) => state.user
-  // );
   const options = {
     Home: ["teenyicons:home-solid", "/"],
     "Company Requests": ["mdi:company", "/admin/company/requests"],
-    "Verify Recruiters": ["clarity:employee-group-solid", "/admin/recruiter/requests"],
+    "Verify Recruiters": [
+      "clarity:employee-group-solid",
+      "/admin/recruiter/requests",
+    ],
     Reports: ["ph:flag-fill", "/admin/reports"],
     Users: ["mdi:user", "/admin/users"],
     Companies: ["mdi:company", "/admin/company"],
@@ -23,19 +22,10 @@ const NavBar = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const handleLogout = (e: any) => {
+  const handleLogout = () => {
     dispatch(logout(navigate));
   };
-  type HandleOptionClick = (
-    event: React.MouseEvent<HTMLDivElement>,
-    option: string
-  ) => void;
 
-  // Implement the event handler function
-  const handleOptionClick: HandleOptionClick = (event, option) => {
-    event.preventDefault();
-    navigate(`/${option}`);
-  };
   return (
     <div className="Nav-Bar h-[100%] lg:w-[340px] w-[95px] ">
       <div className="Nav-Bar fixed h-[100vh] lg:w-[270px] w-[75px] border-r-[.5px] border-black">
@@ -55,7 +45,12 @@ const NavBar = () => {
         </div>
         <div className="options-container flex flex-col items-center mt-10">
           {Object.entries(options).map(([title, icon], index) => (
-            <NavigationOptions key={index} title={title} value={icon} />
+            <NavigationOptions
+              shrink={false}
+              key={index}
+              title={title}
+              value={icon}
+            />
           ))}
           <div
             className="options flex cursor-pointer justify-center w-[80%] mt-4 mb-4"

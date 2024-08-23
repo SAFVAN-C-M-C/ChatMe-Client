@@ -2,7 +2,7 @@
 import { verifyRecruiter } from "@/redux/actions/admin/adminRecruiterRequestAction";
 import { AppDispatch, RootState } from "@/redux/store";
 import { styled, TableCell, tableCellClasses, TableRow } from "@mui/material";
-import React, { FC, useEffect } from "react";
+import { FC, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 

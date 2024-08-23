@@ -3,35 +3,35 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getUsers } from "@/redux/actions/search/searchUserAction";
 import { IProfile } from "@/types/IProfile";
 import { IPosts } from "@/types/IPosts";
-export interface SearchPayload{
-    success:boolean;
-    data:IProfile[] | IPosts[];
-    message:string;
-    key:string;
-  }
+export interface SearchPayload {
+  success: boolean;
+  data: IProfile[] | IPosts[];
+  message: string;
+  key: string;
+}
 export interface SearchState {
-    error: any | null;
-    searchData: SearchPayload | null;
-    loading: boolean;
-  }
+  error: any | null;
+  searchData: SearchPayload | null;
+  loading: boolean;
+}
 const initialState: SearchState = {
-    loading: false as boolean,
-    searchData: null as any | null,
-    error: null as any | null,
-  };
+  loading: false as boolean,
+  searchData: null as any | null,
+  error: null as any | null,
+};
 const searchSlice = createSlice({
-    name: "searchData",
-    initialState,
-    reducers: {
-      updateError: (state, { payload }) => {
-        state.error = payload;
-      },
-      updateSerachKey:(state,{payload})=>{
-        state.searchData=payload
-      }
+  name: "searchData",
+  initialState,
+  reducers: {
+    updateError: (state, { payload }) => {
+      state.error = payload;
     },
-    extraReducers: (builder) => {
-      builder
+    updateSerachKey: (state, { payload }) => {
+      state.searchData = payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
       //get serach user
       .addCase(getUsers.pending, (state) => {
         state.loading = true;
@@ -45,10 +45,9 @@ const searchSlice = createSlice({
         state.loading = false;
         state.searchData = null;
         state.error = payload;
-      })
+      });
+  },
+});
 
-    },
-  });
-
-  export const { updateError,updateSerachKey } = searchSlice.actions;
-  export default searchSlice.reducer;
+export const { updateError, updateSerachKey } = searchSlice.actions;
+export default searchSlice.reducer;

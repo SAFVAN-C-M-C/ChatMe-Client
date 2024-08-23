@@ -1,14 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../../components/admin/NavBar";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { getAdminUsersDetails } from "../../redux/actions/admin/adminUserAction";
 import {
-  blockUser,
-  unBlockUser,
-} from "../../redux/actions/admin/adminUserAction";
-import {
+  Pagination,
   Paper,
   styled,
   Table,
@@ -34,34 +31,31 @@ const Users = () => {
   const { adminUser, error } = useSelector(
     (state: RootState) => state.adminUser
   );
+  const dispatch = useDispatch<AppDispatch>();
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   useEffect(() => {
     if (error) {
       toast.error(error);
     }
   }, [error]);
-  const dispatch = useDispatch<AppDispatch>();
-  const handleBlock = (userId: string) => {
-    const formData = {
-      userId: userId,
-      isBlocked: true,
-      type: "user",
-    };
-    dispatch(blockUser(formData));
-    if (!error) {
-      toast.success("Blocked");
-    }
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    event.preventDefault();
+    setCurrentPage(value);
   };
-  const handleUnBlock = (userId: string) => {
-    const formData = {
-      userId: userId,
-      isBlocked: false,
-      type: "user",
-    };
-    dispatch(unBlockUser(formData));
-    if (!error) {
-      toast.success("UnBlocked");
+  useEffect(() => {
+    dispatch(getAdminUsersDetails({ page: currentPage }));
+    if (adminUser?.totalPages) {
+      setTotalPages(adminUser.totalPages);
     }
-  };
+    if(adminUser?.currentPage){
+      setCurrentPage(adminUser.currentPage)
+    }
+  }, [adminUser?.currentPage, adminUser?.totalPages, currentPage, dispatch]);
   return (
     <>
       <div className="flex" data-theme={"dark"}>
@@ -71,26 +65,37 @@ const Users = () => {
             <span className="text-3xl font-bold underline">Users</span>
           </div>
           {adminUser?.data ? (
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell align="center">Name</StyledTableCell>
-                    <StyledTableCell align="center">Email</StyledTableCell>
-                    <StyledTableCell align="center">Type</StyledTableCell>
-                    <StyledTableCell align="center">
-                      No.of Action
-                    </StyledTableCell>
-                    <StyledTableCell align="center">Action</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {adminUser.data.map((row, index) => (
-                    <UserRow row={row} key={index} />
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <>
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                    <StyledTableCell align="center">Sl.no</StyledTableCell>
+                      <StyledTableCell align="center">Name</StyledTableCell>
+                      <StyledTableCell align="center">Email</StyledTableCell>
+                      <StyledTableCell align="center">Type</StyledTableCell>
+                      <StyledTableCell align="center">
+                        No.of Action
+                      </StyledTableCell>
+                      <StyledTableCell align="center">Action</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {adminUser.data.map((row, index) => (
+                      <UserRow  slno={index+1} row={row} key={index} />
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <div className="w-full flex justify-end m-3">
+                <Pagination
+                  count={totalPages}
+                  page={currentPage}
+                  onChange={handlePageChange}
+                  sx={{ "& .MuiPaginationItem-root": { color: "white" } }} // Custom styling for pagination
+                />
+              </div>
+            </>
           ) : (
             <span>No data</span>
           )}

@@ -8,7 +8,7 @@ import {
   addPreferedJobs,
   addResume,
   addSkills,
-  changeTheam,
+  changeTheme,
   deleteResume,
   followUser,
   getProfileDataFirst,
@@ -43,6 +43,7 @@ const profileSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      //get profile data
       .addCase(getProfileDataFirst.pending, (state) => {
         state.loading = true;
       })
@@ -97,9 +98,8 @@ const profileSlice = createSlice({
         state.loading = false;
         state.profile = null;
         state.error = payload;
-
-        //add education
       })
+      //add education
       .addCase(addEducation.pending, (state) => {
         state.loading = true;
       })
@@ -237,16 +237,16 @@ const profileSlice = createSlice({
         state.profile = null;
         state.error = payload;
       })
-      //cahnge theam
-      .addCase(changeTheam.pending, (state) => {
+      //cahnge theme
+      .addCase(changeTheme.pending, (state) => {
         state.loading = true;
       })
-      .addCase(changeTheam.fulfilled, (state, { payload }) => {
+      .addCase(changeTheme.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.error = null;
         state.profile = payload;
       })
-      .addCase(changeTheam.rejected, (state, { payload }) => {
+      .addCase(changeTheme.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload;
       });

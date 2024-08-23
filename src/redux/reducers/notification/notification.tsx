@@ -3,19 +3,18 @@
 import { getNotification } from "@/redux/actions/notification/notificationAction";
 import { createSlice } from "@reduxjs/toolkit";
 
-
 export interface INotification {
-  _id:string;
-  recipientId?:string;
-  title?:string
-  content?:string
-  isAdminMessage:boolean
-  postId?:string
-  fromUserId?:string
-  type:string
-  read:boolean
-  isSystem:boolean
-  createdAt?:Date
+  _id: string;
+  recipientId?: string;
+  title?: string;
+  content?: string;
+  isAdminMessage: boolean;
+  postId?: string;
+  fromUserId?: string;
+  type: string;
+  read: boolean;
+  isSystem: boolean;
+  createdAt?: Date;
 }
 export interface NotificationPayload {
   success: boolean;
@@ -48,11 +47,10 @@ const notificationSlice = createSlice({
         state.notifications = {
           success: true,
           data: [payload],
-          message: '',
+          message: "",
         };
       }
     },
-
   },
   extraReducers: (builder) => {
     builder
@@ -70,10 +68,10 @@ const notificationSlice = createSlice({
         state.notifications = null;
         state.error = null;
       });
-      
   },
 });
 
-export const { updateNotificationError,addNotification } = notificationSlice.actions;
+export const { updateNotificationError, addNotification } =
+  notificationSlice.actions;
 
 export default notificationSlice.reducer;

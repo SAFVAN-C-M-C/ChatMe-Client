@@ -6,36 +6,41 @@ import { URL } from "../../../common/api";
 
 // get recruiter  details
 export const getAdminRecruiterRequestDetails = createAsyncThunk(
-    "admin/getAdminRecruiterRequestDetails",
-    async (_, { rejectWithValue }) => {
-      try {
-        console.log(`${URL}/admin/users`);
-        
-        const { data } = await axios.get(`${URL}/admin/recruiter/requests`, config);
-        console.log("reruiter req==",data.data);
-        
-        return data;
-      } catch (error: any) {
-        return handleError(error, rejectWithValue);
-      }
-    }
-  );
+  "admin/getAdminRecruiterRequestDetails",
+  async (formData: { page: number }, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(
+        `${URL}/admin/recruiter/requests?page=${formData.page}&limit=10`,
+        config
+      );
 
-      //block company
-      export const verifyRecruiter = createAsyncThunk(
-        "admin/verifyRecruiter",
-        async (formData:{
-          email?: string,
-          isVerified?: boolean,
-          type?: string| "company" | "user",
-        }, { rejectWithValue }) => {
-          try {
-            const { data } = await axios.post(`${URL}/admin/recruiter/requests/verify`,formData, config);
-            console.log("company==",data);
-            
-            return data;
-          } catch (error: any) {
-            return handleError(error, rejectWithValue);
-          }
-        }
-      )
+      return data;
+    } catch (error: any) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);
+
+//block company
+export const verifyRecruiter = createAsyncThunk(
+  "admin/verifyRecruiter",
+  async (
+    formData: {
+      email?: string;
+      isVerified?: boolean;
+      type?: string | "company" | "user";
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const { data } = await axios.put(
+        `${URL}/admin/recruiter/requests/verify`,
+        formData,
+        config
+      );
+      return data;
+    } catch (error: any) {
+      return handleError(error, rejectWithValue);
+    }
+  }
+);

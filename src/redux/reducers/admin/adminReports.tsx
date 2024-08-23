@@ -16,6 +16,8 @@ export interface AdminReports {
 export interface AdminReportPayload {
   success: boolean;
   data: AdminReports[];
+  totalPages: number;
+  currentPage: number;
   message: string;
 }
 export interface AdminReportState {
@@ -68,7 +70,7 @@ const adminReportSlice = createSlice({
         state.adminReport = null;
         state.error = null;
       })
-      //delete report 
+      //delete report
       .addCase(deleteReport.pending, (state) => {
         state.loading = true;
       })

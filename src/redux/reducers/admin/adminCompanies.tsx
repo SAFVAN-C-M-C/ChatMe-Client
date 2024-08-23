@@ -1,21 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
-import { blockCompany, getAdminCompanyDetails, unBlockCompany } from "../../actions/admin/adminCompanyAction";
+import {
+  blockCompany,
+  getAdminCompanyDetails,
+  unBlockCompany,
+} from "../../actions/admin/adminCompanyAction";
 
 export interface AdminCompany {
-    _id?: string;
-    email?: string;
-    name?: string;
-    userId?:string
-    numberOfReportActions?: number | null;
-    isBlocked?: boolean | null;
-    CreatedAt?: Date | null;
-    isVerified?:boolean;
+  _id?: string;
+  email?: string;
+  name?: string;
+  userId?: string;
+  numberOfReportActions?: number | null;
+  isBlocked?: boolean | null;
+  CreatedAt?: Date | null;
+  isVerified?: boolean;
 }
-export interface AdminCompaniesPayload{
-  success:boolean;
-  data:AdminCompany[];
-  message:string;
+export interface AdminCompaniesPayload {
+  success: boolean;
+  data: AdminCompany[];
+  totalPages: number;
+  currentPage: number;
+  message: string;
 }
 export interface AdminCompaniesState {
   error: any | null;
@@ -28,8 +34,6 @@ const initialState: AdminCompaniesState = {
   adminCompanies: null as any | null,
   error: null as any | null,
 };
-
-
 
 const adminCompaniesSlice = createSlice({
   name: "adminCompanies",
@@ -83,7 +87,6 @@ const adminCompaniesSlice = createSlice({
         state.adminCompanies = null;
         state.error = null;
       });
-      
   },
 });
 

@@ -16,7 +16,6 @@ type NavigationOptionsProps = {
   value: string[];
   title: string;
   shrink: boolean;
-  setShrink: Dispatch<SetStateAction<boolean>>;
 };
 type HandleOptionClick = (
   event: React.MouseEvent<HTMLDivElement>,

@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-
 import { getHomePosts } from "../../actions/posts/homePostsActions";
-import { AddCommentPayload, DeleteCommentPayload, IPosts } from "@/types/IPosts";
+import {
+  AddCommentPayload,
+  DeleteCommentPayload,
+  IPosts,
+} from "@/types/IPosts";
 
 export interface HomePostsPayload {
   success: boolean;
   data: IPosts[];
-  totalPages:number;
+  totalPages: number;
   message: string;
 }
 export interface HomePostsState {
@@ -37,7 +40,10 @@ const homePostsSlice = createSlice({
         post.likes?.push(userId);
       }
     },
-    unlikePost(state,action: PayloadAction<{ postId: string; userId: string }>) {
+    unlikePost(
+      state,
+      action: PayloadAction<{ postId: string; userId: string }>
+    ) {
       const { postId, userId } = action.payload;
       const post = state.homePosts?.data.find((post) => post._id === postId);
       if (post) {
@@ -55,19 +61,25 @@ const homePostsSlice = createSlice({
       const { postId, commentId } = action.payload;
       const post = state.homePosts?.data.find((post) => post._id === postId);
       if (post) {
-        post.comments = post?.comments?.filter((comment) => comment !== commentId);
+        post.comments = post?.comments?.filter(
+          (comment) => comment !== commentId
+        );
       }
     },
     addMorePosts(state, action: PayloadAction<HomePostsPayload>) {
       if (state.homePosts) {
-        const existingPostIds = new Set(state.homePosts.data.map(post => post._id));
-        const newPosts = action.payload.data.filter(post => !existingPostIds.has(post._id));
+        const existingPostIds = new Set(
+          state.homePosts.data.map((post) => post._id)
+        );
+        const newPosts = action.payload.data.filter(
+          (post) => !existingPostIds.has(post._id)
+        );
         state.homePosts.data = [...state.homePosts.data, ...newPosts];
         state.homePosts.totalPages = action.payload.totalPages;
       } else {
         state.homePosts = action.payload;
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -88,6 +100,13 @@ const homePostsSlice = createSlice({
   },
 });
 
-export const { updateError,likePost,unlikePost,addComment,deleteComment,addMorePosts } = homePostsSlice.actions;
+export const {
+  updateError,
+  likePost,
+  unlikePost,
+  addComment,
+  deleteComment,
+  addMorePosts,
+} = homePostsSlice.actions;
 
 export default homePostsSlice.reducer;

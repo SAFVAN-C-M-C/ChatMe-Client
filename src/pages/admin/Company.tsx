@@ -1,14 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import NavBar from "../../components/admin/NavBar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { getAdminCompanyDetails } from "../../redux/actions/admin/adminCompanyAction";
 import {
-  blockCompany,
-  unBlockCompany,
-} from "../../redux/actions/admin/adminCompanyAction";
-import { Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow } from "@mui/material";
+  Pagination,
+  Paper,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import CompanyRow from "@/components/admin/UserTable/CompanyRow";
 // import { verifyCompany } from "../../redux/actions/admin/adminCompanyAction";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -24,12 +31,35 @@ const Company = () => {
   const { adminCompanies, error } = useSelector(
     (state: RootState) => state.adminCompany
   );
+  const dispatch = useDispatch<AppDispatch>();
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   useEffect(() => {
     if (error) {
       toast.error(error);
     }
   }, [error]);
-
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    event.preventDefault();
+    setCurrentPage(value);
+  };
+  useEffect(() => {
+    dispatch(getAdminCompanyDetails({ page: currentPage }));
+    if (adminCompanies?.totalPages) {
+      setTotalPages(adminCompanies.totalPages);
+    }
+    if (adminCompanies?.currentPage) {
+      setCurrentPage(adminCompanies.currentPage);
+    }
+  }, [
+    adminCompanies?.currentPage,
+    adminCompanies?.totalPages,
+    currentPage,
+    dispatch,
+  ]);
   return (
     <>
       <div className="flex" data-theme={"dark"}>
@@ -40,23 +70,32 @@ const Company = () => {
           </div>
           {adminCompanies?.data ? (
             <>
-               <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell align="center">Name</StyledTableCell>
-                    <StyledTableCell align="center">Email</StyledTableCell>
-                    <StyledTableCell align="center">Doc</StyledTableCell>
-                    <StyledTableCell align="center">Action</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {adminCompanies?.data.map((row, index) => (
-                    <CompanyRow row={row} key={index} />
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">Sl.no</StyledTableCell>
+                      <StyledTableCell align="left">Name</StyledTableCell>
+                      <StyledTableCell align="center">Email</StyledTableCell>
+                      <StyledTableCell align="center">Doc</StyledTableCell>
+                      <StyledTableCell align="center">Action</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {adminCompanies?.data.map((row, index) => (
+                      <CompanyRow slno={index + 1} row={row} key={index} />
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <div className="w-full flex justify-end m-3">
+                <Pagination
+                  count={totalPages}
+                  page={currentPage}
+                  onChange={handlePageChange}
+                  sx={{ "& .MuiPaginationItem-root": { color: "white" } }} // Custom styling for pagination
+                />
+              </div>
             </>
           ) : (
             <>
@@ -71,8 +110,8 @@ const Company = () => {
 
 export default Company;
 
-
-{/* <table className="w-full overflow-x-scroll ms-5 bg-white border my-4 border-gray-300">
+{
+  /* <table className="w-full overflow-x-scroll ms-5 bg-white border my-4 border-gray-300">
                 <thead>
                   <tr className="bg-gray-100">
                     <th className="py-2 px-0 border-b">Slno</th>
@@ -116,4 +155,5 @@ export default Company;
                     </tr>
                   ))}
                 </tbody>
-              </table> */}
+              </table> */
+}

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { logout } from "../../redux/actions/user/userActions";
 import { useNavigate } from "react-router-dom";
-import { changeTheam } from "@/redux/actions/user/profileActions";
+import { changeTheme } from "@/redux/actions/user/profileActions";
 
 interface NavigationBarProps {
   isChat?: boolean;
@@ -37,9 +37,9 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ isChat }) => {
 
   const handleToggle = (e:ChangeEvent<HTMLInputElement>) => {
     if(e.target.checked){
-      dispatch(changeTheam({theam:"dark"}))
+      dispatch(changeTheme({theam:"dark"}))
     }else{
-      dispatch(changeTheam({theam:"light"}))
+      dispatch(changeTheme({theam:"light"}))
     }
     
   };
@@ -183,7 +183,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ isChat }) => {
                     : "option-title w-[60%] text-lg  justify-start hidden lg:flex"
                 }
               >
-                <b className="text-base">Theam</b>
+                <b className="text-base">Theme</b>
               </div>
             </label>
             <div

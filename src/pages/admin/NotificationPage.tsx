@@ -1,17 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { URL } from "@/common/api";
 import { config } from "@/common/configurations";
 import NavBar from "@/components/admin/NavBar";
 import NotificationCard from "@/components/admin/Notification/NotificationCard";
 import AddNotificationModal from "@/components/modals/CreateNotificationModal/AddNotificationModal";
 import { INotification } from "@/redux/reducers/notification/notification";
-import { RootState } from "@/redux/store";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
 const NotificationPage = () => {
-  const { user } = useSelector((state: RootState) => state.user);
   const [notification, setNotification] = useState<INotification[] | null>(
     null
   );
@@ -33,7 +29,7 @@ const NotificationPage = () => {
     <>
       {openAddNotificationModal ? (
         <AddNotificationModal
-        getNotification={getNotification}
+          getNotification={getNotification}
           setOpenAddNotificationModal={setOpenAddNotificationModal}
         />
       ) : null}
@@ -58,7 +54,11 @@ const NotificationPage = () => {
           <div className="notification-grid mt-6  px-5 flex flex-wrap gap-2 h-auto justify-start w-full">
             {notification && notification.length > 0 ? (
               notification.map((notif, index) => (
-                <NotificationCard getNotification={getNotification} key={index} notification={notif} />
+                <NotificationCard
+                  getNotification={getNotification}
+                  key={index}
+                  notification={notif}
+                />
               ))
             ) : (
               <span>No notifications here</span>

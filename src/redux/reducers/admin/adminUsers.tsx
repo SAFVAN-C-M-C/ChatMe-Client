@@ -1,21 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice } from "@reduxjs/toolkit";
-import { blockUser, getAdminUsersDetails, unBlockUser } from "../../actions/admin/adminUserAction";
+import {
+  blockUser,
+  getAdminUsersDetails,
+  unBlockUser,
+} from "../../actions/admin/adminUserAction";
 
 export interface AdminUsers {
-    _id?: string;
-    email?: string;
-    name?: string;
-    userId?:string
-    numberOfReportActions?: number | null;
-    isBlocked?: boolean | null;
-    CreatedAt?: Date | null;
-    isVerified?:boolean;
+  _id?: string;
+  email?: string;
+  name?: string;
+  userId?: string;
+  numberOfReportActions?: number | null;
+  isBlocked?: boolean | null;
+  CreatedAt?: Date | null;
+  isVerified?: boolean;
 }
-export interface AdminUserPayload{
-  success:boolean;
-  data:AdminUsers[];
-  message:string;
+export interface AdminUserPayload {
+  success: boolean;
+  data: AdminUsers[];
+  totalPages: number;
+  currentPage: number;
+  message: string;
 }
 export interface AdminUserState {
   error: any | null;
@@ -81,7 +87,6 @@ const adminUserSlice = createSlice({
         state.adminUser = null;
         state.error = null;
       });
-
   },
 });
 

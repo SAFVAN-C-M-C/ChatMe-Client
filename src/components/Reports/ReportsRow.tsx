@@ -73,45 +73,39 @@ const ReportsRow: React.FC<ReportProps> = ({ report, slno }) => {
     setOpenViewPost(true);
   };
   const [post, setPost] = useState<IPosts | null>(null);
-  const getPost = async (postId: string) => {
-    try {
-      const response = await axios.get(`${URL}/post/posts/${postId}`, config);
 
-      if (response.status === 200) {
-        console.log(response.data.data);
-        setPost(response.data.data as IPosts);
-        console.log(post);
+  const [user, setUser] = useState<UserDetails | null>(null);
+  const getUser = async (userId: string) => {
+    try {
+      const res = await axios.get(`${URL}/profile/get/user/${userId}`, config);
+      if (res.status === 200) {
+        setUser(res.data.data);
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      setUser(null);
     }
   };
-  const [user,setUser]=useState<UserDetails|null>(null)
-  const getUser=async(userId:string)=>{
-      try{
-        try {
-          const res = await axios.get(`${URL}/profile/get/user/${userId}`, config);
-          if (res.status === 200) {
-              setUser(res.data.data);
-          }
-        } catch (error: any) {
-          console.log("Somthing wrong", error.message);
-        }
-      }catch(error:any){
-        console.log("something went wrong",error.message);
-        
-      }
-    }
-    useEffect(()=>{
-  if(report?.suspectId){
-      getUser(report.suspectId)
-  }
-
-},[])
   useEffect(() => {
-    getPost(String(report?.postId));
-    console.log(post, "here", String(report?.postId));
-  }, [report?.postId]);
+    if (report?.suspectId) {
+      getUser(report.suspectId);
+    }
+  }, [report?.suspectId]);
+  useEffect(() => {
+    const getPost = async (postId: string) => {
+      try {
+        const response = await axios.get(`${URL}/post/posts/${postId}`, config);
+
+        if (response.status === 200) {
+          setPost(response.data.data as IPosts);
+        }
+      } catch (error: any) {
+        setPost(null);
+      }
+    };
+    if (report?.postId) {
+      getPost(String(report.postId));
+    }
+  }, [post, report?.postId]);
   useEffect(() => {
     if (action === "deletePost") {
       deletePost(String(report?.postId));
@@ -145,7 +139,9 @@ const ReportsRow: React.FC<ReportProps> = ({ report, slno }) => {
       ) : null}
       <StyledTableRow>
         <StyledTableCell align="center">{slno}</StyledTableCell>
-        <StyledTableCell align="center" onClick={handlePostView}><span className="cursor-pointer">View Post</span></StyledTableCell>
+        <StyledTableCell align="center" onClick={handlePostView}>
+          <span className="cursor-pointer">View Post</span>
+        </StyledTableCell>
         <StyledTableCell align="center">{user?.name}</StyledTableCell>
         <StyledTableCell align="center">{report?.reason}</StyledTableCell>
         <StyledTableCell align="center">

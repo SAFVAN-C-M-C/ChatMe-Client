@@ -14,8 +14,8 @@ export interface IJobs {
   mode?: string;
   skills?: string[];
   email?: string;
-  updatedAt:Date;
-  createdAt:Date;
+  updatedAt: Date;
+  createdAt: Date;
 }
 export interface JobsPayload {
   success: boolean;

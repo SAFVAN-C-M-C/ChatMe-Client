@@ -4,7 +4,6 @@ import { getSavedPost } from "@/redux/actions/posts/savedPostAction";
 import { ISavedPosts } from "@/types/IPosts";
 import { createSlice } from "@reduxjs/toolkit";
 
-
 export interface SavedPostsPayload {
   success: boolean;
   data: ISavedPosts;
@@ -49,6 +48,6 @@ const savedPostsSlice = createSlice({
   },
 });
 
-export const { updateError} = savedPostsSlice.actions;
+export const { updateError } = savedPostsSlice.actions;
 
 export default savedPostsSlice.reducer;

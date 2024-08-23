@@ -42,36 +42,38 @@ const RecruiterBio = () => {
       {/* for phone */}
       <div
         data-theme={profile?.data.theme || "light"}
-        className="profile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 flex md:hidden"
+        className="profile-bio-sm flex-col  w-[95%]  border-[.5px] border-gray-600  h-auto pb-3 rounded-lg border-dashed mt-12 flex md:hidden"
       >
-        <div className="first-row w-full flex justify-center h-[50px]  mt-3 mb-3">
-          <div className="provile-avatar mr-4 w-[30%] flex justify-center items-center">
+        <div className="first-row w-full flex justify-start h-auto  m-3 gap-2">
+          <div className="provile-avatar flex justify-center items-center">
             <img
-              src="/general/ChatMe-profile.png"
+              src={
+                profile?.data.bio?.avatar
+                  ? profile?.data.bio?.avatar
+                  : "/general/ChatMe-profile.png"
+              }
               alt="avatar"
-              className="w-[40px] h-[40px]"
+              className="w-[40px] h-[40px] rounded-full"
             />{" "}
           </div>
-          <div className="user-name w-[70%] flex-wrap h-full flex items-center">
-            <span className="text-md mr-1">{profile?.data.name}</span>
+          <div className="user-name  flex-wrap h-auto flex gap-1 items-center">
+            <span className="text-sm sm:text-base md:text-lg">{profile?.data.name}</span>
             {profile?.data.isVerified ? (
               <Icon
-                className="text-green-500 ml-1"
+                className="text-green-500 w-[14px] h-[14px]"
                 icon="material-symbols:verified"
-                height={20}
-                width={20}
               />
             ) : null}
           </div>
         </div>
-        <div className="second-row w-full flex justify-around h-auto">
+        <div className="second-row w-full flex justify-around h-auto text-sm sm:text-base md:text-lg">
           <div className="post">
             <p>
-              <span className="font-bold flex justify-center">0 </span>Posts
+              <span className="font-bold flex justify-center">{userPosts?.data ? userPosts?.data.length : "0"}{" "} </span>Posts
             </p>
           </div>
           <div className="follower">
-            <p>
+            <p >
               <span className="font-bold flex justify-center">
                 {profile?.data ? profile.data?.followers?.length : "0"}{" "}
               </span>
@@ -90,7 +92,7 @@ const RecruiterBio = () => {
         <div className="thrid-row mt-2 ml-2  flex w-full justify-between">
           <div className="title">
             <span
-              className={`text-gray-500  ${
+              className={`text-gray-500 text-sm sm:text-base md:text-lg  ${
                 profile?.data.theme === "dark"
                   ? "bg-gray-600 text-slate-300"
                   : "bg-slate-200"
@@ -102,58 +104,48 @@ const RecruiterBio = () => {
                 {profile?.data.campanyId}
               </span> */}
           </div>
-          <div className="action flex mr-3">
+          <div className="action flex mr-3 text-sm sm:text-base md:text-lg">
             <div className="edit-profile mr-1 flex justify-center items-center">
               <Icon
-                className=" cursor-pointer"
+              onClick={() => setOpenEditBio(!openEditBio)}
+                className="cursor-pointer w-[18px]  h-[18px] sm:w-[20px] sm:h-[20px]"
                 icon="mdi:edit"
-                width={20}
-                height={20}
+
               />
             </div>
-            <div className="settings mr-1 flex justify-center items-center cursor-pointer">
-              {" "}
-              <Icon
-                icon="material-symbols:settings-account-box"
-                width={20}
-                height={20}
-              />
-            </div>
+
           </div>
         </div>
         {profile?.data.bio?.location ? (
-          <div className="fourth-row ml-2 mt-2 flex">
+          <div className="fourth-row ml-2 mt-2 flex items-center text-sm sm:text-base md:text-lg">
             <Icon
-              className="text-gray-400 mr-1"
+              className="text-gray-400 mr-1 w-[16px]  h-[16px] sm:w-[18px] sm:h-[18px]"
               icon="mdi:location"
-              width={26}
-              height={26}
+
             />
             <span className="text-gray-400">{profile?.data.bio?.location}</span>
           </div>
         ) : null}
         {profile?.data.bio?.phone ? (
-          <div className="fifth-row ml-2 mt-2 flex">
+          <div className="fifth-row ml-2 mt-2 flex items-center">
             <Icon
-              className="text-gray-400 mr-1"
+              className="text-gray-400 mr-1 w-[16px]  h-[16px] sm:w-[18px] sm:h-[18px]"
               icon="ic:baseline-phone"
-              width={26}
-              height={26}
+
             />
-            <span className="text-gray-400">
+            <span className="text-gray-400 text-sm sm:text-base md:text-lg">
               +91 {profile?.data.bio?.phone}
             </span>
           </div>
         ) : null}
         {profile?.data.email ? (
-          <div className="sixth-row ml-2 mt-2 flex">
+          <div className="sixth-row ml-2 mt-2 flex items-center">
             <Icon
-              className="text-gray-400 mr-1"
+              className="text-gray-400 mr-1 w-[16px]  h-[16px] sm:w-[18px] sm:h-[18px]"
               icon="ic:baseline-email"
-              width={26}
-              height={26}
+
             />
-            <span className="text-gray-400">{profile?.data.email}</span>
+            <span className="text-gray-400 text-sm sm:text-base md:text-lg">{profile?.data.email}</span>
           </div>
         ) : null}
       </div>

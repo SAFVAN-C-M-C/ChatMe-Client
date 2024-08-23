@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { verifyCompany } from "@/redux/actions/admin/adminCompanyRequestAction";
-import { verifyRecruiter } from "@/redux/actions/admin/adminRecruiterRequestAction";
 import { AppDispatch, RootState } from "@/redux/store";
 import { styled, TableCell, tableCellClasses, TableRow } from "@mui/material";
-import React, { FC, useEffect } from "react";
+import { FC, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -57,7 +56,11 @@ const CompanyRequestRow: FC<CompanyRequestRowProps> = ({ row, slno }) => {
         <StyledTableCell align="center">{slno}</StyledTableCell>
         <StyledTableCell align="center">{row?.name}</StyledTableCell>
         <StyledTableCell align="center">{row?.email}</StyledTableCell>
-        <StyledTableCell align="center"><a target="_blank" href={row?.doc}>View Registration</a></StyledTableCell>
+        <StyledTableCell align="center">
+          <a target="_blank" href={row?.doc}>
+            View Registration
+          </a>
+        </StyledTableCell>
         <StyledTableCell align="center">
           <button
             onClick={() => handleVerify(row?.email)}
