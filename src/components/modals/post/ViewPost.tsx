@@ -5,10 +5,12 @@ import { Icon } from "@iconify/react";
 import {
   Button,
   CircularProgress,
+  CssBaseline,
   Dialog,
   Menu,
   MenuItem,
   TextField,
+  ThemeProvider,
 } from "@mui/material";
 import React, {
   Dispatch,
@@ -41,6 +43,7 @@ import { getSavedPost } from "@/redux/actions/posts/savedPostAction";
 import Comments from "./Comments";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import NothingHere from "@/components/general/NothingHere";
+import { darkTheme, lightTheme } from "@/helper/theme";
 
 interface ViewPostProps {
   setOpenViewPost: Dispatch<SetStateAction<boolean>>;
@@ -195,7 +198,7 @@ export const ViewPost: React.FC<ViewPostProps> = ({
       setIsVideo(true);
     }
   }, []);
-  const getComments = async (postId: string,page:number) => {
+  const getComments = async (postId: string, page: number) => {
     try {
       const res = await axios.get(
         `${URL}/post/get/comment/${postId}?page=${page}&limit=9`
@@ -245,7 +248,7 @@ export const ViewPost: React.FC<ViewPostProps> = ({
             comment: response.data.data._id,
           })
         );
-        setComments((old)=>[response.data.data,...old])
+        setComments((old) => [response.data.data, ...old]);
         setComment("");
         if (post.userId === user?.data._id) {
           dispatch(getMyPosts());
@@ -258,188 +261,296 @@ export const ViewPost: React.FC<ViewPostProps> = ({
   };
   useEffect(() => {
     if (post._id) {
-      getComments(post._id,page);
+      getComments(post._id, page);
     }
   }, [post._id, page]);
   const loadMore = () => {
-    setPage(prevPage => prevPage + 1);
-};
+    setPage((prevPage) => prevPage + 1);
+  };
   return (
     <>
-      <Menu
-        id="post-options"
-        aria-labelledby="post-options-button"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={() => setAnchorEl(null)}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
+      <ThemeProvider
+        theme={profile?.data.theme === "dark" ? darkTheme : lightTheme}
       >
-        {myPost ? <MenuItem onClick={handleEditClick}>Edit</MenuItem> : null}
-        {myPost ? <MenuItem onClick={handleDelete}>Delete</MenuItem> : null}
+        <CssBaseline />
+        <Menu
+          id="post-options"
+          aria-labelledby="post-options-button"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={() => setAnchorEl(null)}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+        >
+          {myPost ? <MenuItem onClick={handleEditClick}>Edit</MenuItem> : null}
+          {myPost ? <MenuItem onClick={handleDelete}>Delete</MenuItem> : null}
 
-        {!myPost ? <MenuItem onClick={handleEditClick}>Report</MenuItem> : null}
-      </Menu>
-      <Dialog open fullWidth={true} maxWidth={"lg"} onClose={handleClose}>
-        <div className="main-cover flex">
-          <div className="media-part w-[700px] h-[700px] flex justify-center bg-slate-300">
-            {!isVideo ? (
-              <img
-                src={post.media}
-                alt="media"
-                className="w-[700px] h-[700px] object-cover"
-              />
-            ) : (
-              <video src={post.media} muted controls preload="auto" />
-            )}
-          </div>
-          <div className="second-part flex flex-col">
-            <div className="header flex items-center justify-between border-b-[.5px] border-gray-500 w-[500px] h-[60px]">
-              <div className=" user flex ml-3">
-                <div className="flex items-center">
-                  <img
-                    src={post.userAvatar}
-                    alt="avatar"
-                    className="w-[40px] h-[40px] rounded-full"
-                  />
+          {!myPost ? (
+            <MenuItem onClick={handleEditClick}>Report</MenuItem>
+          ) : null}
+        </Menu>
+        <Dialog open fullWidth={true} maxWidth={"lg"} onClose={handleClose}>
+          {/* phone */}
+          <div className="main-cover md:hidden flex">
+            <div className="second-part flex flex-col w-full">
+              <div className="header flex items-center justify-between border-b-[.5px] border-gray-500 w-full h-[60px]">
+                <div className="user flex ml-3">
+                  <div className="flex items-center">
+                    <img
+                      src={post.userAvatar}
+                      alt="avatar"
+                      className="w-[40px] h-[40px] rounded-full"
+                    />
+                  </div>
+                  <div className="name ml-3 flex items-center">
+                    <span>{post.name}</span>
+                  </div>
                 </div>
-                <div className="name ml-3 flex items-center">
-                  <span>{post.name}</span>
+                <div className="option mr-3">
+                  <Button
+                    variant="text"
+                    id="post-options-button"
+                    aria-controls={open ? "post-options" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                  >
+                    <Icon icon="mi:options-vertical" width={26} height={26} />
+                  </Button>
                 </div>
               </div>
-              <div className="option mr-3">
-                <Button
-                  variant="text"
-                  id="post-options-button"
-                  aria-controls={open ? "post-options" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                  onClick={handleClick}
+              <div className="comment-list-section border-b-[.5px] border-gray-500 overflow-y-scroll h-[400px] w-full">
+                {comments && comments.length > 0 ? (
+                  comments?.map((comment, index) => (
+                    <Comments
+                      comments={comments}
+                      setComments={setComments}
+                      isReply={false}
+                      getComments={getComments}
+                      key={index}
+                      postId={String(post._id)}
+                      postUser={String(post.userId)}
+                      comment={comment}
+                    />
+                  ))
+                ) : (
+                  <NothingHere />
+                )}
+                {hasMore && (
+                  <div
+                    onClick={loadMore}
+                    className="w-full  flex justify-center "
+                  >
+                    Load More
+                  </div>
+                )}
+              </div>
+
+              <form
+                onSubmit={handleCommentPost}
+                className="relative comment-section flex items-center border-t-[.5px] w-full h-[50px] mt-2 border-gray-500"
+              >
+                {showEmojiPicker && (
+                  <div className="emoji-picker-container">
+                    <EmojiPicker onEmojiClick={onEmojiClick} />
+                  </div>
+                )}
+                <div
+                  className="emoji w-[50px] flex justify-center"
+                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                 >
-                  <Icon icon="mi:options-vertical" width={26} height={26} />
-                </Button>
-              </div>
-            </div>
-            <div className="comment-list-section border-b-[.5px] border-gray-500 overflow-y-scroll h-[510px] w-[500px]">
-              {comments && comments.length > 0 ? (
-                comments?.map((comment, index) => (
-                  <Comments
-                    comments={comments}
-                    setComments={setComments}
-                    isReply={false}
-                    getComments={getComments}
-                    key={index}
-                    postId={String(post._id)}
-                    postUser={String(post.userId)}
-                    comment={comment}
+                  <Icon icon="mingcute:emoji-line" width={26} height={26} />
+                </div>
+
+                <div className="input-section w-[80%]  flex items-center">
+                  {" "}
+                  <TextField
+                    inputRef={commentInput}
+                    fullWidth
+                    value={comment}
+                    onChange={handleCommentChange}
+                    variant="standard"
+                    type="text"
+                    placeholder="Add comment..."
+                    className="flex items-center focus:outline-none w-full h-full"
                   />
-                ))
+                </div>
+                <div className="post-section">
+                  <button type="submit" className="text-blue-600">
+                    Post
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          {/* lap */}
+          <div className="main-cover md:flex hidden">
+            <div className="media-part w-[700px] h-[700px] flex justify-center bg-slate-300">
+              {!isVideo ? (
+                <img
+                  src={post.media}
+                  alt="media"
+                  className="w-[700px] h-[700px] object-cover"
+                />
               ) : (
-                <NothingHere />
+                <video src={post.media} muted controls preload="auto" />
               )}
-              {/* {hasMore && (
+            </div>
+            <div className="second-part flex flex-col">
+              <div className="header flex items-center justify-between border-b-[.5px] border-gray-500 w-[500px] h-[60px]">
+                <div className=" user flex ml-3">
+                  <div className="flex items-center">
+                    <img
+                      src={post.userAvatar}
+                      alt="avatar"
+                      className="w-[40px] h-[40px] rounded-full"
+                    />
+                  </div>
+                  <div className="name ml-3 flex items-center">
+                    <span>{post.name}</span>
+                  </div>
+                </div>
+                <div className="option mr-3">
+                  <Button
+                    variant="text"
+                    id="post-options-button"
+                    aria-controls={open ? "post-options" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                  >
+                    <Icon icon="mi:options-vertical" width={26} height={26} />
+                  </Button>
+                </div>
+              </div>
+              <div className="comment-list-section border-b-[.5px] border-gray-500 overflow-y-scroll h-[510px] w-[500px]">
+                {comments && comments.length > 0 ? (
+                  comments?.map((comment, index) => (
+                    <Comments
+                      comments={comments}
+                      setComments={setComments}
+                      isReply={false}
+                      getComments={getComments}
+                      key={index}
+                      postId={String(post._id)}
+                      postUser={String(post.userId)}
+                      comment={comment}
+                    />
+                  ))
+                ) : (
+                  <NothingHere />
+                )}
+                {/* {hasMore && (
                 <div className="mt-2" ref={loader}>
                   <CircularProgress />
                 </div>
               )} */}
-              {hasMore && <div onClick={loadMore} className="w-full  flex justify-center ">Load More</div>}
-            </div>
-            <div className="first-row pl-4">
-              <span className="username font-bold ">{post.name}</span>{" "}
-              <span>{post.content} </span>
-            </div>
-            <div className="actions flex justify-around mt-2 ">
-              <div className="like flex items-center">
-                <span className="mr-1">{post.likes?.length}</span>
-                {liked ? (
-                  <Icon
-                    icon="solar:like-bold"
-                    width={26}
-                    height={26}
-                    className="cursor-pointer"
-                    onClick={handleUnLike}
-                  />
-                ) : (
-                  <Icon
-                    onClick={handleLike}
-                    icon="solar:like-broken"
-                    width={26}
-                    className="cursor-pointer"
-                    height={26}
-                  />
+                {hasMore && (
+                  <div
+                    onClick={loadMore}
+                    className="w-full  flex justify-center "
+                  >
+                    Load More
+                  </div>
                 )}
-                <span>Like</span>
               </div>
-              <div className="comment flex items-center">
-                <span className="mr-1">{post.comments?.length}</span>
-                <Icon icon="iconamoon:comment" width={26} height={26} />
-                <span>Comment</span>
+              <div className="first-row pl-4">
+                <span className="username font-bold ">{post.name}</span>{" "}
+                <span>{post.content} </span>
               </div>
-              <div className="save flex items-center">
-                {saved ? (
-                  <Icon
-                    icon="mdi:bookmark"
-                    width={26}
-                    height={26}
-                    className="cursor-pointer"
-                    onClick={handleUnSave}
-                  />
-                ) : (
-                  <Icon
-                    icon="mdi:bookmark-outline"
-                    width={26}
-                    height={26}
-                    className="cursor-pointer"
-                    onClick={handleSave}
-                  />
-                )}
-                <span>Save</span>
-              </div>
-            </div>
-            <form
-              onSubmit={handleCommentPost}
-              className="relative comment-section flex items-center border-t-[.5px] w-[500px] h-[58px] mt-2 border-gray-500"
-            >
-              {showEmojiPicker && (
-                <div className="emoji-picker-container">
-                  <EmojiPicker onEmojiClick={onEmojiClick} />
+              <div className="actions flex justify-around mt-2 ">
+                <div className="like flex items-center">
+                  <span className="mr-1">{post.likes?.length}</span>
+                  {liked ? (
+                    <Icon
+                      icon="solar:like-bold"
+                      width={26}
+                      height={26}
+                      className="cursor-pointer"
+                      onClick={handleUnLike}
+                    />
+                  ) : (
+                    <Icon
+                      onClick={handleLike}
+                      icon="solar:like-broken"
+                      width={26}
+                      className="cursor-pointer"
+                      height={26}
+                    />
+                  )}
+                  <span>Like</span>
                 </div>
-              )}
-              <div
-                className="emoji w-[50px] flex justify-center"
-                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                <div className="comment flex items-center">
+                  <span className="mr-1">{post.comments?.length}</span>
+                  <Icon icon="iconamoon:comment" width={26} height={26} />
+                  <span>Comment</span>
+                </div>
+                <div className="save flex items-center">
+                  {saved ? (
+                    <Icon
+                      icon="mdi:bookmark"
+                      width={26}
+                      height={26}
+                      className="cursor-pointer"
+                      onClick={handleUnSave}
+                    />
+                  ) : (
+                    <Icon
+                      icon="mdi:bookmark-outline"
+                      width={26}
+                      height={26}
+                      className="cursor-pointer"
+                      onClick={handleSave}
+                    />
+                  )}
+                  <span>Save</span>
+                </div>
+              </div>
+              <form
+                onSubmit={handleCommentPost}
+                className="relative comment-section flex items-center border-t-[.5px] w-[500px] h-[58px] mt-2 border-gray-500"
               >
-                <Icon icon="mingcute:emoji-line" width={26} height={26} />
-              </div>
+                {showEmojiPicker && (
+                  <div className="emoji-picker-container">
+                    <EmojiPicker onEmojiClick={onEmojiClick} />
+                  </div>
+                )}
+                <div
+                  className="emoji w-[50px] flex justify-center"
+                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                >
+                  <Icon icon="mingcute:emoji-line" width={26} height={26} />
+                </div>
 
-              <div className="input-section w-[390px]  flex items-center">
-                {" "}
-                <TextField
-                  inputRef={commentInput}
-                  fullWidth
-                  value={comment}
-                  onChange={handleCommentChange}
-                  variant="filled"
-                  type="text"
-                  placeholder="Add comment..."
-                  className="flex items-center focus:outline-none w-full h-full"
-                />
-              </div>
-              <div className="post-section">
-                <button type="submit" className="text-blue-600">
-                  Post
-                </button>
-              </div>
-            </form>
+                <div className="input-section w-[390px]  flex items-center">
+                  {" "}
+                  <TextField
+                    inputRef={commentInput}
+                    fullWidth
+                    value={comment}
+                    onChange={handleCommentChange}
+                    variant="filled"
+                    type="text"
+                    placeholder="Add comment..."
+                    className="flex items-center focus:outline-none w-full h-full"
+                  />
+                </div>
+                <div className="post-section">
+                  <button type="submit" className="text-blue-600">
+                    Post
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      </Dialog>
+        </Dialog>
+      </ThemeProvider>
     </>
   );
 };

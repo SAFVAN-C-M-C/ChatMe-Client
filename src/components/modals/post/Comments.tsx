@@ -18,10 +18,10 @@ interface CommentProps {
   comment: IComments;
   postId: string;
   postUser: string;
-  getComments: (postId: string,page:number) => Promise<void>;
+  getComments: (postId: string, page: number) => Promise<void>;
   isReply: boolean;
-  comments:IComments[]
-  setComments:React.Dispatch<React.SetStateAction<IComments[]>>
+  comments: IComments[];
+  setComments: React.Dispatch<React.SetStateAction<IComments[]>>;
 }
 const Comments: React.FC<CommentProps> = ({
   comment,
@@ -30,7 +30,7 @@ const Comments: React.FC<CommentProps> = ({
   getComments,
   isReply,
   comments,
-  setComments
+  setComments,
 }) => {
   const { user } = useSelector((state: RootState) => state.user);
   const { profile } = useSelector((state: RootState) => state.profile);
@@ -61,7 +61,9 @@ const Comments: React.FC<CommentProps> = ({
           })
         );
 
-          setComments((oldCmnts)=>[ ...oldCmnts.filter((cmnt) => cmnt._id !== comment._id)])
+        setComments((oldCmnts) => [
+          ...oldCmnts.filter((cmnt) => cmnt._id !== comment._id),
+        ]);
         if (postUser === user?.data._id) {
           dispatch(getMyPosts());
         }
@@ -80,7 +82,9 @@ const Comments: React.FC<CommentProps> = ({
   const getReplyComment = async (commentId: string) => {
     try {
       setLoading(true);
-      const res = await axios.get(`${URL}/post/get/comment/reply/${commentId}?page=${page}&limit=3`);
+      const res = await axios.get(
+        `${URL}/post/get/comment/reply/${commentId}?page=${page}&limit=3`
+      );
       if (res.status === 200) {
         setReplys((prev) => [
           ...prev,
@@ -106,13 +110,13 @@ const Comments: React.FC<CommentProps> = ({
       setShowReply(true);
     } catch (error: any) {
       console.log("Seomething went wrong", error.message);
-    }  
+    }
   };
 
   const handleCommentPost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      setShowReply(false)
+      setShowReply(false);
       const formData = new FormData();
       formData.append("comment", reply);
       formData.append("name", String(profile?.data.name));
@@ -133,10 +137,10 @@ const Comments: React.FC<CommentProps> = ({
           })
         );
         // getComments(postId);
-        setComments((prevComments) => 
-          prevComments.map(cmnt => 
-            cmnt._id === comment._id 
-              ? { ...cmnt, replys: cmnt.replys + 1 } 
+        setComments((prevComments) =>
+          prevComments.map((cmnt) =>
+            cmnt._id === comment._id
+              ? { ...cmnt, replys: cmnt.replys + 1 }
               : cmnt
           )
         );
@@ -162,32 +166,32 @@ const Comments: React.FC<CommentProps> = ({
     // }
     setReplyInput(!replyInput);
   };
-  useEffect(()=>{
-    getReplyComment(comment._id)
-  },[page])
+  useEffect(() => {
+    getReplyComment(comment._id);
+  }, [page]);
   const loadMore = () => {
-    setPage(prevPage => prevPage + 1);
-};
+    setPage((prevPage) => prevPage + 1);
+  };
   return (
     <>
-      <div className="container w-full h-auto  mt-2 flex justify-between">
+      <div className="container w-full  h-auto mt-2 flex justify-between">
         <div className="content-part flex">
-          <div className="avatar w-[30px] h-[30px] rounded-full m-2">
+          <div className="avatar w-[30px] h-[30px] aspect-square rounded-full m-2">
             <img
               src={comment.userAvatar}
               alt="avatar"
-              className="w-full h-full object-cover rounded-full"
+              className="w-full h-full  object-cover rounded-full"
             />
           </div>
 
-          <div className="content  h-full">
-            <div className="username flex  items-center">
-              <span className="text-gray-900 font-semibold">
+          <div className="content w-[90%]   h-full">
+            <div className="username flex  items-center ">
+              <span className="text-gray-900 font-semibold break-all whitespace-pre-wrap">
                 {comment.name}
               </span>
             </div>
             <div className="comment ">
-              <span className="text-gray-500 font-normal">
+              <span className="text-gray-500 font-normal break-all whitespace-pre-wrap">
                 {comment.comment}
               </span>
             </div>
@@ -259,8 +263,8 @@ const Comments: React.FC<CommentProps> = ({
                 ) : replys ? (
                   replys.map((comment, index) => (
                     <Comments
-                    comments={comments}
-                    setComments={setComments}
+                      comments={comments}
+                      setComments={setComments}
                       isReply={true}
                       comment={comment}
                       getComments={getComments}
@@ -272,7 +276,14 @@ const Comments: React.FC<CommentProps> = ({
                 ) : (
                   <NothingHere />
                 )}
-                {hasMore && <div onClick={loadMore} className="w-full  flex justify-center ">Load More</div>}
+                {hasMore && (
+                  <div
+                    onClick={loadMore}
+                    className="w-full  flex justify-center "
+                  >
+                    Load More
+                  </div>
+                )}
               </div>
             ) : null}
           </div>

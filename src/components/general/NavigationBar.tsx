@@ -14,20 +14,20 @@ interface NavigationBarProps {
 const NavigationBar: React.FC<NavigationBarProps> = ({ isChat }) => {
   const { profile } = useSelector((state: RootState) => state.profile);
 
-
-
-  const [theme,setTheme]=useState(profile?.data.theme?profile?.data.theme:"light")
-  useEffect(()=>{
-    setTheme(profile?.data.theme?profile.data.theme:"light")
-    document.querySelector("html")?.setAttribute("data-theme",theme)
-  },[profile?.data.theme,theme])
+  const [theme, setTheme] = useState(
+    profile?.data.theme ? profile?.data.theme : "light"
+  );
+  useEffect(() => {
+    setTheme(profile?.data.theme ? profile.data.theme : "light");
+    document.querySelector("html")?.setAttribute("data-theme", theme);
+  }, [profile?.data.theme, theme]);
   const options = {
     Home: ["teenyicons:home-solid", "/"],
     Notification: ["mingcute:notification-fill", "/"],
     Search: ["tabler:search", "/"],
     Chat: ["icon-park-solid:message", "/chat"],
     "Create Post": ["icons8:plus", "/"],
-    "My Application":["material-symbols:post-add", "/jobs/my-applications"],
+    "My Application": ["material-symbols:post-add", "/jobs/my-applications"],
     "Create Job Post": ["material-symbols:post-add", "/"],
     Jobs: ["solar:suitcase-bold", "/jobs"],
   };
@@ -35,13 +35,12 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ isChat }) => {
 
   // const [theamToggle,setTheamToggle]=useState("light");
 
-  const handleToggle = (e:ChangeEvent<HTMLInputElement>) => {
-    if(e.target.checked){
-      dispatch(changeTheme({theam:"dark"}))
-    }else{
-      dispatch(changeTheme({theam:"light"}))
+  const handleToggle = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      dispatch(changeTheme({ theam: "dark" }));
+    } else {
+      dispatch(changeTheme({ theam: "light" }));
     }
-    
   };
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -139,19 +138,15 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ isChat }) => {
                 <b className="text-base">{profile?.data?.name}</b>
               </div>
             </div>
-
           </div>
           <div className="footers-options absolute  w-full h-auto bottom-10  flex items-center flex-col ">
-            <label
-              className="options flex justify-center items-center w-[90%] mb-2 mt-2 pt-2 pb-2 hover:bg-slate-200 hover:text-gray-700 rounded-lg"
-              
-            >
+            <label className="options flex justify-center items-center w-[90%] mb-2 mt-2 pt-2 pb-2 hover:bg-slate-200 hover:text-gray-700 rounded-lg">
               <div className="option-icon rounded-full h-auto  w-[40%] flex justify-center items-center">
                 <label className="swap swap-rotate" id="theam-controller">
                   {/* this hidden checkbox controls the state */}
                   <input
                     onChange={handleToggle}
-                    checked={theme==="light"?false:true}
+                    checked={theme === "light" ? false : true}
                     type="checkbox"
                     className="theme-controller"
                     value="synthwave"
