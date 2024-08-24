@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { config } from "@/common/configurations";
 import { URL } from "@/common/api";
 import axios from "axios";
-
 import { likePost, unlikePost } from "@/redux/reducers/posts/homePosts";
 import { IPosts } from "@/types/IPosts";
 import { likeMyPost, unlikeMyPost } from "@/redux/reducers/posts/userPosts";
@@ -40,14 +39,14 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
     } else {
       setMypost(false);
     }
-  }, []);
+  }, [post.userId, user?.data._id]);
   useEffect(() => {
     if (profile?.data.following?.find((val) => val === post.userId)) {
       setFollow(true);
     } else {
       setFollow(false);
     }
-  }, [profile?.data.following?.length]);
+  }, [post.userId, profile?.data.following, profile?.data?.following?.length]);
   useEffect(() => {
     setIsVideo(false);
     if (getFileExtension(String(post.media)) !== "jpeg") {
@@ -93,36 +92,30 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
   };
   const handleUnfollow = () => {
     try {
-      console.log("clicked");
       dispatch(unFollowUser({ userId: String(post?.userId) }));
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
   const handlefollow = () => {
     try {
-      console.log("clicked");
       dispatch(followUser({ userId: String(post?.userId) }));
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
   const handleSave = async () => {
     try {
-      console.log("clicked save", `${URL}/post/save/${post._id}`);
-
       const response = await axios.put(`${URL}/post/save/${post._id}`, config);
       if (response.status === 200) {
         dispatch(getSavedPost());
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
   const handleUnSave = async () => {
     try {
-      console.log("clicked unsave");
-
       const response = await axios.put(
         `${URL}/post/unsave/${post._id}`,
         config
@@ -131,13 +124,11 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
         dispatch(getSavedPost());
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
   const handleLike = async () => {
     try {
-      console.log("clicked");
-
       const response = await axios.put(`${URL}/post/like/${post._id}`, config);
       if (response.status === 200) {
         dispatch(
@@ -153,7 +144,7 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
         }
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
   const handleUserClick = () => {
@@ -165,8 +156,6 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
   };
   const handleUnLike = async () => {
     try {
-      console.log("clicked");
-
       const response = await axios.put(
         `${URL}/post/unlike/${post._id}`,
         config
@@ -188,7 +177,7 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
         }
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
   return (
@@ -224,7 +213,7 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
       >
         {myPost
           ? [
-              <MenuItem  key="edit" onClick={handleEditClick}>
+              <MenuItem key="edit" onClick={handleEditClick}>
                 Edit
               </MenuItem>,
               <MenuItem key="delete" onClick={handleDelete}>
@@ -285,11 +274,7 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
         </div>
         <div className="media-part w-full aspect-square  sm:w-[398px] sm:h-[398px]  lg:w-[498px] lg:h-[498px] bg-slate-500">
           {!isVideo ? (
-            <img
-              src={post.media}
-              alt=""
-              className="w-full  object-cover"
-            />
+            <img src={post.media} alt="" className="w-full  object-cover" />
           ) : (
             <video
               src={post.media}
@@ -302,16 +287,21 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
         </div>
         <div className="bottom-section w-full h-auto rounded-b-xl ">
           <div className="first-row pl-2 sm:pl-4 mt-1 mb-1">
-            <span className="username font-bold text-xs sm:text-sm ">{post.name}</span>{" "}
-            <span className="username  text-xs sm:text-sm ">{post.content} </span>
+            <span className="username font-bold text-xs sm:text-sm ">
+              {post.name}
+            </span>{" "}
+            <span className="username  text-xs sm:text-sm ">
+              {post.content}{" "}
+            </span>
           </div>
           <div className="second-row flex justify-around mt-2 mb-4  ">
             <div className="like flex justify-center items-center">
-              <span className="mr-1 text-xs sm:text-sm">{post.likes?.length}</span>
+              <span className="mr-1 text-xs sm:text-sm">
+                {post.likes?.length}
+              </span>
               {liked ? (
                 <Icon
                   icon="solar:like-bold"
-
                   className="cursor-pointer w-[22px] h-[22px] sm:w-[26px] sm:h-[26px]"
                   onClick={handleUnLike}
                 />
@@ -319,9 +309,7 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
                 <Icon
                   onClick={handleLike}
                   icon="solar:like-broken"
-                  
                   className="cursor-pointer w-[22px] h-[22px] sm:w-[26px] sm:h-[26px]"
-                  
                 />
               )}
               <span className="text-xs sm:text-sm">Like</span>
@@ -330,11 +318,12 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
               className="comment flex justify-center items-center cursor-pointer"
               onClick={() => setShowPost(!showPost)}
             >
-              <span className="mr-1 text-xs sm:text-sm">{post.comments?.length}</span>
+              <span className="mr-1 text-xs sm:text-sm">
+                {post.comments?.length}
+              </span>
               <Icon
                 className="mr-1 w-[22px] h-[22px] sm:w-[26px] sm:h-[26px]"
                 icon="iconamoon:comment"
-                
               />
               <span className="text-xs sm:text-sm">Comment</span>
             </div>
@@ -342,14 +331,12 @@ const HomePost: React.FC<HomePostProps> = ({ post }) => {
               {saved ? (
                 <Icon
                   icon="mdi:bookmark"
-                  
                   className="cursor-pointer w-[22px] h-[22px] sm:w-[26px] sm:h-[26px]"
                   onClick={handleUnSave}
                 />
               ) : (
                 <Icon
                   icon="mdi:bookmark-outline"
-                  
                   className="cursor-pointer w-[22px] h-[22px] sm:w-[26px] sm:h-[26px]"
                   onClick={handleSave}
                 />

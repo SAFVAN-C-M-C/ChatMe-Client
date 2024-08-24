@@ -6,7 +6,6 @@ import RecruiterBioEditModal from "../../modals/RecruiterBioEditModal";
 import AvatarViewModal from "@/components/modals/AvatarViewModal";
 import FollowerList from "@/components/modals/FollowModals/FollowerList";
 import FollowingList from "@/components/modals/FollowModals/FollowingList";
-// import { useState } from "react";
 const RecruiterBio = () => {
   //redux
   const { profile } = useSelector((state: RootState) => state.profile);
@@ -57,7 +56,9 @@ const RecruiterBio = () => {
             />{" "}
           </div>
           <div className="user-name  flex-wrap h-auto flex gap-1 items-center">
-            <span className="text-sm sm:text-base md:text-lg">{profile?.data.name}</span>
+            <span className="text-sm sm:text-base md:text-lg">
+              {profile?.data.name}
+            </span>
             {profile?.data.isVerified ? (
               <Icon
                 className="text-green-500 w-[14px] h-[14px]"
@@ -69,11 +70,14 @@ const RecruiterBio = () => {
         <div className="second-row w-full flex justify-around h-auto text-sm sm:text-base md:text-lg">
           <div className="post">
             <p>
-              <span className="font-bold flex justify-center">{userPosts?.data ? userPosts?.data.length : "0"}{" "} </span>Posts
+              <span className="font-bold flex justify-center">
+                {userPosts?.data ? userPosts?.data.length : "0"}{" "}
+              </span>
+              Posts
             </p>
           </div>
           <div className="follower">
-            <p >
+            <p>
               <span className="font-bold flex justify-center">
                 {profile?.data ? profile.data?.followers?.length : "0"}{" "}
               </span>
@@ -107,13 +111,11 @@ const RecruiterBio = () => {
           <div className="action flex mr-3 text-sm sm:text-base md:text-lg">
             <div className="edit-profile mr-1 flex justify-center items-center">
               <Icon
-              onClick={() => setOpenEditBio(!openEditBio)}
+                onClick={() => setOpenEditBio(!openEditBio)}
                 className="cursor-pointer w-[18px]  h-[18px] sm:w-[20px] sm:h-[20px]"
                 icon="mdi:edit"
-
               />
             </div>
-
           </div>
         </div>
         {profile?.data.bio?.location ? (
@@ -121,7 +123,6 @@ const RecruiterBio = () => {
             <Icon
               className="text-gray-400 mr-1 w-[16px]  h-[16px] sm:w-[18px] sm:h-[18px]"
               icon="mdi:location"
-
             />
             <span className="text-gray-400">{profile?.data.bio?.location}</span>
           </div>
@@ -131,7 +132,6 @@ const RecruiterBio = () => {
             <Icon
               className="text-gray-400 mr-1 w-[16px]  h-[16px] sm:w-[18px] sm:h-[18px]"
               icon="ic:baseline-phone"
-
             />
             <span className="text-gray-400 text-sm sm:text-base md:text-lg">
               +91 {profile?.data.bio?.phone}
@@ -143,9 +143,10 @@ const RecruiterBio = () => {
             <Icon
               className="text-gray-400 mr-1 w-[16px]  h-[16px] sm:w-[18px] sm:h-[18px]"
               icon="ic:baseline-email"
-
             />
-            <span className="text-gray-400 text-sm sm:text-base md:text-lg">{profile?.data.email}</span>
+            <span className="text-gray-400 text-sm sm:text-base md:text-lg">
+              {profile?.data.email}
+            </span>
           </div>
         ) : null}
       </div>

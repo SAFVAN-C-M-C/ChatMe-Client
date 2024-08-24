@@ -7,12 +7,12 @@ import { ChatContext } from "@/context/ChatContext";
 import { useSocket } from "@/context/SocketContext";
 import { RootState } from "@/redux/store";
 import { Icon } from "@iconify/react";
-import Picker, { EmojiClickData } from 'emoji-picker-react';
+import Picker, { EmojiClickData } from "emoji-picker-react";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { BsSend } from "react-icons/bs";
 import { useSelector } from "react-redux";
-import EmojiPicker from "emoji-picker-react";
+import toast from "react-hot-toast";
 
 const MessageInput = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -27,10 +27,10 @@ const MessageInput = () => {
     e.preventDefault();
     setMessage(e.target.value);
   };
-  const [openSelectMediaModal,setOpenSelectMediaModal]=useState(false)
-  const handleSendMediaModal=()=>{
-    setOpenSelectMediaModal(true)
-  }
+  const [openSelectMediaModal, setOpenSelectMediaModal] = useState(false);
+  const handleSendMediaModal = () => {
+    setOpenSelectMediaModal(true);
+  };
   const handleMessageSend = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -46,7 +46,6 @@ const MessageInput = () => {
       const res = await axios.post(`${URL}/chat/message`, formData, config);
       if (res.status === 200) {
         getChat(String(chat?._id));
-        console.log(res.data.data, "===message");
 
         setMessage("");
         addNewMessage(res.data.data);
@@ -57,7 +56,7 @@ const MessageInput = () => {
         }
       }
     } catch (error: any) {
-      console.log("Some thing went wrong", error.message);
+      toast.error("Some thing went wrong,please try again");
     }
   };
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
@@ -67,23 +66,24 @@ const MessageInput = () => {
   };
   return (
     <>
-          
-    {
-      openSelectMediaModal?<SelectMedia chat={chat}  setOpenSelectMediaModal={setOpenSelectMediaModal}/>:null
-    }
+      {openSelectMediaModal ? (
+        <SelectMedia
+          chat={chat}
+          setOpenSelectMediaModal={setOpenSelectMediaModal}
+        />
+      ) : null}
       <form className=" px-4 mx-8 my-3" onSubmit={handleMessageSend}>
         <div className="w-full chat-input-container flex light-dark rounded-lg ">
-        {showEmojiPicker && (
-        <div className="emoji-picker-container">
-          <Picker onEmojiClick={onEmojiClick} />
-        </div>
-      )}
-        <div className=" m-3 text-white cursor-pointer" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
-            <Icon
-              icon="mingcute:emoji-line"
-              width={26}
-              height={26}
-            />
+          {showEmojiPicker && (
+            <div className="emoji-picker-container">
+              <Picker onEmojiClick={onEmojiClick} />
+            </div>
+          )}
+          <div
+            className=" m-3 text-white cursor-pointer"
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+          >
+            <Icon icon="mingcute:emoji-line" width={26} height={26} />
           </div>
           <input
             type="text"
@@ -92,7 +92,10 @@ const MessageInput = () => {
             className=" outline-none text-sm rounded-lg block w-full p-2.5 light-dark  text-white "
             placeholder=" Send a message"
           />
-          <div className=" m-3 text-white cursor-pointer" onClick={handleSendMediaModal}>
+          <div
+            className=" m-3 text-white cursor-pointer"
+            onClick={handleSendMediaModal}
+          >
             <Icon
               icon="material-symbols:image-outline"
               width={26}

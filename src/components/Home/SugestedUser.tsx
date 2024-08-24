@@ -3,14 +3,14 @@
 import { followUser, unFollowUser } from "@/redux/actions/user/profileActions";
 import { AppDispatch, RootState } from "@/redux/store";
 import { SuggestedUsers } from "@/types/IProfile";
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-interface SuggestedUsersProps{
-  user:SuggestedUsers
+interface SuggestedUsersProps {
+  user: SuggestedUsers;
 }
-const SugestedUser:FC<SuggestedUsersProps> = ({user}) => {
+const SugestedUser: FC<SuggestedUsersProps> = ({ user }) => {
   const { profile } = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -25,33 +25,23 @@ const SugestedUser:FC<SuggestedUsersProps> = ({user}) => {
   const handleUserClick = () => {
     navigate(`/u/profile/${user.userId}`);
   };
-  const handleUnfollow=()=>{
-    try {
-      console.log("clicked");
-      dispatch(unFollowUser({userId:String(user?.userId)}))
-      
-      
-    } catch (error: any) {
-      console.log("something went wrong", error.message);
-    }
-  }
-  const handlefollow=()=>{
-    try {
-      console.log("clicked");
-      dispatch(followUser({userId:String(user?.userId)}))
-      
-      
-    } catch (error: any) {
-      console.log("something went wrong", error.message);
-    }
-  }
+  const handleUnfollow = () => {
+    dispatch(unFollowUser({ userId: String(user?.userId) }));
+  };
+  const handlefollow = () => {
+    dispatch(followUser({ userId: String(user?.userId) }));
+  };
   return (
     <>
       <div className="suggested-user flex justify-between w-[400px] pl-4 pr-4 mt-5">
-        <div className="user flex">
+        <div onClick={handleUserClick} className="user flex">
           <div className="avatars flex items-center">
             <img
-              src={user?.bio?.avatar?String(user.bio.avatar):"/general/ChatMe-profile.png"}
+              src={
+                user?.bio?.avatar
+                  ? String(user.bio.avatar)
+                  : "/general/ChatMe-profile.png"
+              }
               alt=""
               className="w-[40px] h-[40px] rounded-full"
             />
@@ -61,9 +51,21 @@ const SugestedUser:FC<SuggestedUsersProps> = ({user}) => {
           </div>
         </div>
         <div className="action flex items-center">
-          {
-            follow?<span className="text-blue-600 cursor-pointer" onClick={handleUnfollow}>Following</span>:<span className="text-blue-600 cursor-pointer" onClick={handlefollow}>Follow</span>
-          }
+          {follow ? (
+            <span
+              className="text-blue-600 cursor-pointer"
+              onClick={handleUnfollow}
+            >
+              Following
+            </span>
+          ) : (
+            <span
+              className="text-blue-600 cursor-pointer"
+              onClick={handlefollow}
+            >
+              Follow
+            </span>
+          )}
         </div>
       </div>
     </>

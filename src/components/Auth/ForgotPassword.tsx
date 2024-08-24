@@ -6,18 +6,9 @@ import { forgotPassword } from "../../redux/actions/user/userActions";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useNavigate } from "react-router-dom";
-// import { validateEmail } from '../../helper/validate';
-// import toast from 'react-hot-toast';
-// import { useState } from 'react';
-// import { forgotPassword } from '../../redux/actions/user/userActions';
-// import { useDispatch } from 'react-redux';
-// import { AppDispatch } from '../../redux/store';
-// import { useNavigate } from 'react-router-dom';
 
 const ForgotPassword = () => {
-  const { user, loading, error } = useSelector(
-    (state: RootState) => state.user
-  );
+  const { user, error } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -46,7 +37,7 @@ const ForgotPassword = () => {
       localStorage.removeItem("timerEnd");
       navigate("/otp-verification", { replace: true });
     }
-  }, [user]);
+  }, [navigate, user]);
 
   return (
     <>

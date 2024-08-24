@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { formateDateForChat } from "@/_lib/util/formateDateForChat";
@@ -39,19 +40,20 @@ const UserInChat: FC<UserInChatProps> = ({ chat }) => {
         setIsSelectedChat(false);
       }
     }
-  }, [chatId, myChats]);
-  const getTotalUnread = (messages: IMessage[]) => {
-    let count = 0;
-    for (const message of messages) {
-      if (!message.recieverSeen && message.receiverId === user?.data._id) {
-        count++;
-      }
-    }
-    setUnread(count);
-  };
+  }, [chat._id, chatId, myChats]);
+
   useEffect(() => {
+    const getTotalUnread = (messages: IMessage[]) => {
+      let count = 0;
+      for (const message of messages) {
+        if (!message.recieverSeen && message.receiverId === user?.data._id) {
+          count++;
+        }
+      }
+      setUnread(count);
+    };
     getTotalUnread(chat.messages);
-  }, [chat]);
+  }, [chat, user?.data._id]);
   const handleClick = () => {
     setChat(chat);
 
@@ -71,7 +73,7 @@ const UserInChat: FC<UserInChatProps> = ({ chat }) => {
     } else {
       setIsOnline(false);
     }
-  }, [reciever?.userId, onlineUsers]);
+  }, [reciever?.userId, onlineUsers, reciever]);
   const getUserDetails = async (userId: string) => {
     try {
       const res = await axios.get(`${URL}/profile/get/user/${userId}`, config);
@@ -79,7 +81,7 @@ const UserInChat: FC<UserInChatProps> = ({ chat }) => {
         setReceiver(res.data.data);
       }
     } catch (error: any) {
-      console.log("Something wrong", error.message);
+      setReceiver(null);
     }
   };
   useEffect(() => {
@@ -90,7 +92,7 @@ const UserInChat: FC<UserInChatProps> = ({ chat }) => {
         getUserDetails(String(chat.participants[0]));
       }
     }
-  }, [chat?._id]);
+  }, [chat?._id, chat.participants, user?.data._id]);
   const [formattedDate, setFormattedDate] = useState(() =>
     formateDateForChat(chat?.messages[chat?.messages?.length - 1]?.createdAt)
   );
@@ -99,7 +101,9 @@ const UserInChat: FC<UserInChatProps> = ({ chat }) => {
     // Update the date format every minute
     const intervalId = setInterval(() => {
       setFormattedDate(
-        formateDateForChat(chat?.messages[chat?.messages?.length - 1]?.createdAt)
+        formateDateForChat(
+          chat?.messages[chat?.messages?.length - 1]?.createdAt
+        )
       );
     }, 60000); // 1 minute interval
 
@@ -185,10 +189,8 @@ const UserInChat: FC<UserInChatProps> = ({ chat }) => {
               </span>
             )}
             <span className="flex text-sm">
-{" "} . 
-{" "}              {formateDateForChat(
-                chat.messages[chat.messages?.length - 1]?.createdAt
-              )}
+              {" "}
+              . {formateDateForChat(formattedDate)}
             </span>
           </div>
         </div>

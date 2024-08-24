@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { getSignedUrl } from "../../services";
-import ReactLoading from 'react-loading';
+import ReactLoading from "react-loading";
 import axios from "axios";
 import { updateAvatar } from "../../redux/actions/user/profileActions";
 
@@ -18,7 +18,7 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
   handleAvatarViewModalOpen,
   photoUrl,
 }) => {
-  const { loading, error } = useSelector(
+  const { loading, error, profile } = useSelector(
     (state: RootState) => state.profile
   );
   const dispatch = useDispatch<AppDispatch>();
@@ -29,17 +29,10 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
     }
   }, [error]);
 
-  // useEffect(() => {
-  //   if (profile?.message === "Avatar updated") {
-  //     toast.success("Profile Pic updated");
-  //     handleAvatarViewModalOpen();
-  //   }
-  // }, [profile?.message, handleAvatarViewModalOpen]);
-
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(photoUrl);
   const [openCrop, setOpenCrop] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const [uploding,setUploading]=useState<boolean>(false)
+  const [uploding, setUploading] = useState<boolean>(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -52,17 +45,20 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
 
   const handleImageUpload = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setUploading(true)
+    setUploading(true);
     if (!file) {
       toast.error("Select an image");
       return;
     }
-  
+
     try {
-      const signedUrl: { url: string; media: string } = await getSignedUrl("avatar", "jpeg");
-      
+      const signedUrl: { url: string; media: string } = await getSignedUrl(
+        "avatar",
+        "jpeg"
+      );
+
       const { url, media } = signedUrl;
-      
+
       // Ensure the correct Content-Type is used
       const response = await axios.put(url, file, {
         headers: {
@@ -70,18 +66,16 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
         },
         withCredentials: true,
       });
-  
+
       if (response.status === 200) {
-        console.log("Image uploaded successfully");
-  
         // Update profile with the new avatar URL
         const updatedProfileData = {
           avatar: `https://s3.ap-south-1.amazonaws.com/bucket.chatme.use/${media}`,
         };
         dispatch(updateAvatar(updatedProfileData));
-        toast.success("Avatar changed")
-        setUploading(false)
-        handleAvatarViewModalOpen()
+        toast.success("Avatar changed");
+        setUploading(false);
+        handleAvatarViewModalOpen();
       } else {
         throw new Error("Failed to upload image");
       }
@@ -100,7 +94,10 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
           {...{ avatarUrl, setOpenCrop, setAvatarUrl, setFile, formData }}
         />
       ) : (
-        <div className="fixed inset-0 z-40 flex justify-center items-center">
+        <div
+          data-theme={profile?.data.theme || "light"}
+          className="fixed inset-0 z-40 flex justify-center items-center"
+        >
           <div
             className="closeButton fixed w-auto h-auto top-5 right-5"
             onClick={handleAvatarViewModalOpen}
@@ -141,7 +138,16 @@ const AvatarViewModal: React.FC<AvatarViewModalProps> = ({
                   className="ml-2 mr-4 p-2 bg-blue-500 w-[100px] rounded-md text-white"
                   disabled={loading}
                 >
-                  {loading || uploding ? <ReactLoading type={"bubbles"} color={"#fff"} height={'20%'} width={'20%'} /> : "Change"}
+                  {loading || uploding ? (
+                    <ReactLoading
+                      type={"bubbles"}
+                      color={"#fff"}
+                      height={"20%"}
+                      width={"20%"}
+                    />
+                  ) : (
+                    "Change"
+                  )}
                 </button>
               </div>
             </form>

@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import RecruiterPost from "./RecruiterPost";
+import NothingHere from "@/components/general/NothingHere";
 
 const Recruiters = () => {
   const { profile } = useSelector((state: RootState) => state.profile);
@@ -11,7 +12,7 @@ const Recruiters = () => {
           <RecruiterPost key={index} recruiterId={String(recruiter.userId)} />
         ))
       ) : (
-        <span>No data</span>
+        <NothingHere />
       )}
     </div>
   );

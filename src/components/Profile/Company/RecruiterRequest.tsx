@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import RecruiterRequestPost from "./RecruiterRequestPost";
 import { RootState } from "../../../redux/store";
+import NothingHere from "@/components/general/NothingHere";
 
 const RecruiterRequest = () => {
   const { profile } = useSelector((state: RootState) => state.profile);
@@ -11,7 +12,7 @@ const RecruiterRequest = () => {
           <RecruiterRequestPost key={index} value={application} />
         ))
       ) : (
-        <span>No data</span>
+        <NothingHere />
       )}
     </div>
   );

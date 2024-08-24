@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import {
@@ -10,7 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { validateEmail, validatePassword } from "../../../helper/validate";
 import { GoogleLogin } from "@react-oauth/google";
-import ReactLoading from 'react-loading';
+import ReactLoading from "react-loading";
 
 const RegisterForm_1 = () => {
   //redux
@@ -28,7 +29,6 @@ const RegisterForm_1 = () => {
   });
   const [confirmPass, setConfirmPass] = useState("");
   const [inputError, setInputError] = useState("");
-  const [button, setButton] = useState(true);
 
   //event handlers
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +39,6 @@ const RegisterForm_1 = () => {
     setConfirmPass(e.target.value);
     if (confirmPass === formData.password) {
       setInputError("");
-      setButton(false);
     } else {
       setInputError("Password dont match");
     }
@@ -48,7 +47,6 @@ const RegisterForm_1 = () => {
     setConfirmPass(e.target.value);
     if (confirmPass === formData.password) {
       setInputError("");
-      setButton(false);
     } else {
       setInputError("Password dont match");
     }
@@ -87,7 +85,7 @@ const RegisterForm_1 = () => {
       localStorage.removeItem("timerEnd");
       navigate("/otp-verification", { replace: true });
     }
-  }, [user]);
+  }, [navigate, user]);
   return (
     <>
       <div className="register-container bg-white border-[.5px] border-gray-700 rounded-lg w-[90%] m-2 h-[550px] lg:w-[80%] md:w-[90%] sm:w-[60%] flex flex-col items-center">
@@ -168,7 +166,16 @@ const RegisterForm_1 = () => {
               className="w-full outline-none rounded-full hover:outline-none bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-500 focus:outline-none h-full text-white flex justify-center items-center transition-colors duration-500 delay-200"
               type="submit"
             >
-              {loading ? <ReactLoading type={"bubbles"} color={"#fff"} height={'20%'} width={'20%'} /> : "Verify"}
+              {loading ? (
+                <ReactLoading
+                  type={"bubbles"}
+                  color={"#fff"}
+                  height={"20%"}
+                  width={"20%"}
+                />
+              ) : (
+                "Verify"
+              )}
             </button>
           </div>
         </form>
@@ -181,7 +188,7 @@ const RegisterForm_1 = () => {
               loginWithGoogle(credentialResponse);
             }}
             onError={() => {
-              console.log("Login Failed");
+              toast.error("Login Failed");
             }}
           />
         </div>

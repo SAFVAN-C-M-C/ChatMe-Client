@@ -12,124 +12,131 @@ import toast from "react-hot-toast";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { addExperience } from "../../redux/actions/user/profileActions";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { darkTheme, lightTheme } from "@/helper/theme";
 
-interface AddExperienceProps{
-    setOpenAddExperience: Dispatch<SetStateAction<boolean>>;
+interface AddExperienceProps {
+  setOpenAddExperience: Dispatch<SetStateAction<boolean>>;
 }
-const AddExperience:React.FC<AddExperienceProps> = ({setOpenAddExperience}) => {
-    const { error } = useSelector((state: RootState) => state.profile);
+const AddExperience: React.FC<AddExperienceProps> = ({
+  setOpenAddExperience,
+}) => {
+  const { error, profile } = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch<AppDispatch>();
-      const handleClose = () => {
-        setOpenAddExperience(false);
-      };
-      useEffect(() => {
-        if (error) {
-          toast.error(error);
-        }
-      }, [error]);
-      const handleSubmit=(event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const formJson = Object.fromEntries((formData as any).entries());
-        if(!validateName(formJson.nameOfinstitue)){
-            toast.error("Enter a valid name");
-            return;
-        }
-        if(!validateName(formJson.position)){
-            toast.error("Enter a valid Position");
-            return;
-        }
-        if(!validateYear(formJson.startYear)){
-            toast.error("Enter a valid Year");
-            return;
-        }
-        if(formJson.endYear){
-            if(!validateYear(formJson.endYear) && formJson.endYear.toLowerCase()!=="present" ){
-                toast.error("Enter a valid Years");
-                return;
-            }
-        }
-        dispatch(addExperience(formJson))
-        if(!error){
-            toast.success("Expierience added")
-            handleClose();
-        }
-        
+  const handleClose = () => {
+    setOpenAddExperience(false);
+  };
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const formJson = Object.fromEntries((formData as any).entries());
+    if (!validateName(formJson.nameOfinstitue)) {
+      toast.error("Enter a valid name");
+      return;
+    }
+    if (!validateName(formJson.position)) {
+      toast.error("Enter a valid Position");
+      return;
+    }
+    if (!validateYear(formJson.startYear)) {
+      toast.error("Enter a valid Year");
+      return;
+    }
+    if (formJson.endYear) {
+      if (
+        !validateYear(formJson.endYear) &&
+        formJson.endYear.toLowerCase() !== "present"
+      ) {
+        toast.error("Enter a valid Years");
+        return;
       }
+    }
+    dispatch(addExperience(formJson));
+    if (!error) {
+      toast.success("Expierience added");
+      handleClose();
+    }
+  };
   return (
     <>
-      <Dialog
-        open
-        onClose={handleClose}
-        PaperProps={{
-          component: "form",
-          onSubmit: handleSubmit
-
-        }}
+      <ThemeProvider
+        theme={profile?.data.theme === "dark" ? darkTheme : lightTheme}
       >
-        <DialogTitle>Add Experience</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Add you Experience realated Data. Note that this will show in your profile.
-            
-          </DialogContentText>
-          <TextField
-          
-            autoFocus
-            required
-            margin="dense"
-            id="nameOfinstitue"
-            name="nameOfinstitue"
-            label="Name of Institute"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-         
-            autoFocus
-            required
-            margin="dense"
-            id="position"
-            name="position"
-            label="Position"
-            type="text"
-            fullWidth
-            variant="standard"
-          /><TextField
-          
-          autoFocus
-          required
-          margin="dense"
-          id="startYear"
-          name="startYear"
-          label="Starting Year"
-          type="text"
-          variant="standard"
-        />
-        <TextField
-        sx={{
-            ml:2
-        }}
-        
-          autoFocus
-          
-          margin="dense"
-          id="endYear"
-          name="endYear"
-          label="Ending Year"
-          type="text"
-          variant="standard"
-        />     
-        <p className="text-xs text-red-500">
-        Note: if your curently under the course please enter present as end year
-        </p>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Save</Button>
-        </DialogActions>
-      </Dialog>
+        <CssBaseline />
+        <Dialog
+          open
+          onClose={handleClose}
+          PaperProps={{
+            component: "form",
+            onSubmit: handleSubmit,
+          }}
+        >
+          <DialogTitle>Add Experience</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Add you Experience realated Data. Note that this will show in your
+              profile.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="nameOfinstitue"
+              name="nameOfinstitue"
+              label="Name of Institute"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="position"
+              name="position"
+              label="Position"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="startYear"
+              name="startYear"
+              label="Starting Year"
+              type="text"
+              variant="standard"
+            />
+            <TextField
+              sx={{
+                ml: 2,
+              }}
+              autoFocus
+              margin="dense"
+              id="endYear"
+              name="endYear"
+              label="Ending Year"
+              type="text"
+              variant="standard"
+            />
+            <p className="text-xs text-red-500">
+              Note: if your curently under the course please enter present as
+              end year
+            </p>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit">Save</Button>
+          </DialogActions>
+        </Dialog>
+      </ThemeProvider>
     </>
   );
 };

@@ -31,8 +31,14 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ isChat }) => {
     "Create Job Post": ["material-symbols:post-add", "/"],
     Jobs: ["solar:suitcase-bold", "/jobs"],
   };
-  const [shrink, setShrink] = useState(isChat ? isChat : false);
-
+  const [shrink, setShrink] = useState(false);
+  useEffect(() => {
+    if (isChat) {
+      setShrink(isChat);
+    } else {
+      setShrink(false);
+    }
+  }, [isChat]);
   // const [theamToggle,setTheamToggle]=useState("light");
 
   const handleToggle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -103,7 +109,6 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ isChat }) => {
             {Object.entries(options).map(([title, icon], index) => (
               <NavigationOptions
                 shrink={shrink}
-                setShrink={setShrink}
                 key={index}
                 title={title}
                 value={icon}

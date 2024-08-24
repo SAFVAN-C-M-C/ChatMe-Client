@@ -8,45 +8,50 @@ import { followUser, unFollowUser } from "@/redux/actions/user/profileActions";
 
 interface CompanyBioProps {
   Userprofile: ProfilePayload | null;
-  postLength?:number
+  postLength?: number;
 }
-const CompanyBio: React.FC<CompanyBioProps> = ({ Userprofile,postLength }) => {
+const CompanyBio: React.FC<CompanyBioProps> = ({ Userprofile, postLength }) => {
   const [follow, setFollow] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-    const { profile } = useSelector((state: RootState) => state.profile);
+  const { profile } = useSelector((state: RootState) => state.profile);
 
   useEffect(() => {
     if (
-        profile?.data.following?.find((val) => val === Userprofile?.data.userId)
+      profile?.data.following?.find((val) => val === Userprofile?.data.userId)
     ) {
       setFollow(true);
     } else {
       setFollow(false);
     }
-  }, [profile?.data.following?.length]);
+  }, [
+    Userprofile?.data.userId,
+    profile?.data.following,
+    profile?.data.following?.length,
+  ]);
   const handleUnfollow = () => {
     try {
-      console.log("clicked");
       dispatch(unFollowUser({ userId: String(Userprofile?.data.userId) }));
       setFollow(false);
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
   const handlefollow = () => {
     try {
-      console.log("clicked");
       dispatch(followUser({ userId: String(Userprofile?.data.userId) }));
       setFollow(true);
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
 
   return (
     <>
       {/* for phone */}
-      <div data-theme={profile?.data.theme || "light"} className="Userprofile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 flex md:hidden">
+      <div
+        data-theme={profile?.data.theme || "light"}
+        className="Userprofile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 flex md:hidden"
+      >
         <div className="first-row w-full flex justify-center items-center h-[50px]  mt-3 mb-3">
           <div className="provile-avatar mr-4 w-[30%] flex justify-center items-center">
             <img
@@ -92,7 +97,13 @@ const CompanyBio: React.FC<CompanyBioProps> = ({ Userprofile,postLength }) => {
         </div>
         <div className="thrid-row mt-2 ml-2  flex w-full justify-between">
           <div className="title">
-            <span className={`text-gray-500  pl-4 pr-4 pt-1 pb-1 rounded-md  ${profile?.data.theme==="dark"?"bg-gray-600 text-slate-300":"bg-slate-200"}`}>
+            <span
+              className={`text-gray-500  pl-4 pr-4 pt-1 pb-1 rounded-md  ${
+                profile?.data.theme === "dark"
+                  ? "bg-gray-600 text-slate-300"
+                  : "bg-slate-200"
+              }`}
+            >
               Company
             </span>
           </div>
@@ -115,7 +126,9 @@ const CompanyBio: React.FC<CompanyBioProps> = ({ Userprofile,postLength }) => {
               width={26}
               height={26}
             />
-            <span className="text-gray-400">{Userprofile?.data.bio?.location}</span>
+            <span className="text-gray-400">
+              {Userprofile?.data.bio?.location}
+            </span>
           </div>
         ) : null}
         {Userprofile?.data.bio?.phone ? (
@@ -145,7 +158,10 @@ const CompanyBio: React.FC<CompanyBioProps> = ({ Userprofile,postLength }) => {
       </div>
 
       {/* for lap */}
-      <div data-theme={profile?.data.theme || "light"} className="Userprofile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 md:flex hidden">
+      <div
+        data-theme={profile?.data.theme || "light"}
+        className="Userprofile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 md:flex hidden"
+      >
         <div className="Userprofile-avatar w-[30%] h-full  flex justify-center items-center pt-2 pb-2">
           <img
             src={
@@ -195,7 +211,9 @@ const CompanyBio: React.FC<CompanyBioProps> = ({ Userprofile,postLength }) => {
             <div className="follwers">
               <p>
                 <span className="font-bold">
-                  {Userprofile?.data ? Userprofile.data?.followers?.length : "0"}
+                  {Userprofile?.data
+                    ? Userprofile.data?.followers?.length
+                    : "0"}
                 </span>
                 Followers
               </p>
@@ -203,14 +221,22 @@ const CompanyBio: React.FC<CompanyBioProps> = ({ Userprofile,postLength }) => {
             <div className="following">
               <p>
                 <span className="font-bold">
-                  {Userprofile?.data ? Userprofile.data?.following?.length : "0"}{" "}
+                  {Userprofile?.data
+                    ? Userprofile.data?.following?.length
+                    : "0"}{" "}
                 </span>
                 Following
               </p>
             </div>
           </div>
           <div className="thrid-row mt-2 ml-4 pl-2">
-            <span className={`text-gray-500 ${profile?.data.theme==="dark"?"bg-gray-600 text-slate-300":"bg-slate-200"} pl-4 pr-4 pt-1 pb-1 rounded-md`}>
+            <span
+              className={`text-gray-500 ${
+                profile?.data.theme === "dark"
+                  ? "bg-gray-600 text-slate-300"
+                  : "bg-slate-200"
+              } pl-4 pr-4 pt-1 pb-1 rounded-md`}
+            >
               Company
             </span>
           </div>

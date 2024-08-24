@@ -9,16 +9,26 @@ interface ExperienceProps {
   data: IResumes;
 }
 const Resumes: React.FC<ExperienceProps> = ({ data }) => {
-    const { profile } = useSelector((state: RootState) => state.profile);
-    const dispatch = useDispatch<AppDispatch>();
-    const handleDelete=()=>{
-        dispatch(deleteResume({id:String(data._id)}))
-    }
+  const { profile } = useSelector((state: RootState) => state.profile);
+  const dispatch = useDispatch<AppDispatch>();
+  const handleDelete = () => {
+    dispatch(deleteResume({ id: String(data._id) }));
+  };
   return (
     <>
-      <span className={`flex gap-2 items-center p-3 ${profile?.data.theme==="dark"?"bg-gray-700":"bg-gray-300"} w-auto rounded-md`}>
+      <span
+        className={`flex gap-2 items-center p-3 ${
+          profile?.data.theme === "dark" ? "bg-gray-700" : "bg-gray-300"
+        } w-auto rounded-md`}
+      >
         <span>{data.name}</span>
-        <Icon onClick={handleDelete} className="cursor-pointer" icon={"material-symbols:delete"} width={20} height={20}/>
+        <Icon
+          onClick={handleDelete}
+          className="cursor-pointer"
+          icon={"material-symbols:delete"}
+          width={20}
+          height={20}
+        />
       </span>
     </>
   );

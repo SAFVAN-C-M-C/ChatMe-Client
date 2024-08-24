@@ -1,32 +1,44 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import io, { Socket } from "socket.io-client";
-import { createContext, FC, ReactNode, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  FC,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import notificationSound from "@/assets/sounds/notification.mp3";
 import { getNotification } from "@/redux/actions/notification/notificationAction";
 import toast from "react-hot-toast";
+import { NOTIFICATION_SERVER_URL } from "@/common/api";
 interface NotificationSocketContextProps {
   socket: Socket | null;
   onlineUsers: any[];
 }
 
-const NotificationSocketContext = createContext<NotificationSocketContextProps>({
+const NotificationSocketContext = createContext<NotificationSocketContextProps>(
+  {
     socket: null,
     onlineUsers: [],
-});
+  }
+);
 interface NotificationSocketProviderProps {
   children: ReactNode;
 }
-export const NotificationSocketProvider: FC<NotificationSocketProviderProps> = ({ children }) => {
+export const NotificationSocketProvider: FC<
+  NotificationSocketProviderProps
+> = ({ children }) => {
   const { user } = useSelector((state: RootState) => state.user);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     if (user && user.data._id) {
-      const socket = io("http://localhost:1236", {
+      const socket = io(NOTIFICATION_SERVER_URL, {
         query: {
           userId: user.data._id,
         },
@@ -37,25 +49,23 @@ export const NotificationSocketProvider: FC<NotificationSocketProviderProps> = (
         console.log("Connected to server🌐🌐🌐");
         setSocket(socket);
       });
-      socket.on("getOnlineUsers",(users)=>{
-        setOnlineUsers(users)
-      })
+      socket.on("getOnlineUsers", (users) => {
+        setOnlineUsers(users);
+      });
       socket.on("newAdminNotification", (newNotification: any) => {
         const sound = new Audio(notificationSound);
         sound.volume = 1.0; // Ensure the volume is set
         sound.muted = false; // Ensure the sound is not muted
         sound.load();
-        if(user.data.role!=="admin"){
+        if (user.data.role !== "admin") {
           sound.play().catch((error) => {
             console.error("Error playing sound:", error);
           });
           toast(newNotification.content, {
-            icon: '🔔',
+            icon: "🔔",
           });
         }
-        // dispatch(addNotification(newNotification))
-        // addNewMessage(newMessage);
-        dispatch(getNotification())
+        dispatch(getNotification());
       });
 
       setSocket(socket);
@@ -69,22 +79,23 @@ export const NotificationSocketProvider: FC<NotificationSocketProviderProps> = (
         setSocket(null);
       }
     }
-  }, [user?.data._id]);
+  }, [dispatch, socket, user, user?.data._id]);
 
   const value = {
     socket,
     onlineUsers,
   };
   return (
-    <NotificationSocketContext.Provider value={value}>{children}</NotificationSocketContext.Provider>
+    <NotificationSocketContext.Provider value={value}>
+      {children}
+    </NotificationSocketContext.Provider>
   );
 };
 
-
 export const useNotificationSocket = () => {
-    const context = useContext(NotificationSocketContext);
-    if (!context) {
-      throw new Error('useSocket must be used within a SocketProvider');
-    }
-    return context;
-  };
+  const context = useContext(NotificationSocketContext);
+  if (!context) {
+    throw new Error("useSocket must be used within a SocketProvider");
+  }
+  return context;
+};

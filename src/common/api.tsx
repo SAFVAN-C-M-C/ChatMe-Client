@@ -3,6 +3,8 @@
 import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
 
 export const URL = import.meta.env.VITE_CHAT_ME_APP_SERVER_URL;
+export const NOTIFICATION_SERVER_URL = import.meta.env.VITE_CHAT_ME_APP_NOTIFICATION_SERVER_URL;
+export const CHAT_SERVER_URL = import.meta.env.VITE_CHAT_ME_APP_CHAT_SERVER_URL;
 
 const apiInstance = axios.create({
   baseURL: URL,

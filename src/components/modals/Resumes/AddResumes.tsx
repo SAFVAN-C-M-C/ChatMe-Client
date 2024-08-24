@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Button from "@mui/material/Button";
@@ -11,11 +10,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 import toast from "react-hot-toast";
-
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { validateField} from "@/helper/validate";
-import {  addResume } from "@/redux/actions/user/profileActions";
+import { validateField } from "@/helper/validate";
+import { addResume } from "@/redux/actions/user/profileActions";
 import { darkTheme, lightTheme } from "@/helper/theme";
 import axios from "axios";
 import { getSignedUrl } from "@/services";
@@ -62,7 +60,6 @@ const AddResumes: React.FC<AddResumesProps> = ({ setOpenAddResumes }) => {
         "doc",
         type
       );
-      console.log(signedUrl);
       const { url, media } = signedUrl;
       const res = await axios.put(url, file, {
         headers: {
@@ -74,7 +71,6 @@ const AddResumes: React.FC<AddResumesProps> = ({ setOpenAddResumes }) => {
         withCredentials: true,
       });
       if (res.status === 200) {
-        console.log("file uploaded successfully");
         const data = {
           name: formJson.name,
           doc: `https://s3.ap-south-1.amazonaws.com/bucket.chatme.use/${media}`,
@@ -88,7 +84,7 @@ const AddResumes: React.FC<AddResumesProps> = ({ setOpenAddResumes }) => {
         handleClose();
       }
     } catch (error: any) {
-      console.log("Something went wrong", error.message);
+      console.error("Something went wrong", error.message);
     }
   };
   return (

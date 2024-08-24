@@ -68,11 +68,13 @@ const Message: FC<MessageProps> = ({ reciever, fromMe, message }) => {
           )}
         </div>
         <div className="chat-footer opacity-50 text-sm flex gap-1 items-center">
-          <span className={`text-white`}>{new Date(message?.createdAt).toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: true,
-          })}</span>
+          <span className={`text-white`}>
+            {new Date(message?.createdAt).toLocaleTimeString([], {
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
+            })}
+          </span>
         </div>
       </div>
     </>

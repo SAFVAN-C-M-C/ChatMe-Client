@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { URL } from "@/common/api";
 import { config } from "@/common/configurations";
@@ -7,9 +7,9 @@ import NothingHere from "@/components/general/NothingHere";
 import ApplicationCard from "@/components/Jobs/Applications/ApplicationCard";
 import { IJobs } from "@/redux/reducers/jobs/jobs";
 import { RootState } from "@/redux/store";
-import { IJobApplication, IJobApplicationFromBackend } from "@/types/IJob";
+import { IJobApplicationFromBackend } from "@/types/IJob";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -25,16 +25,12 @@ const JobApplicationPage = () => {
   useEffect(() => {
     const getJob = async (jobId: string) => {
       try {
-        try {
-          const res = await axios.get(`${URL}/job/get/${jobId}`, config);
-          if (res.status === 200) {
-            setJob(res.data.data);
-          }
-        } catch (error: any) {
-          console.log("Somthing wrong", error.message);
+        const res = await axios.get(`${URL}/job/get/${jobId}`, config);
+        if (res.status === 200) {
+          setJob(res.data.data);
         }
       } catch (error: any) {
-        console.log("something went wrong", error.message);
+        console.error("Somthing wrong", error.message);
       }
     };
     if (!job && jobId) {
@@ -47,7 +43,7 @@ const JobApplicationPage = () => {
     ) {
       navigate(`/jobs/job/${job._id}`, { replace: true });
     }
-  }, [job, jobId]);
+  }, [job, jobId, navigate, profile?.data.userId]);
   const fetchApplications = async () => {
     try {
       const response = await axios.get(
@@ -62,9 +58,10 @@ const JobApplicationPage = () => {
     }
   };
   useEffect(() => {
-    fetchApplications();
-    console.log("app", applications);
-  }, [jobId, page]);
+    if (!applications) {
+      fetchApplications();
+    }
+  }, [applications, jobId, page]);
   return (
     <>
       <div data-theme={profile?.data.theme || "light"} className="flex">
@@ -151,20 +148,19 @@ const JobApplicationPage = () => {
             </div>
           </div>
           <div className="w-full flex justify-center mt-10">
-          <div className="application-list flex flex-wrap gap-5 pl-2 h-auto justify-start lg:w-[950px] md:w-[650px] w-[300px]">
-
-            {applications && applications.length > 0 ? (
-              applications.map((application, index) => (
-                <ApplicationCard
-                  fetchApplications={fetchApplications}
-                  application={application}
-                  key={index}
-                />
-              ))
-            ) : (
-              <NothingHere />
-            )}
-          </div>
+            <div className="application-list flex flex-wrap gap-5 pl-2 h-auto justify-start lg:w-[950px] md:w-[650px] w-[300px]">
+              {applications && applications.length > 0 ? (
+                applications.map((application, index) => (
+                  <ApplicationCard
+                    fetchApplications={fetchApplications}
+                    application={application}
+                    key={index}
+                  />
+                ))
+              ) : (
+                <NothingHere />
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { URL } from "@/common/api";
@@ -69,7 +70,7 @@ const Comments: React.FC<CommentProps> = ({
         }
       }
     } catch (error: any) {
-      console.log("Seomething went wrong", error.message);
+      console.error("Seomething went wrong", error.message);
       toast.error("Something went wrong,please try again!");
     }
   };
@@ -101,7 +102,7 @@ const Comments: React.FC<CommentProps> = ({
         setLoading(false);
       }
     } catch (error: any) {
-      console.log("Seomething went wrong", error.message);
+      console.error("Seomething went wrong", error.message);
     }
   };
   const handleShowReply = () => {
@@ -109,7 +110,7 @@ const Comments: React.FC<CommentProps> = ({
       getReplyComment(comment._id);
       setShowReply(true);
     } catch (error: any) {
-      console.log("Seomething went wrong", error.message);
+      console.error("Seomething went wrong", error.message);
     }
   };
 
@@ -154,7 +155,7 @@ const Comments: React.FC<CommentProps> = ({
         }
       }
     } catch (error: any) {
-      console.log("Seomething went wrong", error.message);
+      console.error("Seomething went wrong", error.message);
       toast.error("Something went wrong,please try again!");
     }
   };
@@ -168,7 +169,7 @@ const Comments: React.FC<CommentProps> = ({
   };
   useEffect(() => {
     getReplyComment(comment._id);
-  }, [page]);
+  }, [comment._id, page]);
   const loadMore = () => {
     setPage((prevPage) => prevPage + 1);
   };

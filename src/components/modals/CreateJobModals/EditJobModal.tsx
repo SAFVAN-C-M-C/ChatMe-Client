@@ -17,32 +17,37 @@ import { URL } from "@/common/api";
 import { config } from "@/common/configurations";
 import { validateField } from "@/helper/validate";
 import { getJobs } from "@/redux/actions/jobs/jobAction";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { IJobs } from "@/redux/reducers/jobs/jobs";
-import { ThemeProvider } from '@mui/material/styles';
-import { CssBaseline } from '@mui/material';
+import { ThemeProvider } from "@mui/material/styles";
+import { CssBaseline } from "@mui/material";
 import { darkTheme, lightTheme } from "@/helper/theme";
 interface EditJobModalProps {
   setOpenEditJobModal: Dispatch<SetStateAction<boolean>>;
-job:IJobs|null
-getJob:(jobId: string) => Promise<void>
+  job: IJobs | null;
+  getJob: (jobId: string) => Promise<void>;
 }
 
 const EditJobModal: React.FC<EditJobModalProps> = ({
-    setOpenEditJobModal,
-    job,
-    getJob
+  setOpenEditJobModal,
+  job,
+  getJob,
 }) => {
   const { error, profile } = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch<AppDispatch>();
-  const [description, setDescription] = useState<string>(job?.description?job.description:'');
-  const [jobTitle, setJobTitle] = useState<string>(job?.jobTitle?job.jobTitle:'');
-  const [skill, setSkill] = useState<string>(job?.skills?job.skills.join(','):'');
-  const [mode, setMode] = useState<string>(job?.mode?job.mode:'');
-  const [type, seType] = useState<string>(job?.type?job.type:'');
+  const [description, setDescription] = useState<string>(
+    job?.description ? job.description : ""
+  );
+  const [jobTitle, setJobTitle] = useState<string>(
+    job?.jobTitle ? job.jobTitle : ""
+  );
+  const [skill, setSkill] = useState<string>(
+    job?.skills ? job.skills.join(",") : ""
+  );
+  const [mode, setMode] = useState<string>(job?.mode ? job.mode : "");
+  const [type, seType] = useState<string>(job?.type ? job.type : "");
 
-    
   const handleClose = () => {
     setOpenEditJobModal(false);
   };
@@ -81,14 +86,18 @@ const EditJobModal: React.FC<EditJobModalProps> = ({
       }
 
       formJson.companyId = profile?.data.companyDetails?.companyId;
-      formJson.skills = formJson?.skills.split(',');
+      formJson.skills = formJson?.skills.split(",");
       formJson.description = description;
 
-      const res = await axios.post(`${URL}/job/edit/${job?._id}`, formJson, config);
+      const res = await axios.post(
+        `${URL}/job/edit/${job?._id}`,
+        formJson,
+        config
+      );
       if (res.status === 200) {
         toast.success("Job updated");
-        dispatch(getJobs());
-        getJob(String(job?._id))
+        dispatch(getJobs({ filter: "all" }));
+        getJob(String(job?._id));
         handleClose();
       }
     } catch (error: any) {
@@ -98,92 +107,93 @@ const EditJobModal: React.FC<EditJobModalProps> = ({
   };
 
   return (
-    <ThemeProvider theme={profile?.data.theme==="dark"?darkTheme:lightTheme}>
-      <CssBaseline />
-    <Dialog
-
-      open
-      onClose={handleClose}
-      PaperProps={{
-        component: "form",
-        onSubmit: handleSubmit,
-      }}
+    <ThemeProvider
+      theme={profile?.data.theme === "dark" ? darkTheme : lightTheme}
     >
-      <DialogTitle align="center">Edit Job</DialogTitle>
-      <DialogContent>
-        <DialogContentText>Edit job details.</DialogContentText>
-        <TextField
-          placeholder="Enter a proper Job Title"
-          autoFocus
-          value={jobTitle}
-          onChange={(e)=>setJobTitle(e.target.value)}
-          required
-          margin="dense"
-          id="jobTitle"
-          name="jobTitle"
-          label="Job title"
-          type="text"
-          fullWidth
-        />
-        <label htmlFor="">Description</label>
-        <ReactQuill
-          theme="snow"
-          value={description}
-          onChange={setDescription}
-          placeholder="Enter a detailed description"
-          style={{ marginBottom: '1rem', height:'100px' }}
-        />
-        <TextField
-        value={skill}
-        onChange={(e)=>setSkill(e.target.value)}
-        style={{marginTop:'3rem'}}
-          placeholder="Enter all needed skills separated by commas (,)"
-          required
-          margin="dense"
-          id="skills"
-          name="skills"
-          label="Skills"
-          type="text"
-          fullWidth
-        />
-        <FormControl fullWidth sx={{ mt: 1 }}>
-          <InputLabel id="mode-of-work-label">Mode of Work</InputLabel>
-          <Select
-          value={mode}
-          onChange={(e)=>setMode(e.target.value)}
-            labelId="mode-of-work-label"
-            id="mode"
+      <CssBaseline />
+      <Dialog
+        open
+        onClose={handleClose}
+        PaperProps={{
+          component: "form",
+          onSubmit: handleSubmit,
+        }}
+      >
+        <DialogTitle align="center">Edit Job</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Edit job details.</DialogContentText>
+          <TextField
+            placeholder="Enter a proper Job Title"
+            autoFocus
+            value={jobTitle}
+            onChange={(e) => setJobTitle(e.target.value)}
+            required
+            margin="dense"
+            id="jobTitle"
+            name="jobTitle"
+            label="Job title"
+            type="text"
             fullWidth
+          />
+          <label htmlFor="">Description</label>
+          <ReactQuill
+            theme="snow"
+            value={description}
+            onChange={setDescription}
+            placeholder="Enter a detailed description"
+            style={{ marginBottom: "1rem", height: "100px" }}
+          />
+          <TextField
+            value={skill}
+            onChange={(e) => setSkill(e.target.value)}
+            style={{ marginTop: "3rem" }}
+            placeholder="Enter all needed skills separated by commas (,)"
             required
-            label="Mode of Work"
-            name="mode"
-          >
-            <MenuItem value={"On-site"}>On-site</MenuItem>
-            <MenuItem value={"remote"}>Remote</MenuItem>
-            <MenuItem value={"hybrid"}>Hybrid</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl fullWidth sx={{ mt: 1 }}>
-          <InputLabel id="job-type-label">Job Type</InputLabel>
-          <Select
-                    value={type}
-                    onChange={(e)=>seType(e.target.value)}
-            required
-            labelId="job-type-label"
-            id="type"
-            label="Job Type"
-            name="type"
-          >
-            <MenuItem value={"full-time"}>Full-time</MenuItem>
-            <MenuItem value={"part-time"}>Part-time</MenuItem>
-          </Select>
-        </FormControl>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button type="submit">Save</Button>
-      </DialogActions>
-    </Dialog>
+            margin="dense"
+            id="skills"
+            name="skills"
+            label="Skills"
+            type="text"
+            fullWidth
+          />
+          <FormControl fullWidth sx={{ mt: 1 }}>
+            <InputLabel id="mode-of-work-label">Mode of Work</InputLabel>
+            <Select
+              value={mode}
+              onChange={(e) => setMode(e.target.value)}
+              labelId="mode-of-work-label"
+              id="mode"
+              fullWidth
+              required
+              label="Mode of Work"
+              name="mode"
+            >
+              <MenuItem value={"On-site"}>On-site</MenuItem>
+              <MenuItem value={"remote"}>Remote</MenuItem>
+              <MenuItem value={"hybrid"}>Hybrid</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth sx={{ mt: 1 }}>
+            <InputLabel id="job-type-label">Job Type</InputLabel>
+            <Select
+              value={type}
+              onChange={(e) => seType(e.target.value)}
+              required
+              labelId="job-type-label"
+              id="type"
+              label="Job Type"
+              name="type"
+            >
+              <MenuItem value={"full-time"}>Full-time</MenuItem>
+              <MenuItem value={"part-time"}>Part-time</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit">Save</Button>
+        </DialogActions>
+      </Dialog>
     </ThemeProvider>
   );
 };

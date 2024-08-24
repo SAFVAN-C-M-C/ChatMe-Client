@@ -52,8 +52,8 @@ const Users = () => {
     if (adminUser?.totalPages) {
       setTotalPages(adminUser.totalPages);
     }
-    if(adminUser?.currentPage){
-      setCurrentPage(adminUser.currentPage)
+    if (adminUser?.currentPage) {
+      setCurrentPage(adminUser.currentPage);
     }
   }, [adminUser?.currentPage, adminUser?.totalPages, currentPage, dispatch]);
   return (
@@ -70,7 +70,7 @@ const Users = () => {
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableHead>
                     <TableRow>
-                    <StyledTableCell align="center">Sl.no</StyledTableCell>
+                      <StyledTableCell align="center">Sl.no</StyledTableCell>
                       <StyledTableCell align="center">Name</StyledTableCell>
                       <StyledTableCell align="center">Email</StyledTableCell>
                       <StyledTableCell align="center">Type</StyledTableCell>
@@ -82,7 +82,7 @@ const Users = () => {
                   </TableHead>
                   <TableBody>
                     {adminUser.data.map((row, index) => (
-                      <UserRow  slno={index+1} row={row} key={index} />
+                      <UserRow slno={index + 1} row={row} key={index} />
                     ))}
                   </TableBody>
                 </Table>

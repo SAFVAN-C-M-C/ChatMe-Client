@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import ReactLoading from 'react-loading';
+import ReactLoading from "react-loading";
 import {
   googleLoginOrSignUp,
   loginUser,
@@ -38,7 +38,7 @@ const LoginForm = () => {
 
   const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateError(null))
+    dispatch(updateError(null));
     if (!validateEmail(formData?.email)) {
       toast.error("Invalid email");
       return;
@@ -57,7 +57,6 @@ const LoginForm = () => {
     dispatch(googleLoginOrSignUp(data));
   };
   useEffect(() => {
-    
     if (user && user?.data?.details) {
       navigate("/register", { replace: true });
     }
@@ -122,9 +121,16 @@ const LoginForm = () => {
               className="w-full rounded-full  bg-gradient-to-r from-blue-500 to-purple-500 hover:from-purple-500 hover:to-blue-500 focus:outline-none h-full text-white flex justify-center items-center transition-all duration-500 delay-200 ease-in-out custom-gradient-transition"
               type="submit"
             >
-              {
-                loading?<ReactLoading type={"bubbles"} color={"#fff"} height={'20%'} width={'20%'} />:"Login"
-              }
+              {loading ? (
+                <ReactLoading
+                  type={"bubbles"}
+                  color={"#fff"}
+                  height={"20%"}
+                  width={"20%"}
+                />
+              ) : (
+                "Login"
+              )}
             </button>
           </div>
         </form>
@@ -144,9 +150,7 @@ const LoginForm = () => {
             onSuccess={(credentialResponse) => {
               loginWithGoogle(credentialResponse);
             }}
-            onError={() => {
-              
-            }}
+            onError={() => {}}
           />
         </div>
         {/* </div> */}

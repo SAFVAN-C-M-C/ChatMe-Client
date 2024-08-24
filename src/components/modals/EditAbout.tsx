@@ -43,7 +43,10 @@ const EditAbout: React.FC<EditAboutProps> = ({ handleEditAboutclick }) => {
   return (
     <>
       <div className="fixed inset-0 z-40 bg-black opacity-35"></div>
-      <div className="fixed inset-0 z-40 flex justify-center items-center">
+      <div
+        data-theme={profile?.data.theme || "light"}
+        className="fixed inset-0 z-40 flex justify-center items-center"
+      >
         <div
           className="closeButton fixed w-auto h-auto top-5 right-5"
           onClick={handleEditAboutclick}

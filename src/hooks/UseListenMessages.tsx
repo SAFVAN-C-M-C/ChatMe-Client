@@ -1,33 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {  useChatContext } from "@/context/ChatContext";
+import { useChatContext } from "@/context/ChatContext";
 import { useSocket } from "@/context/SocketContext";
-import {  useEffect } from "react";
+import { useEffect } from "react";
 import notificationSound from "@/assets/sounds/notification.mp3";
 const UseListenMessages = () => {
   const { socket } = useSocket();
-const {addNewMessage,setRead}=useChatContext()
+  const { addNewMessage, setRead } = useChatContext();
   useEffect(() => {
     if (socket) {
       socket.on("newMessage", (newMessage: any) => {
         newMessage.obj.shouldShake = true;
         const sound = new Audio(notificationSound);
-        sound.volume = 1.0; // Ensure the volume is set
-        sound.muted = false; // Ensure the sound is not muted
+        sound.volume = 1.0; 
+        sound.muted = false; 
         sound.load();
         sound.play().catch((error) => {
           console.error("Error playing sound:", error);
         });
         addNewMessage(newMessage);
       });
-      socket.on("messageSeen",(data:any)=>{
+      socket.on("messageSeen", (data: any) => {
         console.log(data);
-        setRead()
-      })
+        setRead();
+      });
     }
     return () => {
       socket?.off("newMessage");
     };
-  }, [socket, addNewMessage]);
+  }, [socket, addNewMessage, setRead]);
 };
 
 export default UseListenMessages;

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Icon } from "@iconify/react";
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import EditJobModal from "../modals/CreateJobModals/EditJobModal";
 import { IJobs } from "@/redux/reducers/jobs/jobs";
 import axios from "axios";
@@ -12,38 +12,41 @@ import { getJobs } from "@/redux/actions/jobs/jobAction";
 import { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-interface EditDropdownProps{
-  job:IJobs|null
-  getJob:(jobId: string) => Promise<void>
+interface EditDropdownProps {
+  job: IJobs | null;
+  getJob: (jobId: string) => Promise<void>;
 }
-const EditDropdown:FC<EditDropdownProps> = ({job,getJob}) => {
+const EditDropdown: FC<EditDropdownProps> = ({ job, getJob }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const navigate=useNavigate()
-  const [openEditJobModal,setOpenEditJobModal]=useState<boolean>(false)
-  const handleOpenEdit=()=>{
-    setOpenEditJobModal(true)
-  }
-  const handleDelete=async()=>{
+  const navigate = useNavigate();
+  const [openEditJobModal, setOpenEditJobModal] = useState<boolean>(false);
+  const handleOpenEdit = () => {
+    setOpenEditJobModal(true);
+  };
+  const handleDelete = async () => {
     try {
-        const res = await axios.post(`${URL}/job/delete/${job?._id}`, config);
-        if (res.status === 200) {
-          toast.success("Job deleted");
-          dispatch(getJobs());
-          navigate('/jobs')
-        }
-    } catch (error:any) {
-        console.log("Something went wrong",error.message);
-        
+      const res = await axios.post(`${URL}/job/delete/${job?._id}`, config);
+      if (res.status === 200) {
+        toast.success("Job deleted");
+        dispatch(getJobs({ filter: "all" }));
+        navigate("/jobs");
+      }
+    } catch (error: any) {
+      toast.error("Something went wrong");
     }
-  }
-  const handleViewApplication=()=>{
-    navigate(`/jobs/applications/${job?._id}`)
-  }
+  };
+  const handleViewApplication = () => {
+    navigate(`/jobs/applications/${job?._id}`);
+  };
   return (
     <>
-    {
-      openEditJobModal?<EditJobModal getJob={getJob} setOpenEditJobModal={setOpenEditJobModal} job={job}/>:null
-    }
+      {openEditJobModal ? (
+        <EditJobModal
+          getJob={getJob}
+          setOpenEditJobModal={setOpenEditJobModal}
+          job={job}
+        />
+      ) : null}
       <div className="dropdown dropdown-end absolute right-2">
         <div tabIndex={0} role="button" className=" m-1">
           <Icon className="" icon="cil:options" width={26} height={26} />

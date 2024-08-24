@@ -3,11 +3,13 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import {
   Button,
+  CssBaseline,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   TextField,
+  ThemeProvider,
 } from "@mui/material";
 import { getFileExtension } from "../../../helper/getExtention";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -18,6 +20,7 @@ import { IPosts } from "../../../types/IPosts";
 import { updateError } from "../../../redux/reducers/posts/userPosts";
 import { validateField } from "../../../helper/validate";
 import { editPost } from "../../../redux/actions/posts/userPostsAction";
+import { darkTheme, lightTheme } from "@/helper/theme";
 
 interface EditPostProps {
   post: IPosts;
@@ -28,7 +31,7 @@ export const EditPost: React.FC<EditPostProps> = ({
   setOpenEditPost,
 }) => {
   const { error } = useSelector((state: RootState) => state.userPosts);
-
+  const { profile } = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     if (error) {
@@ -49,7 +52,7 @@ export const EditPost: React.FC<EditPostProps> = ({
     try {
       const formData = new FormData(e.currentTarget);
       const formJson = Object.fromEntries((formData as any).entries());
-      console.log(formJson.content);
+
       if (!validateField(formJson.content)) {
         toast.error("Caption is required");
         return;
@@ -61,7 +64,7 @@ export const EditPost: React.FC<EditPostProps> = ({
       };
       dispatch(editPost(createPostData));
       toast.success("Post Edited");
-      setOpenEditPost(false)
+      setOpenEditPost(false);
     } catch (error) {
       console.error("There was a problem with the upload:", error);
       toast.error("Failed to edit post");
@@ -76,62 +79,67 @@ export const EditPost: React.FC<EditPostProps> = ({
   }, []);
   return (
     <>
-      <Dialog
-        fullWidth={true}
-        open
-        onClose={handleClose}
-        PaperProps={{
-          component: "form",
-          onSubmit: handleSubmit,
-        }}
+      <ThemeProvider
+        theme={profile?.data.theme === "dark" ? darkTheme : lightTheme}
       >
-        <DialogTitle align="center">Edit Post</DialogTitle>
-        <DialogContent>
-          <div className="w-full h-[350px] border-dashed border-[.4px] border-gray-400 rounded-lg mb-3 items-center flex flex-col justify-center">
-            {!isVideo ? (
-              <img
-                className="w-[300px] h-[300px] object-contain"
-                src={post.media}
-                alt="draging"
-              />
-            ) : (
-              <video
-                controls
-                muted
-                preload="auto"
-                className="w-[300px] h-[300px] object-cover"
-                src={post.media}
-              ></video>
-            )}
-          </div>
-          <TextField
-            onChange={handleChange}
-            value={content}
-            autoFocus
-            required
-            margin="dense"
-            id="content"
-            name="content"
-            placeholder="Enter a good caption"
-            label="Enter a Caption"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button
-            type="submit"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-          >
-            Edit
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <CssBaseline />
+        <Dialog
+          fullWidth={true}
+          open
+          onClose={handleClose}
+          PaperProps={{
+            component: "form",
+            onSubmit: handleSubmit,
+          }}
+        >
+          <DialogTitle align="center">Edit Post</DialogTitle>
+          <DialogContent>
+            <div className="w-full h-[350px] border-dashed border-[.4px] border-gray-400 rounded-lg mb-3 items-center flex flex-col justify-center">
+              {!isVideo ? (
+                <img
+                  className="w-[300px] h-[300px] object-contain"
+                  src={post.media}
+                  alt="draging"
+                />
+              ) : (
+                <video
+                  controls
+                  muted
+                  preload="auto"
+                  className="w-[300px] h-[300px] object-cover"
+                  src={post.media}
+                ></video>
+              )}
+            </div>
+            <TextField
+              onChange={handleChange}
+              value={content}
+              autoFocus
+              required
+              margin="dense"
+              id="content"
+              name="content"
+              placeholder="Enter a good caption"
+              label="Enter a Caption"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button
+              type="submit"
+              role={undefined}
+              variant="contained"
+              tabIndex={-1}
+              startIcon={<CloudUploadIcon />}
+            >
+              Edit
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </ThemeProvider>
     </>
   );
 };

@@ -22,28 +22,32 @@ import UseListenNotification from "@/hooks/UseListenNotification";
 import ResumePart from "@/components/Profile/Personal/ResumePart";
 
 const ProfilePage = () => {
-  UseListenMessages()
-  UseListenNotification()
+  UseListenMessages();
+  UseListenNotification();
   const { user } = useSelector((state: RootState) => state.user);
   const { profile } = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate=useNavigate()
-  useEffect(()=>{
+  const navigate = useNavigate();
+  useEffect(() => {
     dispatch(getUserDataFirst());
-    if(!user?.data){
+    if (!user?.data) {
       navigate("/login", { replace: true });
     }
-  },[user?.data._id])
+  }, [user?.data._id]);
 
   return (
     <>
       <div className="flex " data-theme={profile?.data.theme || "light"}>
         <NavigationBar />
         <div className="profile-part w-full   flex flex-col items-center">
-          {
-            profile?.data?.accountType === "personal" ?<UserBio/>:profile?.data?.accountType === "company" ? <CompanyBio/>:profile?.data?.accountType === "recruiter" ? <RecruiterBio/>:null
-          }
-          
+          {profile?.data?.accountType === "personal" ? (
+            <UserBio />
+          ) : profile?.data?.accountType === "company" ? (
+            <CompanyBio />
+          ) : profile?.data?.accountType === "recruiter" ? (
+            <RecruiterBio />
+          ) : null}
+
           <About />
           {profile?.data?.accountType === "personal" ? (
             <>

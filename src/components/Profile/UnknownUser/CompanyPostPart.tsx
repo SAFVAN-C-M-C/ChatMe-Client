@@ -5,7 +5,6 @@ import { useState } from "react";
 import { UserPostsPayload } from "@/redux/reducers/posts/userPosts";
 import Posts from "./Posts";
 
-
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import CompanyJobs from "./CompanyJobs";
@@ -15,15 +14,13 @@ import { ProfilePayload } from "@/redux/reducers/profileSlice";
 interface CompanyPostPartProps {
   userPosts: UserPostsPayload | null;
   userId: string;
-  user:ProfilePayload|null
+  user: ProfilePayload | null;
 }
 const CompanyPostPart: React.FC<CompanyPostPartProps> = ({
   userPosts,
   userId,
-  user
+  user,
 }) => {
-  
-  
   const [postNav, setPostNav] = useState<
     string | "post" | "jobs" | "recruiter" | "recruiter_request"
   >("post");
@@ -112,8 +109,6 @@ const CompanyPostPart: React.FC<CompanyPostPartProps> = ({
               <span className="hidden md:inline">Recruiters</span>
             </div>
           </li>
-
-
         </ul>
       </div>
       {postNav === "post" ? (
@@ -121,7 +116,7 @@ const CompanyPostPart: React.FC<CompanyPostPartProps> = ({
       ) : postNav === "jobs" ? (
         <CompanyJobs userId={userId} />
       ) : postNav === "recruiter" ? (
-        <Recruiters  user={user}/>
+        <Recruiters user={user} />
       ) : null}
     </>
   );

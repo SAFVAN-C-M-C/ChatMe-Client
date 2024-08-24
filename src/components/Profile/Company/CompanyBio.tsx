@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -22,7 +21,7 @@ const CompanyBio = () => {
 
   return (
     <>
-          {openFollowerList ? (
+      {openFollowerList ? (
         <FollowerList setOpenFollowerList={setOpenFollowerList} />
       ) : null}
       {openFollowingList ? (

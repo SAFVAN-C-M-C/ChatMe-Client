@@ -50,10 +50,15 @@ function RecruiterRequests() {
     if (adminRecruiterRequests?.totalPages) {
       setTotalPages(adminRecruiterRequests.totalPages);
     }
-    if(adminRecruiterRequests?.currentPage){
-      setCurrentPage(adminRecruiterRequests.currentPage)
+    if (adminRecruiterRequests?.currentPage) {
+      setCurrentPage(adminRecruiterRequests.currentPage);
     }
-  }, [adminRecruiterRequests?.currentPage, adminRecruiterRequests?.totalPages, currentPage, dispatch]);
+  }, [
+    adminRecruiterRequests?.currentPage,
+    adminRecruiterRequests?.totalPages,
+    currentPage,
+    dispatch,
+  ]);
   return (
     <>
       <div className="flex" data-theme={"dark"}>

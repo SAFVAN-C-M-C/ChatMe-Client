@@ -48,13 +48,18 @@ function CompanyRequests() {
   };
   useEffect(() => {
     dispatch(getAdminCompanyRequestsDetails({ page: currentPage }));
-    if(adminCompanyRequests?.totalPages){
-      setTotalPages(adminCompanyRequests.totalPages)
+    if (adminCompanyRequests?.totalPages) {
+      setTotalPages(adminCompanyRequests.totalPages);
     }
-    if(adminCompanyRequests?.currentPage){
-      setCurrentPage(adminCompanyRequests.currentPage)
+    if (adminCompanyRequests?.currentPage) {
+      setCurrentPage(adminCompanyRequests.currentPage);
     }
-  }, [adminCompanyRequests?.currentPage, adminCompanyRequests?.totalPages, currentPage, dispatch]);
+  }, [
+    adminCompanyRequests?.currentPage,
+    adminCompanyRequests?.totalPages,
+    currentPage,
+    dispatch,
+  ]);
   return (
     <>
       <div className="flex" data-theme={"dark"}>
@@ -84,14 +89,14 @@ function CompanyRequests() {
             </Table>
           </TableContainer>
 
-                <div className="w-full flex justify-end m-3">
-                <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handlePageChange}
-            sx={{ "& .MuiPaginationItem-root": { color: "white" } }} // Custom styling for pagination
-          />
-                </div>
+          <div className="w-full flex justify-end m-3">
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              sx={{ "& .MuiPaginationItem-root": { color: "white" } }} // Custom styling for pagination
+            />
+          </div>
         </div>
       </div>
     </>

@@ -1,7 +1,7 @@
-import  { FC, useEffect, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import Message from "./Message";
 import { UserDetails } from "@/types/IProfile";
-import {  useChatContext } from "@/context/ChatContext";
+import { useChatContext } from "@/context/ChatContext";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import UseListenMessages from "@/hooks/UseListenMessages";

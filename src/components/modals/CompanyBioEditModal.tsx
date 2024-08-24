@@ -5,19 +5,26 @@ import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-// import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { validateField, validateName, validatePhone } from "../../helper/validate";
+import {
+  validateField,
+  validateName,
+  validatePhone,
+} from "../../helper/validate";
 import toast from "react-hot-toast";
 import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import {  updateBio } from "../../redux/actions/user/profileActions";
+import { updateBio } from "../../redux/actions/user/profileActions";
 import { BioDetails } from "../../types/IProfile";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { darkTheme, lightTheme } from "@/helper/theme";
 
 interface CompanyBioEditModalProps {
   setOpenEditBio: Dispatch<SetStateAction<boolean>>;
 }
-const CompanyBioEditModal: React.FC<CompanyBioEditModalProps> = ({ setOpenEditBio }) => {
+const CompanyBioEditModal: React.FC<CompanyBioEditModalProps> = ({
+  setOpenEditBio,
+}) => {
   const { profile, error } = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch<AppDispatch>();
   const handleClose = () => {
@@ -51,30 +58,27 @@ const CompanyBioEditModal: React.FC<CompanyBioEditModalProps> = ({ setOpenEditBi
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries((formData as any).entries());
-    console.log(formJson);
-    
+
     if (!validatePhone(formJson?.phone)) {
-        toast.error("Enter proper phone number");
-        return;
-      }
-      if (!validateName(formJson?.name)) {
-        toast.error("Enter proper Name");
-        return;
-      }
-      if (!validateField(formJson?.location)) {
-        toast.error("Enter a valid location ");
-        return;
-      }
-      const data: BioDetails = {
-        name: formJson.name,
-        bio: {
-          location: formJson.location,
-          phone: formJson.phone,
-        },
-      };
+      toast.error("Enter proper phone number");
+      return;
+    }
+    if (!validateName(formJson?.name)) {
+      toast.error("Enter proper Name");
+      return;
+    }
+    if (!validateField(formJson?.location)) {
+      toast.error("Enter a valid location ");
+      return;
+    }
+    const data: BioDetails = {
+      name: formJson.name,
+      bio: {
+        location: formJson.location,
+        phone: formJson.phone,
+      },
+    };
 
-
-    
     dispatch(updateBio(data));
     if (!error) {
       toast.success("Profile Updated");
@@ -83,75 +87,80 @@ const CompanyBioEditModal: React.FC<CompanyBioEditModalProps> = ({ setOpenEditBi
   };
   return (
     <>
-      <Dialog
-        open
-        onClose={handleClose}
-        PaperProps={{
-          component: "form",
-          onSubmit: handleSubmit,
-        }}
+      <ThemeProvider
+        theme={profile?.data.theme === "dark" ? darkTheme : lightTheme}
       >
-        <DialogTitle>Edit Bio</DialogTitle>
-        <DialogContent>
-          <TextField
-            onChange={handleChange}
-            value={formData.name}
-            autoFocus
-            required
-            margin="dense"
-            id="name"
-            name="name"
-            label="Full Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            onChange={handleChange}
-            value={formData.email}
-            autoFocus
-            required
-            margin="dense"
-            id="email"
-            name="email"
-            label="Email"
-            type="email"
-            disabled
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            onChange={handleChange}
-            value={formData.location}
-            autoFocus
-            required
-            margin="dense"
-            id="location"
-            name="location"
-            label="Location"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            onChange={handleChange}
-            value={formData.phone}
-            autoFocus
-            required
-            margin="dense"
-            id="phone"
-            name="phone"
-            label="Phone"
-            type="text"
-            fullWidth
-            variant="standard"
-          /> 
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Save</Button>
-        </DialogActions>
-      </Dialog>
+        <CssBaseline />
+        <Dialog
+          open
+          onClose={handleClose}
+          PaperProps={{
+            component: "form",
+            onSubmit: handleSubmit,
+          }}
+        >
+          <DialogTitle>Edit Bio</DialogTitle>
+          <DialogContent>
+            <TextField
+              onChange={handleChange}
+              value={formData.name}
+              autoFocus
+              required
+              margin="dense"
+              id="name"
+              name="name"
+              label="Full Name"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              onChange={handleChange}
+              value={formData.email}
+              autoFocus
+              required
+              margin="dense"
+              id="email"
+              name="email"
+              label="Email"
+              type="email"
+              disabled
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              onChange={handleChange}
+              value={formData.location}
+              autoFocus
+              required
+              margin="dense"
+              id="location"
+              name="location"
+              label="Location"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              onChange={handleChange}
+              value={formData.phone}
+              autoFocus
+              required
+              margin="dense"
+              id="phone"
+              name="phone"
+              label="Phone"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type="submit">Save</Button>
+          </DialogActions>
+        </Dialog>
+      </ThemeProvider>
     </>
   );
 };

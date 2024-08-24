@@ -1,22 +1,25 @@
-import { Icon } from '@iconify/react'
-import React, { useState } from 'react';
-import { UserPostsPayload } from '@/redux/reducers/posts/userPosts';
-import Posts from './Posts';
+import { Icon } from "@iconify/react";
+import React, { useState } from "react";
+import { UserPostsPayload } from "@/redux/reducers/posts/userPosts";
+import Posts from "./Posts";
 
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
-import RecruiterJobs from './RecruiterJobs';
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import RecruiterJobs from "./RecruiterJobs";
 
-interface RecruiterPostpartProps{
-    userPosts:UserPostsPayload|null
-    userId:string
+interface RecruiterPostpartProps {
+  userPosts: UserPostsPayload | null;
+  userId: string;
 }
-const RecruiterPostpart:React.FC<RecruiterPostpartProps> = ({userPosts,userId}) => {
-    const [postNav, setPostNav] = useState<string | "post" | "jobs" >("post");
-    const handleNavPostClick = (value: string) => {
-      setPostNav(value);
-    };
-    const { profile } = useSelector((state: RootState) => state.profile);
+const RecruiterPostpart: React.FC<RecruiterPostpartProps> = ({
+  userPosts,
+  userId,
+}) => {
+  const [postNav, setPostNav] = useState<string | "post" | "jobs">("post");
+  const handleNavPostClick = (value: string) => {
+    setPostNav(value);
+  };
+  const { profile } = useSelector((state: RootState) => state.profile);
   return (
     <>
       <div className="nonlist navigat-part mt-10">
@@ -76,12 +79,15 @@ const RecruiterPostpart:React.FC<RecruiterPostpartProps> = ({userPosts,userId}) 
               <span className="hidden md:inline">Jobs</span>
             </div>
           </li>
-          
         </ul>
       </div>
-      {postNav === "post" ? <Posts userPosts={userPosts} /> : <RecruiterJobs userId={userId} />}
+      {postNav === "post" ? (
+        <Posts userPosts={userPosts} />
+      ) : (
+        <RecruiterJobs userId={userId} />
+      )}
     </>
-  )
-}
+  );
+};
 
-export default RecruiterPostpart
+export default RecruiterPostpart;

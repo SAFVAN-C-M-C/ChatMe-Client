@@ -1,42 +1,39 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { URL } from "@/common/api";
 import { config } from "@/common/configurations";
-import NavigationBar from "@/components/general/NavigationBar"
-import NothingHere from "@/components/general/NothingHere"
+import NavigationBar from "@/components/general/NavigationBar";
+import NothingHere from "@/components/general/NothingHere";
 import MyApplicationCard from "@/components/Jobs/Applications/MyApplicationCard";
 import { RootState } from "@/redux/store";
 import { IJobApplicationFromBackend } from "@/types/IJob";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
 
 const MyJobApplication = () => {
-    const { profile } = useSelector((state: RootState) => state.profile);
-    const navigate = useNavigate();
-    const [page, setPage] = useState("all");
-    const [applications, setApplications] = useState<
-      IJobApplicationFromBackend[] | null
-    >(null);
-    const fetchApplications = async () => {
-        try {
-          const response = await axios.get(
-            `${URL}/job/myapplications?status=${page}`,
-            config
-          );
-          if (response.status === 200) {
-            setApplications(response.data.data);
-          }
-        } catch (error) {
-          console.error("Failed to fetch applications:", error);
-        }
-      };
-      useEffect(()=>{
-        fetchApplications()
-        console.log(applications);
-        
-      },[page])
+  const { profile } = useSelector((state: RootState) => state.profile);
+  const [page, setPage] = useState("all");
+  const [applications, setApplications] = useState<
+    IJobApplicationFromBackend[] | null
+  >(null);
+  const fetchApplications = async () => {
+    try {
+      const response = await axios.get(
+        `${URL}/job/myapplications?status=${page}`,
+        config
+      );
+      if (response.status === 200) {
+        setApplications(response.data.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch applications:", error);
+    }
+  };
+  useEffect(() => {
+    if (!applications) {
+      fetchApplications();
+    }
+  }, [applications, page]);
   return (
     <>
       <div data-theme={profile?.data.theme || "light"} className="flex">
@@ -123,24 +120,20 @@ const MyJobApplication = () => {
             </div>
           </div>
           <div className="w-full flex justify-center mt-10">
-          <div className="application-list flex flex-wrap gap-5 pl-2 h-auto justify-start lg:w-[950px] md:w-[650px] w-[300px]">
-
-            {applications && applications.length > 0 ? (
-              applications.map((application, index) => (
-                <MyApplicationCard
-                  application={application}
-                  key={index}
-                />
-              ))
-            ) : (
-              <NothingHere />
-            )}
-          </div>
+            <div className="application-list flex flex-wrap gap-5 pl-2 h-auto justify-start lg:w-[950px] md:w-[650px] w-[300px]">
+              {applications && applications.length > 0 ? (
+                applications.map((application, index) => (
+                  <MyApplicationCard application={application} key={index} />
+                ))
+              ) : (
+                <NothingHere />
+              )}
+            </div>
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default MyJobApplication
+export default MyJobApplication;

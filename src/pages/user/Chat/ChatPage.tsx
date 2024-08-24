@@ -6,34 +6,42 @@ import UseListenNotification from "@/hooks/UseListenNotification";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import './ChatPage.css'
+import "./ChatPage.css";
 import { useEffect, useRef } from "react";
 import { useChatContext } from "@/context/ChatContext";
 
 function ChatPage() {
-  
   const { profile } = useSelector((state: RootState) => state.profile);
-  UseListenMessages()
-  UseListenNotification()
-  const {chatId}=useParams()
-  const searchRef=useRef<HTMLInputElement | null>(null)
-  const {getMyChats}=useChatContext()
+  UseListenMessages();
+  UseListenNotification();
+  const { chatId } = useParams();
+  const searchRef = useRef<HTMLInputElement | null>(null);
+  const { getMyChats, myChats } = useChatContext();
   useEffect(() => {
-    getMyChats();
-  }, []);
+    if (!myChats) {
+      getMyChats();
+    }
+  }, [getMyChats, myChats]);
   return (
     <>
-      <div data-theme={profile?.data.theme || "light"} className="hidden sm:flex   overflow-hidden">
+      <div
+        data-theme={profile?.data.theme || "light"}
+        className="hidden sm:flex   overflow-hidden"
+      >
         <NavigationBar isChat={true} />
-          <InboxPart serachRef={searchRef}/>
-          <ChatPart serachRef={searchRef}/>
+        <InboxPart serachRef={searchRef} />
+        <ChatPart serachRef={searchRef} />
       </div>
-      <div data-theme={profile?.data.theme || "light"} className="sm:hidden flex   overflow-hidden">
+      <div
+        data-theme={profile?.data.theme || "light"}
+        className="sm:hidden flex   overflow-hidden"
+      >
         <NavigationBar isChat={true} />
-          {
-            chatId?<ChatPart serachRef={searchRef}/>:<InboxPart serachRef={searchRef}/>
-            
-          }
+        {chatId ? (
+          <ChatPart serachRef={searchRef} />
+        ) : (
+          <InboxPart serachRef={searchRef} />
+        )}
       </div>
     </>
   );

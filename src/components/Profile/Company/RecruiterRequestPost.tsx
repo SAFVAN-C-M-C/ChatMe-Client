@@ -3,7 +3,10 @@ import { RecruiterApplication } from "../../../types/IProfile";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import toast from "react-hot-toast";
-import { acceptRecruiterRequest, ignoreRecruiterRequest } from "../../../redux/actions/user/profileActions";
+import {
+  acceptRecruiterRequest,
+  ignoreRecruiterRequest,
+} from "../../../redux/actions/user/profileActions";
 
 interface RecruiterRequestPostProps {
   value: RecruiterApplication;
@@ -24,9 +27,9 @@ const RecruiterRequestPost: React.FC<RecruiterRequestPostProps> = ({
       userEmail: value.userEmail,
       userId: value.userId,
     };
-    dispatch(acceptRecruiterRequest(formData))
-    if(!error){
-      toast.success("Accepted")
+    dispatch(acceptRecruiterRequest(formData));
+    if (!error) {
+      toast.success("Accepted");
     }
   };
   const handleIgnore = () => {
@@ -34,9 +37,9 @@ const RecruiterRequestPost: React.FC<RecruiterRequestPostProps> = ({
       requestId: value._id,
       userEmail: value.userEmail,
     };
-    dispatch(ignoreRecruiterRequest(formData))
-    if(!error){
-      toast.success("Deleted")
+    dispatch(ignoreRecruiterRequest(formData));
+    if (!error) {
+      toast.success("Deleted");
     }
   };
   return (
@@ -56,7 +59,10 @@ const RecruiterRequestPost: React.FC<RecruiterRequestPostProps> = ({
             </span>{" "}
           </div>
           <div className="action flex">
-            <div onClick={handleIgnore} className="cursor-pointer message mr-4  w-auto h-auto bg-slate-300 pt-1 pb-1 pl-5 pr-5 rounded-md">
+            <div
+              onClick={handleIgnore}
+              className="cursor-pointer message mr-4  w-auto h-auto bg-slate-300 pt-1 pb-1 pl-5 pr-5 rounded-md"
+            >
               <span>ignore</span>
             </div>
             <div

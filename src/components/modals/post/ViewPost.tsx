@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Icon } from "@iconify/react";
 import {
   Button,
-  CircularProgress,
   CssBaseline,
   Dialog,
   Menu,
@@ -66,7 +64,6 @@ export const ViewPost: React.FC<ViewPostProps> = ({
   const [comment, setComment] = useState("");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const loader = useRef(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [comments, setComments] = useState<IComments[]>([]);
 
@@ -97,8 +94,6 @@ export const ViewPost: React.FC<ViewPostProps> = ({
 
   const handleLike = async () => {
     try {
-      console.log("clicked");
-
       const response = await axios.put(`${URL}/post/like/${post._id}`, config);
       if (response.status === 200) {
         dispatch(
@@ -114,14 +109,12 @@ export const ViewPost: React.FC<ViewPostProps> = ({
         }
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
 
   const handleUnLike = async () => {
     try {
-      console.log("clicked");
-
       const response = await axios.put(
         `${URL}/post/unlike/${post._id}`,
         config
@@ -143,25 +136,21 @@ export const ViewPost: React.FC<ViewPostProps> = ({
         }
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
   const handleSave = async () => {
     try {
-      console.log("clicked save", `${URL}/post/save/${post._id}`);
-
       const response = await axios.put(`${URL}/post/save/${post._id}`, config);
       if (response.status === 200) {
         dispatch(getSavedPost());
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
   const handleUnSave = async () => {
     try {
-      console.log("clicked unsave");
-
       const response = await axios.put(
         `${URL}/post/unsave/${post._id}`,
         config
@@ -170,7 +159,7 @@ export const ViewPost: React.FC<ViewPostProps> = ({
         dispatch(getSavedPost());
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
   const handleClose = () => {
@@ -201,9 +190,9 @@ export const ViewPost: React.FC<ViewPostProps> = ({
   const getComments = async (postId: string, page: number) => {
     try {
       const res = await axios.get(
-        `${URL}/post/get/comment/${postId}?page=${page}&limit=9`
+        `${URL}/post/get/comment/${postId}?page=${page}&limit=9`,
+        config
       );
-      console.log(res);
 
       if (res.status === 200) {
         setComments((prev) => [
@@ -220,7 +209,7 @@ export const ViewPost: React.FC<ViewPostProps> = ({
         setHasMore(false);
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
 
@@ -255,7 +244,7 @@ export const ViewPost: React.FC<ViewPostProps> = ({
         }
       }
     } catch (error: any) {
-      console.log("Seomething went wrong", error.message);
+      console.error("Seomething went wrong", error.message);
       toast.error("Something went wrong,please try again!");
     }
   };

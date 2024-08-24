@@ -17,19 +17,15 @@ const RecruiterJobPost: FC<RecruiterJobPostProps> = ({ job }) => {
   const navigate = useNavigate();
   const getCompany = async (companyId: string) => {
     try {
-      try {
-        const res = await axios.get(
-          `${URL}/profile/get/user/${companyId}`,
-          config
-        );
-        if (res.status === 200) {
-          setCompany(res.data.data);
-        }
-      } catch (error: any) {
-        console.log("Somthing wrong", error.message);
+      const res = await axios.get(
+        `${URL}/profile/get/user/${companyId}`,
+        config
+      );
+      if (res.status === 200) {
+        setCompany(res.data.data);
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("Somthing wrong", error.message);
     }
   };
   const handleJobClick = () => {
@@ -38,13 +34,10 @@ const RecruiterJobPost: FC<RecruiterJobPostProps> = ({ job }) => {
     }
   };
   useEffect(() => {
-    if (job.companyId) {
+    if (job.companyId && !company) {
       getCompany(job.companyId);
     }
-    // if(job.recruiterId){
-    //   getRecruiter(job.recruiterId)
-    // }
-  }, []);
+  }, [company, job.companyId]);
   return (
     <>
       <div

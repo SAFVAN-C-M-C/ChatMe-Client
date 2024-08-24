@@ -10,7 +10,7 @@ const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(updateError(null));
-  }, []);
+  }, [dispatch]);
   return (
     <>
       <div className="main-container w-full h-[100vh] flex">

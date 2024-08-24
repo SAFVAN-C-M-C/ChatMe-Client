@@ -31,29 +31,28 @@ const RecruiterPost: React.FC<RecruiterPostProps> = ({ recruiterId }) => {
   const [recruiter, setRecruiter] = useState<UserDetails | null>(null);
   const getRecruiter = async (recruiterId: string) => {
     try {
-      try {
-        const res = await axios.get(
-          `${URL}/profile/get/user/${recruiterId}`,
-          config
-        );
-        if (res.status === 200) {
-          setRecruiter(res.data.data);
-        }
-      } catch (error: any) {
-        console.log("Somthing wrong", error.message);
+      const res = await axios.get(
+        `${URL}/profile/get/user/${recruiterId}`,
+        config
+      );
+      if (res.status === 200) {
+        setRecruiter(res.data.data);
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("Somthing wrong", error.message);
     }
   };
   useEffect(() => {
-    if (recruiterId) {
+    if (recruiterId && !recruiter) {
       getRecruiter(String(recruiterId));
     }
-  }, []);
+  }, [recruiterId,recruiter]);
   return (
     <div className="post-container mt-4 w-[90%] rounded-lg border-[.5px] border-gray-500 h-auto flex p-4">
-      <div className="logo w-[30%] md:w-[10%]  h-full flex justify-center items-center md:ml-10 cursor-pointer" onClick={()=>handleUserClick(recruiter?.userId as string)}>
+      <div
+        className="logo w-[30%] md:w-[10%]  h-full flex justify-center items-center md:ml-10 cursor-pointer"
+        onClick={() => handleUserClick(recruiter?.userId as string)}
+      >
         <img
           src={recruiter?.avatar}
           alt="company logo"
@@ -62,7 +61,10 @@ const RecruiterPost: React.FC<RecruiterPostProps> = ({ recruiterId }) => {
       </div>
       <div className="main w-[70%] md:w-[80%] flex items-center  h-full ">
         <div className="main-row ml-2 mt-2 mb-2 w-full flex justify-between">
-          <div className="recruiter flex items-center cursor-pointer" onClick={()=>handleUserClick(recruiter?.userId as string)}>
+          <div
+            className="recruiter flex items-center cursor-pointer"
+            onClick={() => handleUserClick(recruiter?.userId as string)}
+          >
             <span className="text-base font-medium ">{recruiter?.name}</span>{" "}
             {recruiter?.isVerified ? (
               <Icon

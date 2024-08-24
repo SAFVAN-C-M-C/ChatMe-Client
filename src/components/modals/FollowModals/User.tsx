@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { URL } from "@/common/api";
 import { config } from "@/common/configurations";
@@ -6,7 +5,7 @@ import { followUser, unFollowUser } from "@/redux/actions/user/profileActions";
 import { AppDispatch, RootState } from "@/redux/store";
 import { UserDetails } from "@/types/IProfile";
 import axios from "axios";
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 interface UserProps {
@@ -32,7 +31,7 @@ const User: FC<UserProps> = ({ userId }) => {
         setUser(res.data.data);
       }
     } catch (error: any) {
-      console.log("Something went wrong", error.message);
+      console.error("Something went wrong", error.message);
     }
   };
 
@@ -41,37 +40,34 @@ const User: FC<UserProps> = ({ userId }) => {
       getUser(userId);
     }
   }, [user, userId]);
-  const handleUnfollow=()=>{
+  const handleUnfollow = () => {
     try {
-      console.log("clicked");
-      dispatch(unFollowUser({userId:String(userId)}))
-      
-      
+      dispatch(unFollowUser({ userId: String(userId) }));
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
-  }
-  const handlefollow=()=>{
+  };
+  const handlefollow = () => {
     try {
-      console.log("clicked");
-      dispatch(followUser({userId:String(userId)}))
-      
-      
+      dispatch(followUser({ userId: String(userId) }));
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
-  }
-  const handleUserClick=()=>{
-    if(userId===profile?.data.userId){
-      navigate(`/profile`)
-      return
+  };
+  const handleUserClick = () => {
+    if (userId === profile?.data.userId) {
+      navigate(`/profile`);
+      return;
     }
-    navigate(`/u/profile/${userId}`)
-  }
+    navigate(`/u/profile/${userId}`);
+  };
   return (
     <>
-      <div className="user-container relative flex items-center rounded-md  " >
-        <div className="avatar  w-10 m-3 cursor-pointer" onClick={handleUserClick}>
+      <div className="user-container relative flex items-center rounded-md  ">
+        <div
+          className="avatar  w-10 m-3 cursor-pointer"
+          onClick={handleUserClick}
+        >
           <div className="img-container rounded-full w-10">
             <img
               src={user?.avatar ? user.avatar : "/general/ChatMe-profile.png"}
@@ -89,9 +85,18 @@ const User: FC<UserProps> = ({ userId }) => {
         </div>
 
         <div className="follow-up flex justify-center absolute right-0">
-        {
-                    following?<span onClick={handleUnfollow} className='btn btn-outline btn-primary hover:text-white'>Unfollow</span>:<span onClick={handlefollow} className='btn btn-primary text-white'>Follow</span> 
-                }
+          {following ? (
+            <span
+              onClick={handleUnfollow}
+              className="btn btn-outline btn-primary hover:text-white"
+            >
+              Unfollow
+            </span>
+          ) : (
+            <span onClick={handlefollow} className="btn btn-primary text-white">
+              Follow
+            </span>
+          )}
         </div>
       </div>
       <div className="divider "></div>

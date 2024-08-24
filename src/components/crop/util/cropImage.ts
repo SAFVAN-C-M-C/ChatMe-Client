@@ -99,20 +99,20 @@ export default async function getCroppedImg(
   }
 
   // Set the size of the cropped canvas
-  croppedCanvas.width = pixelCrop.width;
-  croppedCanvas.height = pixelCrop.height;
+  croppedCanvas.width = Number(pixelCrop?.width);
+  croppedCanvas.height = Number(pixelCrop?.height);
 
   // Draw the cropped image onto the new canvas
   croppedCtx.drawImage(
     canvas,
-    pixelCrop.x,
-    pixelCrop.y,
-    pixelCrop.width,
-    pixelCrop.height,
+    Number(pixelCrop?.x),
+    Number(pixelCrop?.y),
+    Number(pixelCrop?.width),
+    Number(pixelCrop?.height),
     0,
     0,
-    pixelCrop.width,
-    pixelCrop.height
+    Number(pixelCrop?.width),
+    Number(pixelCrop?.height)
   );
 
   // As a blob

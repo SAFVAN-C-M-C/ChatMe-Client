@@ -28,8 +28,6 @@ const SearchModal: React.FC<SearchModalProps> = ({ setOpenSearchModal }) => {
   const { profile } = useSelector((state: RootState) => state.profile);
   const { searchData } = useSelector((state: RootState) => state.searchData);
   const [filter, setFilter] = useState("user");
-  console.log(searchData);
-
   const dispatch = useDispatch<AppDispatch>();
   const handleClose = () => {
     setOpenSearchModal(false);
@@ -45,7 +43,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ setOpenSearchModal }) => {
     try {
       setSerachKey(e.target.value);
     } catch (error: any) {
-      console.log("Something went wrong", error.message);
+      console.error("Something went wrong", error.message);
     }
   };
   useEffect(() => {

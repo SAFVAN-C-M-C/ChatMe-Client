@@ -3,7 +3,6 @@
 import { capitalizeString } from "@/_lib/util/capitalizeString";
 import { URL } from "@/common/api";
 import { config } from "@/common/configurations";
-import ViewApplicationModal from "@/components/modals/Application/ViewApplicationModal";
 import { formatDate } from "@/helper/formateDate";
 import { IJobs } from "@/redux/reducers/jobs/jobs";
 import { RootState } from "@/redux/store";
@@ -12,7 +11,7 @@ import { UserDetails } from "@/types/IProfile";
 import { Icon } from "@iconify/react";
 
 import axios from "axios";
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -31,21 +30,17 @@ const MyApplicationCard: FC<MyApplicationCardProps> = ({ application }) => {
         setCompany(res.data.data);
       }
     } catch (error: any) {
-      console.log("Something wrong", error.message);
+      setCompany(null);
     }
   };
   const getJob = async (jobId: string) => {
     try {
-      try {
-        const res = await axios.get(`${URL}/job/get/${jobId}`, config);
-        if (res.status === 200) {
-          setJob(res.data.data);
-        }
-      } catch (error: any) {
-        console.log("Somthing wrong", error.message);
+      const res = await axios.get(`${URL}/job/get/${jobId}`, config);
+      if (res.status === 200) {
+        setJob(res.data.data);
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      setJob(null);
     }
   };
   useEffect(() => {
@@ -87,18 +82,17 @@ const MyApplicationCard: FC<MyApplicationCardProps> = ({ application }) => {
             <div className="content-part w-[80%] flex flex-col gap-3">
               <div className="name flex gap-1">
                 <span className=" flex font-bold">{job?.jobTitle}</span>
-                
               </div>
-              <div className="name flex gap-1 items-center gap-1">
+              <div className="name flex gap-1 items-center">
                 <span className=" flex  text-sm">{company?.name}</span>
                 {company?.isVerified ? (
-            <Icon
-              className="text-blue-500"
-              icon="mdi:verified-user"
-              height={16}
-              width={16}
-            />
-          )  : null}
+                  <Icon
+                    className="text-blue-500"
+                    icon="mdi:verified-user"
+                    height={16}
+                    width={16}
+                  />
+                ) : null}
               </div>
               <span>Applied on: {formatDate(application.createdAt)}</span>
               <span

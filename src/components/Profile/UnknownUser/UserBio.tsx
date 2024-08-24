@@ -10,43 +10,48 @@ import { followUser, unFollowUser } from "@/redux/actions/user/profileActions";
 
 interface UserBioProps {
   Userprofile: ProfilePayload | null;
-  postLength?:number
+  postLength?: number;
 }
-const UserBio: React.FC<UserBioProps> = ({ Userprofile,postLength}) => {
-  const [follow,setFollow]=useState(false);
-  const { profile  } = useSelector((state: RootState) => state.profile);
+const UserBio: React.FC<UserBioProps> = ({ Userprofile, postLength }) => {
+  const [follow, setFollow] = useState(false);
+  const { profile } = useSelector((state: RootState) => state.profile);
   const dispatch = useDispatch<AppDispatch>();
-  useEffect(()=>{
-    if(profile?.data.following?.find(val=>val===Userprofile?.data.userId)){
+  useEffect(() => {
+    if (
+      profile?.data.following?.find((val) => val === Userprofile?.data.userId)
+    ) {
       setFollow(true);
-    }else{
-      setFollow(false)
+    } else {
+      setFollow(false);
     }
-  },[profile?.data.following?.length])
-  const handleUnfollow=()=>{
+  }, [
+    Userprofile?.data.userId,
+    profile?.data.following,
+    profile?.data.following?.length,
+  ]);
+  const handleUnfollow = () => {
     try {
-      console.log("clicked");
-      dispatch(unFollowUser({userId:String(Userprofile?.data.userId)}))
-      setFollow(false)
-      
+      dispatch(unFollowUser({ userId: String(Userprofile?.data.userId) }));
+      setFollow(false);
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
-  }
-  const handlefollow=()=>{
+  };
+  const handlefollow = () => {
     try {
-      console.log("clicked");
-      dispatch(followUser({userId:String(Userprofile?.data.userId)}))
+      dispatch(followUser({ userId: String(Userprofile?.data.userId) }));
       setFollow(true);
-      
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
-  }
+  };
   return (
     <>
       {/* for phone */}
-      <div data-theme={profile?.data.theme || "light"} className="Userprofile-bio-sm flex-col  w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 flex md:hidden">
+      <div
+        data-theme={profile?.data.theme || "light"}
+        className="Userprofile-bio-sm flex-col  w-[95%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 flex md:hidden"
+      >
         <div className="first-row w-full flex justify-center h-[50px]  mt-3 mb-3">
           <div className="provile-avatar mr-4 w-[30%] flex justify-center">
             <img
@@ -121,7 +126,9 @@ const UserBio: React.FC<UserBioProps> = ({ Userprofile,postLength}) => {
               width={26}
               height={26}
             />
-            <span className="text-gray-400">{Userprofile?.data.bio?.location}</span>
+            <span className="text-gray-400">
+              {Userprofile?.data.bio?.location}
+            </span>
           </div>
         ) : null}
         {Userprofile?.data.bio?.phone ? (
@@ -158,7 +165,10 @@ const UserBio: React.FC<UserBioProps> = ({ Userprofile,postLength}) => {
         ) : null}
       </div>
       {/* lap */}
-      <div data-theme={profile?.data.theme || "light"} className="Userprofile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 md:flex hidden">
+      <div
+        data-theme={profile?.data.theme || "light"}
+        className="Userprofile-bio w-[80%] border-[.5px] border-gray-600  h-auto pb-3 rounded-xl border-dashed mt-12 md:flex hidden"
+      >
         <div className="Userprofile-avatar w-[30%] h-full  flex justify-center items-center ">
           <img
             src={
@@ -173,15 +183,25 @@ const UserBio: React.FC<UserBioProps> = ({ Userprofile,postLength}) => {
         <div className="Userprofile-details  w-[70%] h-full ">
           <div className="first-row w-full flex h- ml-4 mt-3 mb-3">
             <div className="user-name p-2 mr-14 ">
-              <span>{Userprofile?.data ? Userprofile?.data?.name : "User Name"}</span>
+              <span>
+                {Userprofile?.data ? Userprofile?.data?.name : "User Name"}
+              </span>
             </div>
-            {
-              !follow?<div className="edit-Userprofile h-auto bg-blue-500 mr-5 rounded-md p-2 cursor-pointer" onClick={handlefollow}>
-              <span className="text-white">Follow</span>
-            </div>:<div className="edit-Userprofile h-auto bg-slate-400 mr-5 rounded-md p-2 cursor-pointer" onClick={handleUnfollow}>
-              <span className="text-white">Following</span>
-            </div>
-            }
+            {!follow ? (
+              <div
+                className="edit-Userprofile h-auto bg-blue-500 mr-5 rounded-md p-2 cursor-pointer"
+                onClick={handlefollow}
+              >
+                <span className="text-white">Follow</span>
+              </div>
+            ) : (
+              <div
+                className="edit-Userprofile h-auto bg-slate-400 mr-5 rounded-md p-2 cursor-pointer"
+                onClick={handleUnfollow}
+              >
+                <span className="text-white">Following</span>
+              </div>
+            )}
           </div>
           <div className="second-row md:w-[60%] w-full flex justify-around">
             <div className="post">
@@ -192,7 +212,9 @@ const UserBio: React.FC<UserBioProps> = ({ Userprofile,postLength}) => {
             <div className="follwers">
               <p>
                 <span className="font-bold">
-                  {Userprofile?.data ? Userprofile.data?.followers?.length : "0"}{" "}
+                  {Userprofile?.data
+                    ? Userprofile.data?.followers?.length
+                    : "0"}{" "}
                 </span>
                 Followers
               </p>
@@ -200,7 +222,9 @@ const UserBio: React.FC<UserBioProps> = ({ Userprofile,postLength}) => {
             <div className="following">
               <p>
                 <span className="font-bold">
-                  {Userprofile?.data ? Userprofile.data?.following?.length : "0"}{" "}
+                  {Userprofile?.data
+                    ? Userprofile.data?.following?.length
+                    : "0"}{" "}
                 </span>
                 Following
               </p>

@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getFileExtension } from "@/helper/getExtention";
 import { RootState } from "@/redux/store";
 import { IPosts } from "@/types/IPosts";
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { ViewPost } from "../post/ViewPost";
+import { EditPost } from "../post/EditPost";
 
 interface SearchPostProps {
   post: IPosts;
@@ -35,12 +35,17 @@ const SearchPost: FC<SearchPostProps> = ({ post }) => {
   return (
     <>
       {showPost ? (
-        <ViewPost
-          myPost={myPost}
-          post={post}
-          setOpenEditPost={setOpenEditPost}
-          setOpenViewPost={setShowPost}
-        />
+        <>
+          {openEditPost ? (
+            <EditPost post={post} setOpenEditPost={setOpenEditPost} />
+          ) : null}
+          <ViewPost
+            myPost={myPost}
+            post={post}
+            setOpenEditPost={setOpenEditPost}
+            setOpenViewPost={setShowPost}
+          />
+        </>
       ) : (
         <div
           onClick={handlePostViewOpen}

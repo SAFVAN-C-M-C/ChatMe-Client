@@ -64,13 +64,12 @@ const RegisterForm_2 = () => {
     //upload resume
 
     if (formData.accountType === "company" && file) {
-      console.log(file);
       const type = file.type.split("/")[0] === "application" ? "pdf" : "jpg";
       const signedUrl: { url: string; media: string } = await getSignedUrl(
         "doc",
         type
       );
-      console.log(signedUrl);
+
       const { url, media } = signedUrl;
       const res = await axios.put(url, file, {
         headers: {
@@ -117,7 +116,7 @@ const RegisterForm_2 = () => {
     if (user && user?.success && user?.loggined) {
       navigate("/", { replace: true });
     }
-  }, [user]);
+  }, [navigate, user]);
   return (
     <>
       <div className="register-container bg-white rounded-lg w-[90%] m-2 h-[550px] lg:w-[80%] md:w-[90%] sm:w-[60%] flex flex-col items-center border-[.5px] border-gray-500">

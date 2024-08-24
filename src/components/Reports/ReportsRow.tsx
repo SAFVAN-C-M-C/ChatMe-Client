@@ -57,18 +57,7 @@ const ReportsRow: React.FC<ReportProps> = ({ report, slno }) => {
     e.preventDefault();
     setAction(e.target.value as string);
   };
-  const deletePost = async (id: string) => {
-    const res = await axios.put(`${URL}/post/delete/${id}`, config);
-    if (res.status === 200) {
-      dispatch(
-        reportAction({
-          reportId: String(report?._id),
-          userId: String(report?.suspectId),
-        })
-      );
-      toast.success("User blocked succefully");
-    }
-  };
+
   const handlePostView = () => {
     setOpenViewPost(true);
   };
@@ -107,6 +96,18 @@ const ReportsRow: React.FC<ReportProps> = ({ report, slno }) => {
     }
   }, [post, report?.postId]);
   useEffect(() => {
+    const deletePost = async (id: string) => {
+      const res = await axios.put(`${URL}/post/delete/${id}`, config);
+      if (res.status === 200) {
+        dispatch(
+          reportAction({
+            reportId: String(report?._id),
+            userId: String(report?.suspectId),
+          })
+        );
+        toast.success("User blocked succefully");
+      }
+    };
     if (action === "deletePost") {
       deletePost(String(report?.postId));
       return;
@@ -131,7 +132,7 @@ const ReportsRow: React.FC<ReportProps> = ({ report, slno }) => {
       toast.success("Report succefully deleted");
       return;
     }
-  }, [action]);
+  }, [action, dispatch, report?._id, report?.postId, report?.suspectId]);
   return (
     <>
       {openViewPost ? (
@@ -160,27 +161,3 @@ const ReportsRow: React.FC<ReportProps> = ({ report, slno }) => {
 };
 
 export default ReportsRow;
-
-// {openViewPost ? (
-//   <ViewPost
-//     setOpenViewPost={setOpenViewPost}
-//     post={post}
-//   />
-// ) : null}
-// <tr className="border-b">
-//   <td className="py-2 px-4 text-center" onClick={handlePostView}>{slno}</td>
-//   <td className="py-2 px-4 text-center cursor-pointer" onClick={handlePostView}>{report?.postId}</td>
-//   <td className="py-2 px-4 text-center">{report?.userId}</td>
-//   <td className="py-2 px-4 text-center">{report?.suspectId}</td>
-//   <td className="py-2 px-4 text-center">{report?.reason}</td>
-//   <td className="py-2 px-4 text-center">
-// <Select fullWidth value={action} onChange={handleChange}>
-//   <MenuItem selected value={"select"}>
-//     Select Action
-//   </MenuItem>
-//   <MenuItem value={"deletePost"}>Delete Post</MenuItem>
-//   <MenuItem value={"block"}>Block User</MenuItem>
-//   <MenuItem value={"delete"}>Delete Report</MenuItem>
-// </Select>
-//   </td>
-// </tr>

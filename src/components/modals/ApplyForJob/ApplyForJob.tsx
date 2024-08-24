@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { darkTheme, lightTheme } from "@/helper/theme";
 import { RootState } from "@/redux/store";
-import { ThemeProvider } from "@emotion/react";
+
 import {
   Button,
   CircularProgress,
@@ -17,6 +17,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  ThemeProvider,
 } from "@mui/material";
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
 import toast from "react-hot-toast";
@@ -30,7 +31,6 @@ import {
   validateName,
   validatePhone,
 } from "@/helper/validate";
-import { getSignedUrl } from "@/services";
 import axios from "axios";
 import { IJobApplication } from "@/types/IJob";
 import { IJobs } from "@/redux/reducers/jobs/jobs";
@@ -83,7 +83,6 @@ const ApplyForJob: FC<ApplyForJobProps> = ({ setOpenApplyforJob, job }) => {
     email: profile?.data.email,
     name: profile?.data.name || "",
     phone: profile?.data.bio?.phone || "",
- 
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -107,7 +106,7 @@ const ApplyForJob: FC<ApplyForJobProps> = ({ setOpenApplyforJob, job }) => {
       setLoading(true);
       const formData = new FormData(e.currentTarget);
       const formJson = Object.fromEntries((formData as any).entries());
-      const { name, phone, email,resume } = formJson;
+      const { name, phone, email, resume } = formJson;
       if (!validateName(name)) {
         toast.error("Enter a proper Full name");
         setLoading(false);
@@ -143,7 +142,6 @@ const ApplyForJob: FC<ApplyForJobProps> = ({ setOpenApplyforJob, job }) => {
         resume,
       };
 
-      
       const response = await axios.post(`${URL}/job/apply/job`, data, config);
       if (response.status === 201) {
         toast.success("Succefully applied");

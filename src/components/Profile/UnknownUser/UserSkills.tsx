@@ -1,19 +1,18 @@
-
 import { ProfilePayload } from "@/redux/reducers/profileSlice";
-interface UserSkillsProps{
-    profile: ProfilePayload | null;
+interface UserSkillsProps {
+  profile: ProfilePayload | null;
 }
-const UserSkills:React.FC<UserSkillsProps> = ({profile}) => {
-
+const UserSkills: React.FC<UserSkillsProps> = ({ profile }) => {
   return (
     <>
-     
-      <div data-theme={profile?.data.theme || "light"} className="profile-skill border-[.5px] border-gray-600  w-[80%] h-auto rounded-xl border-dashed mt-12">
+      <div
+        data-theme={profile?.data.theme || "light"}
+        className="profile-skill border-[.5px] border-gray-600  w-[95%] h-auto rounded-xl border-dashed mt-12"
+      >
         <div className="title w-full m-4 pr-6 flex justify-between">
           <div className="education-title">
             <span className="font-bold">Top Skills</span>
           </div>
-          
         </div>
         <div className="skill-list w-full m-4 pr-6 flex flex-col">
           {profile?.data?.skills && profile.data.skills.length > 0 ? (

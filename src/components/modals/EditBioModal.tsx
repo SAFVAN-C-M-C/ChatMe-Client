@@ -5,7 +5,6 @@ import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-// import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import {
   validateField,
@@ -17,10 +16,9 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBio } from "../../redux/actions/user/profileActions";
 import { BioDetails } from "../../types/IProfile";
-import { ThemeProvider } from "@emotion/react";
-import { CssBaseline } from "@mui/material";
-import { darkTheme, lightTheme } from "@/helper/theme";
 
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { darkTheme, lightTheme } from "@/helper/theme";
 
 interface EditBioModalProps {
   setOpenEditBio: Dispatch<SetStateAction<boolean>>;
@@ -31,7 +29,6 @@ const EditBioModal: React.FC<EditBioModalProps> = ({ setOpenEditBio }) => {
   const handleClose = () => {
     setOpenEditBio(false);
   };
-  const [file, setFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     email: profile?.data.email,
     name: profile?.data.name || "",
@@ -56,19 +53,11 @@ const EditBioModal: React.FC<EditBioModalProps> = ({ setOpenEditBio }) => {
     }
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const file = e.target.files?.[0];
-    if (file) {
-      setFile(file);
-    }
-  };
-  const handleSubmit =async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       const formData = new FormData(event.currentTarget);
       const formJson = Object.fromEntries((formData as any).entries());
-      console.log(formJson);
 
       if (!validatePhone(formJson?.phone)) {
         toast.error("Enter proper phone number");
@@ -87,25 +76,23 @@ const EditBioModal: React.FC<EditBioModalProps> = ({ setOpenEditBio }) => {
         return;
       }
 
+      const data: BioDetails = {
+        name: formJson.name,
+        title: formJson.title,
+        bio: {
+          location: formJson.location,
+          phone: formJson.phone,
+        },
+      };
 
-        const data: BioDetails = {
-          name: formJson.name,
-          title: formJson.title,
-          bio: {
-            location: formJson.location,
-            phone: formJson.phone,
-          },
-        };
-  
-        dispatch(updateBio(data));
-      
-      
+      dispatch(updateBio(data));
+
       if (!error) {
         toast.success("Profile Updated");
         handleClose();
       }
     } catch (error: any) {
-      console.log(error.message);
+      console.error(error.message);
       toast.error("Please try again!");
     }
   };
@@ -191,17 +178,6 @@ const EditBioModal: React.FC<EditBioModalProps> = ({ setOpenEditBio }) => {
               fullWidth
               variant="standard"
             />
-            <label className="form-control w-full max-w-xs">
-              <div className="label">
-                <span className="label-text">Select a Resume</span>
-              </div>
-              <input
-                onChange={handleSelectFile}
-                accept=".pdf"
-                type="file"
-                className="file-input file-input-bordered file-input-primary w-full max-w-xs"
-              />
-            </label>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>

@@ -17,11 +17,10 @@ const Suggestions = () => {
         setUsers(res.data.data);
       }
     } catch (error: any) {
-      console.log("Something wrong", error.message);
+      setUsers(null);
     }
   };
   const handleShuffleClick = () => {
-    console.log("clicked");
     getSuggestedUsers();
   };
   useEffect(() => {

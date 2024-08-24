@@ -1,9 +1,17 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import io, { Socket } from "socket.io-client";
-import { createContext, FC, ReactNode, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  FC,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import { CHAT_SERVER_URL } from "@/common/api";
 
 interface SocketContextProps {
   socket: Socket | null;
@@ -23,7 +31,7 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
   useEffect(() => {
     if (user && user.data._id) {
-      const socket = io("http://localhost:1239", {
+      const socket = io(CHAT_SERVER_URL, {
         query: {
           userId: user.data._id,
         },
@@ -34,9 +42,9 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
         console.log("Connected to server🌐🌐🌐");
         setSocket(socket);
       });
-      socket.on("getOnlineUsers",(users)=>{
-        setOnlineUsers(users)
-      })
+      socket.on("getOnlineUsers", (users) => {
+        setOnlineUsers(users);
+      });
 
       setSocket(socket);
 
@@ -49,7 +57,7 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
         setSocket(null);
       }
     }
-  }, [user?.data._id]);
+  }, [socket, user, user?.data._id]);
 
   const value = {
     socket,
@@ -60,11 +68,10 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
   );
 };
 
-
 export const useSocket = () => {
-    const context = useContext(SocketContext);
-    if (!context) {
-      throw new Error('useSocket must be used within a SocketProvider');
-    }
-    return context;
-  };
+  const context = useContext(SocketContext);
+  if (!context) {
+    throw new Error("useSocket must be used within a SocketProvider");
+  }
+  return context;
+};

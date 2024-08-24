@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { URL } from "@/common/api";
 import { config } from "@/common/configurations";
@@ -21,15 +22,9 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-
-
-
-
-
-
 const UserProfilePage = () => {
-  UseListenNotification()
-  const { profile  } = useSelector((state: RootState) => state.profile);
+  UseListenNotification();
+  const { profile } = useSelector((state: RootState) => state.profile);
   const { userId } = useParams();
   const [Userprofile, setUserProfile] = useState<ProfilePayload | null>(null);
   const [userPosts, setUserPosts] = useState<UserPostsPayload | null>(null);
@@ -39,13 +34,13 @@ const UserProfilePage = () => {
         `${URL}/profile/users/${userId}`,
         config
       );
-      
+
       if (response.status === 200) {
         setUserProfile(response.data);
         getPosts(String(userId));
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
   const getPosts = async (userId: string) => {
@@ -55,28 +50,43 @@ const UserProfilePage = () => {
         setUserPosts(response.data);
       }
     } catch (error: any) {
-      console.log("something went wrong", error.message);
+      console.error("something went wrong", error.message);
     }
   };
   useEffect(() => {
-    getProfile(String(userId));
-    console.log(Userprofile);
-    
-  }, [userId,profile?.data.following?.length]);
+    if (!Userprofile) {
+      getProfile(String(userId));
+    }
+    if (!userPosts) {
+      getPosts(String(userId));
+    }
+  }, [userId, profile?.data.following?.length, Userprofile, userPosts]);
   return (
     <>
       <div className="flex " data-theme={profile?.data.theme || "light"}>
         <NavigationBar />
         <div className="profile-part w-full   flex flex-col items-center">
-          {
-            Userprofile?.data?.accountType === "personal" ?<UserBio Userprofile={Userprofile} postLength={userPosts?.data.length}/>:Userprofile?.data?.accountType === "company" ? <CompanyBio Userprofile={Userprofile} postLength={userPosts?.data.length}/>:Userprofile?.data?.accountType === "recruiter" ? <RecruiterBio Userprofile={Userprofile} postLength={userPosts?.data.length}/>:null
-          }
-          
+          {Userprofile?.data?.accountType === "personal" ? (
+            <UserBio
+              Userprofile={Userprofile}
+              postLength={userPosts?.data.length}
+            />
+          ) : Userprofile?.data?.accountType === "company" ? (
+            <CompanyBio
+              Userprofile={Userprofile}
+              postLength={userPosts?.data.length}
+            />
+          ) : Userprofile?.data?.accountType === "recruiter" ? (
+            <RecruiterBio
+              Userprofile={Userprofile}
+              postLength={userPosts?.data.length}
+            />
+          ) : null}
 
-          {
-            Userprofile?.data.bio.about?<About userProfile={Userprofile} />:null
-          }
-          
+          {Userprofile?.data.bio.about ? (
+            <About userProfile={Userprofile} />
+          ) : null}
+
           {Userprofile?.data?.accountType === "personal" ? (
             <>
               {Userprofile.data.education?.length !== 0 ? (
@@ -93,9 +103,16 @@ const UserProfilePage = () => {
           {Userprofile?.data?.accountType === "personal" ? (
             <UserPostPart userPosts={userPosts} />
           ) : Userprofile?.data?.accountType === "company" ? (
-            <CompanyPostPart user={Userprofile} userPosts={userPosts} userId={String(Userprofile.data.userId)}/>
+            <CompanyPostPart
+              user={Userprofile}
+              userPosts={userPosts}
+              userId={String(Userprofile.data.userId)}
+            />
           ) : Userprofile?.data?.accountType === "recruiter" ? (
-            <RecruiterPostpart userId={String(Userprofile.data.userId)}  userPosts={userPosts} />
+            <RecruiterPostpart
+              userId={String(Userprofile.data.userId)}
+              userPosts={userPosts}
+            />
           ) : null}
         </div>
       </div>

@@ -110,7 +110,10 @@ const UserBio = () => {
         <div className="second-row w-full flex justify-around h-auto">
           <div className="post">
             <p>
-              <span className="font-bold flex justify-center">{userPosts?.data ? userPosts?.data.length : "0"}{" "} </span>Posts
+              <span className="font-bold flex justify-center">
+                {userPosts?.data ? userPosts?.data.length : "0"}{" "}
+              </span>
+              Posts
             </p>
           </div>
           <div className="follower">
@@ -198,7 +201,7 @@ const UserBio = () => {
       {/* lap */}
       <div
         data-theme={profile?.data.theme || "light"}
-        className="profile-bio w-[80%] border-[.5px] border-dashed border-gray-600  h-auto pb-3 rounded-xl mt-12 md:flex hidden"
+        className="profile-bio w-[95%] border-[.5px] border-dashed border-gray-600  h-auto pb-3 rounded-xl mt-12 md:flex hidden"
       >
         <div className="profile-avatar w-[30%] h-full  flex justify-center items-center ">
           <img
@@ -319,7 +322,6 @@ const UserBio = () => {
               <span className="text-gray-400">{profile?.data?.email}</span>
             </div>
           ) : null}
-          
         </div>
       </div>
     </>

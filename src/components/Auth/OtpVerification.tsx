@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,20 +12,16 @@ import { updateError } from "../../redux/reducers/userSlice";
 axios.defaults.withCredentials = true;
 
 const OtpVerification = () => {
-  const { user, loading, error } = useSelector(
-    (state: RootState) => state.user
-  );
+  const { user, error } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   //local states
-  const [resendButton,setResendButton]=useState<boolean>(false)
-  const [timer, setTimer] = useState<number | null>(null);
+  const [resendButton, setResendButton] = useState<boolean>(false);
+  const [timer, setTimer] = useState<number | null | NodeJS.Timeout>(null);
   const [timerValue, setTimerValue] = useState<string>("01:59");
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
   const inputRefs = useRef<HTMLInputElement[]>([]);
-
-
 
   //event handlers
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -45,28 +42,28 @@ const OtpVerification = () => {
       inputRefs.current[index - 1].focus();
     }
   };
-  const handleSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateError(null))
-    if(otp.length<6){
-      toast.error("enter otp")
-      return
+    dispatch(updateError(null));
+    if (otp.length < 6) {
+      toast.error("enter otp");
+      return;
     }
-    
-    const newOtp=otp.join('')
-    const newData={
-      data:{
-        otp:newOtp,
-        type:user?.data?.otpType
+
+    const newOtp = otp.join("");
+    const newData = {
+      data: {
+        otp: newOtp,
+        type: user?.data?.otpType,
       },
-    }
-    
-    dispatch(verifyOTP(newData))
-  }
-  
+    };
+
+    dispatch(verifyOTP(newData));
+  };
+
   const resendOTP = async () => {
     try {
-      await axios.get(`${URL}/notification/email-verification`,{
+      await axios.get(`${URL}/notification/email-verification`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -75,8 +72,7 @@ const OtpVerification = () => {
       setTimer(null);
       startTimer(119000);
       toast.success("OTP resent successfully");
-    } catch (error:any) {
-      
+    } catch (error: any) {
       toast.error("Failed to resend OTP");
     }
   };
@@ -91,37 +87,44 @@ const OtpVerification = () => {
         localStorage.removeItem("timerValue");
         localStorage.removeItem("timerEnd");
         // You can also show the resend button here
-        setResendButton(true)
+        setResendButton(true);
       } else {
-        if(resendButton){
-            setResendButton(false)
+        if (resendButton) {
+          setResendButton(false);
         }
         const minutes = Math.floor((timeRemaining / 1000 / 60) % 60);
         const seconds = Math.floor((timeRemaining / 1000) % 60);
-        setTimerValue(`${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`);
-        localStorage.setItem("timerValue", `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`);
+        setTimerValue(
+          `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+            2,
+            "0"
+          )}`
+        );
+        localStorage.setItem(
+          "timerValue",
+          `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+            2,
+            "0"
+          )}`
+        );
         localStorage.setItem("timerEnd", String(endTime));
       }
     }, 1000);
     setTimer(interval);
   };
 
-
-
   //useefects
   useEffect(() => {
-    
     const storedTimerValue = localStorage.getItem("timerValue");
     const storedTimerEnd = localStorage.getItem("timerEnd");
     if (storedTimerValue && storedTimerEnd) {
       const storedTimerEndMs = parseInt(storedTimerEnd);
       const timeRemaining = storedTimerEndMs - Date.now();
 
-    //   if (timeRemaining > 0) {
-        startTimer(timeRemaining);
-    //   }
+      //   if (timeRemaining > 0) {
+      startTimer(timeRemaining);
+      //   }
     } else {
-
       startTimer(119000);
     }
 
@@ -138,16 +141,13 @@ const OtpVerification = () => {
   }, [error]);
 
   useEffect(() => {
-    if (user?.success && user?.data?.reset ) {
-      console.log("here");
-      
-      navigate('/update-password' ,{replace:true })
+    if (user?.success && user?.data?.reset) {
+      navigate("/update-password", { replace: true });
     }
     if (user?.success && user?.data?.details) {
-      console.log("there");
-      navigate('/register' ,{replace:true })
+      navigate("/register", { replace: true });
     }
-  }, [user]);
+  }, [navigate, user]);
   return (
     <>
       <div className="otp-container bg-white rounded-lg w-[90%] m-2 h-[300px] lg:w-[80%] md:w-[90%] sm:w-[60%] flex flex-col items-center">
@@ -155,44 +155,44 @@ const OtpVerification = () => {
           <strong className="text-xl">Enter the OTP</strong>
         </div>
         <form onSubmit={handleSubmit}>
-        <div className="otp-input flex items-center justify-center mt-8">
-          {otp.map((value, index) => (
-            <input
-              key={index}
-              type="text"
-              maxLength={1}
-              className="w-10 h-10 sm:w-12 sm:h-12   mx-2 border-b-2 border-gray-300 bg-slate-200 rounded-md text-center focus:outline-none focus:border-blue-500"
-              value={value}
-              onChange={(e) => handleChange(e, index)}
-              onKeyDown={(e) => handleKeyDown(e, index)}
-              ref={(ref) =>
-                (inputRefs.current[index] = ref as HTMLInputElement)
-              }
-            />
-          ))}
-        </div>
+          <div className="otp-input flex items-center justify-center mt-8">
+            {otp.map((value, index) => (
+              <input
+                key={index}
+                type="text"
+                maxLength={1}
+                className="w-10 h-10 sm:w-12 sm:h-12   mx-2 border-b-2 border-gray-300 bg-slate-200 rounded-md text-center focus:outline-none focus:border-blue-500"
+                value={value}
+                onChange={(e) => handleChange(e, index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+                ref={(ref) =>
+                  (inputRefs.current[index] = ref as HTMLInputElement)
+                }
+              />
+            ))}
+          </div>
           <div className="time-container w-full h-[50px] flex justify-between">
             <div className="time-remaining m-4">
-                Time Remaining : <span className="font-semibold">
-                    {/* {minutes<10?`0${minutes}`:minutes}: {seconds<10?`0${seconds}`:seconds} */}
-                    {timerValue}
-                </span>
+              Time Remaining :{" "}
+              <span className="font-semibold">
+                {/* {minutes<10?`0${minutes}`:minutes}: {seconds<10?`0${seconds}`:seconds} */}
+                {timerValue}
+              </span>
             </div>
             <div className="resend m-4">
-                
-                     <a className="" onClick={resendOTP}>Resend OTP</a>
-                
-                
+              <a className="" onClick={resendOTP}>
+                Resend OTP
+              </a>
             </div>
           </div>
-        <div className="submit-button w-[30%] h-[40px] bg-blue-600 rounded-full mt-5">
-          <button
-            className="w-full h-full text-white flex justify-center items-center"
-            type="submit"
-          >
-            Submit
-          </button>
-        </div>
+          <div className="submit-button w-[30%] h-[40px] bg-blue-600 rounded-full mt-5">
+            <button
+              className="w-full h-full text-white flex justify-center items-center"
+              type="submit"
+            >
+              Submit
+            </button>
+          </div>
         </form>
         {/* <div className="new-user mt-3">
           New user?<a href="/">Resend</a>

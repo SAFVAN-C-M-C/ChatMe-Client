@@ -10,10 +10,13 @@ const UserPreferedJob = () => {
   const [openAddPreferedJobs, setOpenAddPreferedJobs] = useState(false);
   return (
     <>
-    {
-      openAddPreferedJobs?<AddPreferedJobs setOpenAddPreferedJobs={setOpenAddPreferedJobs}/>:null
-    }
-      <div data-theme={profile?.data.theme || "light"} className="profile-prefered-job border-[.5px] border-gray-600  w-[80%] h-auto rounded-xl border-dashed mt-12">
+      {openAddPreferedJobs ? (
+        <AddPreferedJobs setOpenAddPreferedJobs={setOpenAddPreferedJobs} />
+      ) : null}
+      <div
+        data-theme={profile?.data.theme || "light"}
+        className="profile-prefered-job border-[.5px] border-gray-600  w-[95%] h-auto rounded-xl border-dashed mt-12"
+      >
         <div className="title w-full m-4 pr-6 flex justify-between">
           <div className="education-title">
             <span className="font-bold">Set Prefered Job</span>{" "}
@@ -23,17 +26,17 @@ const UserPreferedJob = () => {
           </div>
           <div className="action-education flex ">
             <Icon
-            onClick={()=>setOpenAddPreferedJobs(!openAddPreferedJobs)}
+              onClick={() => setOpenAddPreferedJobs(!openAddPreferedJobs)}
               className="mr-2 cursor-pointer"
               icon="mdi:edit"
               width={26}
               height={26}
             />
-            
           </div>
         </div>
         <div className="prefered-job list w-full m-4 pr-6 flex flex-col">
-        {profile?.data?.preferedJobs && profile.data.preferedJobs.length > 0 ? (
+          {profile?.data?.preferedJobs &&
+          profile.data.preferedJobs.length > 0 ? (
             <div className="skills flex flex-wrap ">
               {profile.data.preferedJobs.map((jobs, index) => (
                 <span key={index} className="p-2 m-2 bg-gray-200 rounded-md">
