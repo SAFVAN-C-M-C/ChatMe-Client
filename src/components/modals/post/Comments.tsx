@@ -160,11 +160,7 @@ const Comments: React.FC<CommentProps> = ({
     }
   };
   const [replyInput, setReplyInput] = useState(false);
-  const handleReplyClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // e.preventDefault()
-    // if(inputref.current){
-    //   inputref.current.focus()
-    // }
+  const handleReplyClick = () => {
     setReplyInput(!replyInput);
   };
   useEffect(() => {

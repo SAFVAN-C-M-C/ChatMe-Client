@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
 import { SelectFileModal } from "../modals/CreatePostModals/SelectFileModal";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CreatePostModal } from "../modals/CreatePostModals/CreatePostModal";
 import SearchModal from "../modals/Search/SearchModal";
 import { IChat, IMessage } from "@/types/IChat";

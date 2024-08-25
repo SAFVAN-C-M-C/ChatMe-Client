@@ -33,7 +33,7 @@ const CropModal: React.FC<CropModalProps> = ({
   const [croppedAreaPixels, setCropperdAreaPixels] = useState<PixelCrop | null>(
     null
   );
-  const cropComplete = (croppedArea: any, croppedAreaPixels: any) => {
+  const cropComplete = (_: any, croppedAreaPixels: any) => {
     setCropperdAreaPixels(croppedAreaPixels);
   };
 
@@ -90,7 +90,7 @@ const CropModal: React.FC<CropModalProps> = ({
                 max={3}
                 step={0.1}
                 value={zoom}
-                onChange={(e, zoom) => setZoom(zoom as number)}
+                onChange={(_, zoom) => setZoom(zoom as number)}
               />
             </Box>
             <Box>
@@ -100,7 +100,7 @@ const CropModal: React.FC<CropModalProps> = ({
                 min={0}
                 max={360}
                 value={rotation}
-                onChange={(e, rotation) => setRotation(rotation as number)}
+                onChange={(_, rotation) => setRotation(rotation as number)}
               />
             </Box>
           </Box>
