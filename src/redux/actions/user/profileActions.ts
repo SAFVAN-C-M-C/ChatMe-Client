@@ -40,7 +40,7 @@ export const updateBio = createAsyncThunk(
   "profile/updateBio",
   async (formData: BioDetails, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(
+      const { data } = await axios.put(
         `${URL}/profile/bio/update`,
         formData,
         config
@@ -55,7 +55,7 @@ export const updateAbout = createAsyncThunk(
   "profile/updateAbout",
   async (formData: { about: string }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(
+      const { data } = await axios.put(
         `${URL}/profile/update/about`,
         formData,
         config
@@ -210,7 +210,7 @@ export const acceptRecruiterRequest = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const { data } = await axios.post(
+      const { data } = await axios.put(
         `${URL}/profile/apply-recruiter/accept`,
         formData,
         config
@@ -232,7 +232,7 @@ export const ignoreRecruiterRequest = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const { data } = await axios.post(
+      const { data } = await axios.put(
         `${URL}/profile/apply-recruiter/ignore`,
         formData,
         config
@@ -268,14 +268,13 @@ export const changeTheme = createAsyncThunk(
   "profile/changeTheme",
   async (
     formData: {
-      theam: string;
+      theme: string;
     },
     { rejectWithValue }
   ) => {
     try {
-      const { data } = await axios.post(
-        `${URL}/profile/theam`,
-        formData,
+      const { data } = await axios.put(
+        `${URL}/profile/theme?theme=${formData.theme}`,
         config
       );
       return data;

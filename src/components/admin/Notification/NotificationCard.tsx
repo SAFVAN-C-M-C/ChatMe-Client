@@ -33,12 +33,12 @@ const NotificationCard: FC<NotificationCardProps> = ({
 
   const handleDelete = async () => {
     try {
-      const res = await axios.post(
+      const res = await axios.delete(
         `${URL}/notification/admin/${notification._id}`,
         config
       );
 
-      if (res.status === 200) {
+      if (res.status === 204) {
         getNotification();
         toast.success("Notification deleted");
       }

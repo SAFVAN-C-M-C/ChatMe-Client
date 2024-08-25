@@ -2,6 +2,7 @@ import { URL } from "@/common/api";
 import { config } from "@/common/configurations";
 import NavBar from "@/components/admin/NavBar";
 import NotificationCard from "@/components/admin/Notification/NotificationCard";
+import NothingHere from "@/components/general/NothingHere";
 import AddNotificationModal from "@/components/modals/CreateNotificationModal/AddNotificationModal";
 import { INotification } from "@/redux/reducers/notification/notification";
 import axios from "axios";
@@ -61,7 +62,7 @@ const NotificationPage = () => {
                 />
               ))
             ) : (
-              <span>No notifications here</span>
+              <NothingHere/>
             )}
           </div>
         </div>

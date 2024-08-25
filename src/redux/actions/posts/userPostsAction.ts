@@ -45,7 +45,7 @@ export const deletePost = createAsyncThunk(
   "post/deletePost",
   async (formData: { _id: string }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.put(
+      const { data } = await axios.delete(
         `${URL}/post/delete/${formData._id}`,
         config
       );

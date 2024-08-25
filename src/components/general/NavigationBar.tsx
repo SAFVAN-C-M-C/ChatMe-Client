@@ -43,9 +43,9 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ isChat }) => {
 
   const handleToggle = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
-      dispatch(changeTheme({ theam: "dark" }));
+      dispatch(changeTheme({ theme: "dark" }));
     } else {
-      dispatch(changeTheme({ theam: "light" }));
+      dispatch(changeTheme({ theme: "light" }));
     }
   };
   const dispatch = useDispatch<AppDispatch>();
