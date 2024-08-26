@@ -42,8 +42,6 @@ import JobApplicationPage from "./pages/user/Jobs/JobApplicationPage";
 import MyJobApplication from "./pages/user/Jobs/MyJobApplication";
 
 function App() {
-  console.log('Server URL:', import.meta.env.VITE_CHAT_ME_APP_SERVER_URL);
-
   //redux
   const { user } = useSelector((state: RootState) => state.user);
   const { profile } = useSelector((state: RootState) => state.profile);
