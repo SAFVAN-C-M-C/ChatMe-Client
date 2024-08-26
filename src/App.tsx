@@ -42,10 +42,7 @@ import JobApplicationPage from "./pages/user/Jobs/JobApplicationPage";
 import MyJobApplication from "./pages/user/Jobs/MyJobApplication";
 
 function App() {
-  console.log('Google ID:', import.meta.env.VITE_CHAT_ME_APP_GOOGLE_ID);
   console.log('Server URL:', import.meta.env.VITE_CHAT_ME_APP_SERVER_URL);
-  console.log('Chat Server Url:', import.meta.env.VITE_CHAT_ME_APP_CHAT_SERVER_URL);
-  console.log('Notification url:', import.meta.env.VITE_CHAT_ME_APP_NOTIFICATION_SERVER_URL);
 
   //redux
   const { user } = useSelector((state: RootState) => state.user);
