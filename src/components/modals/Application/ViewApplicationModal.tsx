@@ -62,7 +62,7 @@ const ViewApplicationModal: FC<ViewApplicationModalProp> = ({
       }
     };
     updateStatus(String(application._id));
-  }, [application._id, application.jobId, fetchApplications, status]);
+  }, [status]);
   return (
     <>
       <ThemeProvider
