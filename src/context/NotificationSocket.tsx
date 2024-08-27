@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import notificationSound from "@/assets/sounds/notification.mp3";
 import { getNotification } from "@/redux/actions/notification/notificationAction";
 import toast from "react-hot-toast";
-import { NOTIFICATION_SERVER_URL } from "@/common/api";
 interface NotificationSocketContextProps {
   socket: Socket | null;
   onlineUsers: any[];
@@ -38,12 +37,14 @@ export const NotificationSocketProvider: FC<
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     if (user && user.data._id) {
-      const socket = io(NOTIFICATION_SERVER_URL, {
+      const socket = io("https://chatme-server.safvancmc.in", {
+        path: "/notification/socket.io",
         query: {
           userId: user.data._id,
         },
+        transports: ["websocket"],
         withCredentials: true,
-      });
+      });      
 
       socket.on("connect", () => {
         console.log("Connected to server🌐🌐🌐");

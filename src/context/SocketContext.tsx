@@ -11,7 +11,6 @@ import {
 } from "react";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
-import { CHAT_SERVER_URL } from "@/common/api";
 
 interface SocketContextProps {
   socket: Socket | null;
@@ -31,10 +30,12 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
   useEffect(() => {
     if (user && user.data._id) {
-      const socket = io(CHAT_SERVER_URL, {
+      const socket = io("https://chatme-server.safvancmc.in", {
+        path: "/chat/socket.io",
         query: {
           userId: user.data._id,
         },
+        transports: ["websocket"],
         withCredentials: true,
       });
 
