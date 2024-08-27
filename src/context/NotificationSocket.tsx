@@ -45,7 +45,7 @@ export const NotificationSocketProvider: FC<
         transports: ["websocket"],
         withCredentials: true,
       });      
-
+      console.log(socket);
       socket.on("connect", () => {
         console.log("Connected to server🌐🌐🌐");
         setSocket(socket);

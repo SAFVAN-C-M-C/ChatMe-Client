@@ -38,7 +38,8 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
         transports: ["websocket"],
         withCredentials: true,
       });
-
+      console.log(socket);
+      
       socket.on("connect", () => {
         console.log("Connected to server🌐🌐🌐");
         setSocket(socket);
