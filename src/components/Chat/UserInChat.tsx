@@ -190,7 +190,7 @@ const UserInChat: FC<UserInChatProps> = ({ chat }) => {
             )}
             <span className="flex text-sm">
               {" "}
-              . {formateDateForChat(formattedDate)}
+              . {formattedDate}
             </span>
           </div>
         </div>
