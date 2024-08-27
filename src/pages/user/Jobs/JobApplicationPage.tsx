@@ -58,10 +58,8 @@ const JobApplicationPage = () => {
     }
   };
   useEffect(() => {
-    if (!applications) {
-      fetchApplications();
-    }
-  }, [applications, jobId, page]);
+    fetchApplications();
+  }, [page]);
   return (
     <>
       <div data-theme={profile?.data.theme || "light"} className="flex">
