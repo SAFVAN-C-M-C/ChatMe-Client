@@ -45,7 +45,7 @@ export const NotificationSocketProvider: FC<
         transports: ["websocket"],
         withCredentials: true,
       });      
-      console.log(socket);
+  
       socket.on("connect", () => {
         console.log("Connected to server🌐🌐🌐");
         setSocket(socket);
@@ -80,7 +80,7 @@ export const NotificationSocketProvider: FC<
         setSocket(null);
       }
     }
-  }, [socket]);
+  }, [user?.data._id]);
 
   const value = {
     socket,

@@ -38,7 +38,7 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
         transports: ["websocket"],
         withCredentials: true,
       });
-      console.log(socket);
+
       
       socket.on("connect", () => {
         console.log("Connected to server🌐🌐🌐");
@@ -59,7 +59,7 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
         setSocket(null);
       }
     }
-  }, [socket]);
+  }, [user?.data._id]);
 
   const value = {
     socket,
