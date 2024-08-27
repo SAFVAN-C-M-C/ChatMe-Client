@@ -80,7 +80,7 @@ export const NotificationSocketProvider: FC<
         setSocket(null);
       }
     }
-  }, [dispatch, socket, user, user?.data._id]);
+  }, [socket]);
 
   const value = {
     socket,

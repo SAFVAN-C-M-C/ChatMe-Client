@@ -58,7 +58,7 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
         setSocket(null);
       }
     }
-  }, [socket, user, user?.data._id]);
+  }, [socket]);
 
   const value = {
     socket,
