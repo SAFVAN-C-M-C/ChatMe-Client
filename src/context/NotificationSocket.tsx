@@ -37,15 +37,22 @@ export const NotificationSocketProvider: FC<
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     if (user && user.data._id) {
-      const socket = io("https://chatme-server.safvancmc.in", {
-        path: "/notification/socket.io",
-        query: {
-          userId: user.data._id,
-        },
-        transports: ["websocket"],
-        withCredentials: true,
-      });      
-  
+      //production
+      // const socket = io("https://chatme-server.safvancmc.in", {
+      //   path: "/notification/socket.io",
+      //   query: {
+      //     userId: user.data._id,
+      //   },
+      //   transports: ["websocket"],
+      //   withCredentials: true,
+      // });      
+  //local
+  const socket = io("https://chat-me-server-notification.onrender.com", {
+    query: {
+      userId: user.data._id,
+    },
+    withCredentials: true,
+  });
       socket.on("connect", () => {
         console.log("Connected to server🌐🌐🌐");
         setSocket(socket);

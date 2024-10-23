@@ -17,6 +17,7 @@ import { darkTheme, lightTheme } from "@/helper/theme";
 
 interface AddEducationProps {
   setOpenAddEducation: Dispatch<SetStateAction<boolean>>;
+  
 }
 const AddEducation: React.FC<AddEducationProps> = ({ setOpenAddEducation }) => {
   const { error, profile } = useSelector((state: RootState) => state.profile);

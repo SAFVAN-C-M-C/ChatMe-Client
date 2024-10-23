@@ -30,12 +30,20 @@ export const SocketProvider: FC<SocketProviderProps> = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
   useEffect(() => {
     if (user && user.data._id) {
-      const socket = io("https://chatme-server.safvancmc.in", {
-        path: "/chat/socket.io",
+      //production
+      // const socket = io("https://chatme-server.safvancmc.in", {
+      //   path: "/chat/socket.io",
+      //   query: {
+      //     userId: user.data._id,
+      //   },
+      //   transports: ["websocket"],
+      //   withCredentials: true,
+      // });
+      //local
+      const socket = io("https://chat-me-server-chat.onrender.com", {
         query: {
           userId: user.data._id,
         },
-        transports: ["websocket"],
         withCredentials: true,
       });
 
