@@ -27,6 +27,7 @@ const Suggestions = () => {
     if (!users) {
       getSuggestedUsers();
     }
+    console.log(users);
   }, [users]);
   return (
     <>
@@ -46,7 +47,11 @@ const Suggestions = () => {
           </div>
         </div>
         {users &&
-          users.map((user, index) => <SugestedUser user={user} key={index} />)}
+          users.map((user, index) => {
+            if (user.name && user.bio.avatar){
+              return <SugestedUser user={user} key={index} />;
+            }
+          })}
       </div>
     </>
   );
