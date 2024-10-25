@@ -64,6 +64,8 @@ const Notification: FC<NotificationProps> = ({ notification }) => {
     }
   };
   useEffect(() => {
+    console.log(isAdminMessage);
+    
     if (!notification.isAdminMessage) {
       setIsAdminMessage(false);
       getFromUser(String(notification.fromUserId));
@@ -98,7 +100,7 @@ const Notification: FC<NotificationProps> = ({ notification }) => {
           <div className="img-container rounded-full w-10">
             <img
               src={
-                isAdminMessage
+                type === "admin"
                   ? "/logo/ChatMe--logo-color.png"
                   : fromUser?.avatar
                   ? String(fromUser?.avatar)
