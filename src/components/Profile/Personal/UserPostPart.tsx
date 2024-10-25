@@ -74,29 +74,6 @@ const UserPostPart = () => {
               <span className="hidden md:inline">Saved</span>
             </div>
           </li>
-          <li
-            className={
-              postNav === "applied_job"
-                ? `nonlist md:border-t ${
-                    profile?.data.theme === "dark"
-                      ? "md:border-gray-400 md:text-gray-400"
-                      : "md:border-gray-700 md:text-gray-700"
-                  } md:-mt-px `
-                : ""
-            }
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onClick={() => handleNavPostClick("applied_job")}
-          >
-            <div className="p-3 flex items-center">
-              <Icon
-                icon="hugeicons:job-search"
-                className="mr-1"
-                width={26}
-                height={26}
-              />
-              <span className="hidden md:inline">Applied Jobs</span>
-            </div>
-          </li>
         </ul>
       </div>
       {postNav === "post" ? <Posts /> : postNav === "saved" ? <Saved /> : null}
