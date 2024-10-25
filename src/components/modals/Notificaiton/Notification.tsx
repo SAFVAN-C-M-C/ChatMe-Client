@@ -112,7 +112,7 @@ const Notification: FC<NotificationProps> = ({ notification }) => {
         <div className="data flex flex-col">
           <div className="name">
             <span className="font-bold">
-              {isAdminMessage
+              {type === "admin"
                 ? "ChatMe Team"
                 : fromUser?.name
                 ? String(fromUser?.name)

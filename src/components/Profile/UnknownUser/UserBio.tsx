@@ -155,14 +155,6 @@ const UserBio: React.FC<UserBioProps> = ({ Userprofile, postLength }) => {
             <span className="text-gray-400">{Userprofile?.data.email}</span>
           </div>
         ) : null}
-        {Userprofile?.data.bio?.resume ? (
-          <div className="seventh-row ml-2 mb-2  mt-2 flex">
-            <span className="text-blue-600 flex cursor-pointer">
-              <Icon icon="carbon:document" width={26} height={26} />
-              <p>View Resume</p>
-            </span>
-          </div>
-        ) : null}
       </div>
       {/* lap */}
       <div
@@ -270,14 +262,6 @@ const UserBio: React.FC<UserBioProps> = ({ Userprofile, postLength }) => {
                 height={26}
               />
               <span className="text-gray-400">{Userprofile?.data?.email}</span>
-            </div>
-          ) : null}
-          {Userprofile?.data?.bio?.resume ? (
-            <div className="seventh-row ml-4 pl-2 mt-2 flex">
-              <span className="text-blue-600 flex cursor-pointer">
-                <Icon icon="carbon:document" width={26} height={26} />
-                <p>View Resume</p>
-              </span>
             </div>
           ) : null}
         </div>
